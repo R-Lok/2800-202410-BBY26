@@ -25,7 +25,7 @@ const launch = async () => {
         server.listen(process.env.PORT, () => {
             const { address, port } = server.address()
             console.log('app listening at http://%s:%s', address, port)
-            console.log(`TL is working now on ${app.get('env')}. (pid: ${process.pid})`)
+            console.log(`Server is running now on ${app.get('env')}. (pid: ${process.pid})`)
         })
     } catch (err) {
         console.log(err)
