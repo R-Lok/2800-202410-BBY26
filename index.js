@@ -1,5 +1,4 @@
-// require('dotenv').config({ path: `${__dirname}/.env.${process.env.NODE_ENV}` })
-
+require('dotenv').config({ path: `${__dirname}/.env.${process.env.NODE_ENV}` })
 const mongoose = require('mongoose')
 const { server, app, mongoUrl } = require('./expressServer')
 
@@ -13,19 +12,18 @@ const mongoOptions = {
     // sslValidate: false,
 }
 
-
 const launch = async () => {
     try {
         await Promise.all([
             mongoose.connect(mongoUrl, mongoOptions),
         ])
         console.log('MongoDB connect successful.')
-        process.send('ready')
+        if (process.send) process.send('ready')
 
         server.listen(process.env.PORT, () => {
             const { address, port } = server.address()
-            console.log('app listening at http://%s:%s', address, port)
-            console.log(`Server is running now on ${app.get('env')}. (pid: ${process.pid})`)
+            console.log('Server is listening at http://%s:%s', address, port)
+            console.log(`Process is running now on ${app.get('env')}. (pid: ${process.pid})`)
         })
     } catch (err) {
         console.log(err)
@@ -34,7 +32,7 @@ const launch = async () => {
     }
 }
 
-async function mongoDBShutdown() {
+const mongoDBShutdown = async () => {
     await mongoose.connection.close(false)
     console.log('MongoDb connection closed.')
 }
@@ -60,7 +58,7 @@ process.on('SIGINT', () => {
     })
 })
 
-process.on('uncaughtException', function(err) {
+process.on('uncaughtException', (err) => {
     console.log(err)
 })
 

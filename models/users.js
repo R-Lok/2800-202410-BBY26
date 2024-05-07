@@ -4,13 +4,16 @@ const { Schema } = mongoose
 const UsersSchema = new Schema({
     name: {
         type: String,
+        required: true,
     },
     email: {
         type: String,
+        required: true,
         unique: true,
     },
     password: {
         type: String,
+        required: true,
     },
     role: {
         type: String,
@@ -26,8 +29,10 @@ const UsersSchema = new Schema({
         default: false,
     },
 }, {
-    timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' },
+    timestamps: true,
 })
+
+UsersSchema.index({ email: 1 })
 
 module.exports = mongoose.model('Users', UsersSchema)
 
