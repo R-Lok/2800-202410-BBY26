@@ -40,8 +40,7 @@ app.use(session({
     cookie: { secure: false },
 }))
 
-app.use('/', authRouter)
-app.use('/members', isAuth, userRouter)
+app.use('/members', userRouter)
 
 app.get('/', (req, res) => {
     return res.render('home', { email: req.session.email })
