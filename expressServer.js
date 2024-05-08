@@ -5,7 +5,6 @@ const cors = require('cors')
 const helmet = require('helmet')
 const compression = require('compression')
 const userRouter = require('./routers/users')
-const { router: authRouter, isAuth } = require('./routers/auth')
 
 
 const app = express()
@@ -23,7 +22,7 @@ app.set('view engine', 'ejs')
 
 const mongoUrl = process.env.NODE_ENV === 'local' ?
     `mongodb://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/` :
-    `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}/?retryWrites=true&w=majority&appName=BBY26`
+    `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}/?retryWrites=true&w=majority`
 
 const options = {
     mongoUrl: mongoUrl,
@@ -41,8 +40,7 @@ app.use(session({
     cookie: { secure: false },
 }))
 
-app.use('/', authRouter)
-app.use('/members', isAuth, userRouter)
+app.use('/members', userRouter)
 
 app.get('/', (req, res) => {
     return res.render('home', { email: req.session.email })
