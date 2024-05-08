@@ -5,6 +5,7 @@ const cors = require('cors')
 const helmet = require('helmet')
 const compression = require('compression')
 const userRouter = require('./routers/users')
+const settingRouter = require('./routers/settings')
 
 
 const app = express()
@@ -13,7 +14,7 @@ const server = require('http').createServer(app)
 const whitelist = ['http://localhost:3000']
 
 app.use(cors({ credentials: true, origin: whitelist }))
-app.use(helmet())
+// app.use(helmet())
 app.use(compression())
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ extended: true }))
@@ -37,10 +38,11 @@ app.use(session({
     store: MongoStore.create(options),
     saveUninitialized: false,
     resave: false,
-    cookie: { secure: false },
+    cookie: { secure: process.env.SECURE_COOKIE === 'true' },
 }))
 
 app.use('/members', userRouter)
+app.use('/settings', settingRouter)
 
 app.get('/', (req, res) => {
     return res.render('home', { email: req.session.email })
