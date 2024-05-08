@@ -2,7 +2,7 @@ const express = require('express')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
 const cors = require('cors')
-const helmet = require('helmet')
+// const helmet = require('helmet')
 const compression = require('compression')
 const userRouter = require('./routers/users')
 
@@ -13,7 +13,7 @@ const server = require('http').createServer(app)
 const whitelist = ['http://localhost:3000']
 
 app.use(cors({ credentials: true, origin: whitelist }))
-app.use(helmet())
+// app.use(helmet())
 app.use(compression())
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ extended: true }))
@@ -22,7 +22,7 @@ app.set('view engine', 'ejs')
 
 const mongoUrl = process.env.NODE_ENV === 'local' ?
     `mongodb://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/` :
-    `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}/?retryWrites=true&w=majority&appName=BBY26`
+    `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}/?retryWrites=true&w=majority`
 
 const options = {
     mongoUrl: mongoUrl,
@@ -40,8 +40,6 @@ app.use(session({
     cookie: { secure: false },
 }))
 
-app.use('/', authRouter)
-app.use('/members', isAuth, userRouter)
 
 app.get('/', (req, res) => {
     return res.render('home', { email: req.session.email })
@@ -50,6 +48,36 @@ app.get('/', (req, res) => {
 app.get('/health', (_, res) => {
     return res.status(200).send('ok')
 })
+
+app.get('/review/:setid', (req, res) => {
+    const setid = "123341233"
+    const cards = [
+        {
+            question: "Hello bobby?",
+            answer: "yes"
+        },
+        {
+            question: "biggest donut",
+            answer: "jreoeoe"
+        },
+        {
+            question: "Abba?",
+            answer: "dabba"
+        },
+        {
+            question: "free?",
+            answer: "yes"
+        },
+        {
+            question: "tree?",
+            answer: "man"
+        }
+    ]
+    const carouselData = {bg: "/images/white.jpeg", cards: cards, id: setid}
+
+    return res.render('review', carouselData)
+})
+
 
 app.get('*', (req, res) => {
     return res.status(404).send('Page not found!')
