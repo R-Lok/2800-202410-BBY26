@@ -5,7 +5,6 @@ const cors = require('cors')
 const helmet = require('helmet')
 const compression = require('compression')
 const userRouter = require('./routers/users')
-const { router: authRouter, isAuth } = require('./routers/auth')
 
 
 const app = express()
