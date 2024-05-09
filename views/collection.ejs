@@ -1,21 +1,23 @@
-<%- include("template/header") %>
+<%- include("template/header.ejs") %>
+<link rel="stylesheet" href="/css/collections.css">
 </head>
 <body>
+<%- include("template/headerBar.ejs") %>
 
-  <div class="d-flex justify-content-center">
+  <div class="d-flex justify-content-center mt-5 headerText space">
     <h1>Flashcard Collection</h1>
   </div>
 
-  <div class="d-flex justify-content-center">
+  <div class="d-flex justify-content-center space">
     <h6>Here are your previously generated flashcards</h6>
   </div>
 
   <div class="container">
 
   <div class="input-group justify-content-center">
-    <form action='/searchCollection' method='post'>
+    <form class= "justify-content-center" action='/searchCollection' method='post'>
       <input name="search" type="search" placeholder="Search" />
-      <button type="submit" class="btn btn-primary" data-mdb-ripple-init>
+      <button type="submit" class="btn button-bg" data-mdb-ripple-init>
       <img src='images/search.svg'>
       </button>
     </form>
@@ -29,4 +31,5 @@
 
 </div>
 
-<%- include("template/footer") %>
+<%- include("template/footerBar.ejs") %>
+<%- include("template/footer.ejs") %>
