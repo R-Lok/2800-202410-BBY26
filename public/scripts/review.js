@@ -51,13 +51,14 @@ captions.forEach(element => {
     })
 })
 
-document.getElementById("sharecode").addEventListener("touchstart", (e) => {
+function triggerAlert(e) {
     navigator.clipboard.writeText(e.target.textContent)
-    
+
     const alert = document.querySelector(".alert")
     alert.classList.remove("alert-hidden")
     setTimeout(() => alert.classList.add("alert-hidden"), 3000)
-
-})
+}
+document.getElementById("sharecode").addEventListener("touchstart", triggerAlert)
+document.getElementById("sharecode").addEventListener("click", triggerAlert)
 
 

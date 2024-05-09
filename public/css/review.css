@@ -34,6 +34,10 @@ img {
     border-radius: 20px;
 }
 
+#sharecode:hover {
+    cursor: pointer;
+}
+
 #tap-notif {
     margin: 20px 0px;
 }
