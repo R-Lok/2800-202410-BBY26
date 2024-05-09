@@ -50,6 +50,13 @@ app.get('/health', (_, res) => {
     return res.status(200).send('ok')
 })
 
+app.get('/collection', async (req, res) => {
+    var database = new MongoClient(mongoURL, {useNewUrlParser: true, useUnifiedTopology: true});
+    var flashcardCollection = database.db(process.env.DATABASE_NAME).collection('flashcardset')
+    const collections = await flashcardCollection.find().toArray();
+    return res.render('collection', {collections, collections});
+})
+
 app.get('*', (req, res) => {
     return res.status(404).send('Page not found!')
 })
