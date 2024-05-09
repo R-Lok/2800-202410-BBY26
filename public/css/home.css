@@ -1,0 +1,51 @@
+* {
+    font-size: 14pt;
+}
+
+.header {
+    width: auto;
+    height: auto;
+    position: relative;
+}
+
+.custom-navbar {
+    background-color: #8714c9;
+}
+
+.custom-navbar-brand {
+    display: flex;
+    padding: 0.2em;
+    align-items: center;
+    font-size: 30pt;
+    color: white;
+}
+
+.container-alert {
+    width: auto;
+    height: auto;
+    position: relative;
+}
+
+.custom-alert {
+    margin: 1em;
+    padding: 1em;
+    border-width: 2.5px;
+    border-radius: 20px;
+}
+
+.container-calendar {
+    margin: 1.25em;
+}
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 columns for days of the week */
+    gap: 5px; /* Gap between grid items */
+}
+
+.footer {
+    display: flex;
+    align-items:end;
+}
+
+/* ++++++++++++++ */
