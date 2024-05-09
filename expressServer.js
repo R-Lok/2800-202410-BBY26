@@ -5,7 +5,6 @@ const cors = require('cors')
 const helmet = require('helmet')
 const compression = require('compression')
 const userRouter = require('./routers/users')
-const settingRouter = require('./routers/settings')
 
 
 const app = express()
@@ -13,8 +12,10 @@ const server = require('http').createServer(app)
 
 const whitelist = ['http://localhost:3000']
 
+// const {x, y} = require('./public/scripts/calendar.js');
+
 app.use(cors({ credentials: true, origin: whitelist }))
-// app.use(helmet())
+app.use(helmet())
 app.use(compression())
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ extended: true }))
@@ -38,14 +39,14 @@ app.use(session({
     store: MongoStore.create(options),
     saveUninitialized: false,
     resave: false,
-    cookie: { secure: process.env.SECURE_COOKIE === 'true' },
+    cookie: { secure: false },
 }))
 
 app.use('/members', userRouter)
-app.use('/settings', settingRouter)
 
 app.get('/', (req, res) => {
-    return res.render('home', { email: req.session.email })
+    let days = 3;
+    return res.render('home', { days: days, name: req.session.name, email: req.session.email })
 })
 
 app.get('/health', (_, res) => {
