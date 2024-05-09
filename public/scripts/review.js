@@ -19,6 +19,7 @@ function resetCards(e) {
 const captions = document.querySelectorAll(".carousel-caption")
 console.log(captions)
 
+//This adds event listeners to each flashcard that updates the counter at the top according to which flashcard is currently displayed
 document.querySelectorAll(".carousel-item").forEach(ele => ele.addEventListener("transitionend", (e) => {
     const activeCard = document.querySelector(".carousel-item-next") ? document.querySelector(".carousel-item-next") : document.querySelector(".carousel-item-prev")
     console.log(activeCard)
@@ -28,6 +29,7 @@ document.querySelectorAll(".carousel-item").forEach(ele => ele.addEventListener(
         counter.textContent = activeCard.getAttribute("number")
     }
 }))
+document.querySelector(".carousel-control-next").addEventListener("click", resetCards)
 
 //make each flashcard flippable
 captions.forEach(element => {
@@ -48,4 +50,14 @@ captions.forEach(element => {
         }
     })
 })
+
+document.getElementById("sharecode").addEventListener("touchstart", (e) => {
+    navigator.clipboard.writeText(e.target.textContent)
+    
+    const alert = document.querySelector(".alert")
+    alert.classList.remove("alert-hidden")
+    setTimeout(() => alert.classList.add("alert-hidden"), 3000)
+
+})
+
 
