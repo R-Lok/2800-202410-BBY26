@@ -118,7 +118,37 @@ app.get('/review/:setid', (req, res) => {
             answer: 'Hg',
         },
     ]
-    const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: cards, id: req.params.setid }
+    const carouselData = {bg: "/images/plain-FFFFFF.svg", cards: cards, id: req.params.setid, queryType: "view"}
+
+    return res.render('review', carouselData)
+})
+
+app.get("/check/:json", (req, res) => {
+
+    data = [
+        {
+            "question": "What is the capital of France?",
+            "answer": "Paris"
+        },
+        {
+            "question": "Who wrote 'Romeo and Juliet'?",
+            "answer": "William Shakespeare"
+        },
+        {
+            "question": "What is the powerhouse of the cell?",
+            "answer": "Mitochondria"
+        },
+        {
+            "question": "What is the chemical symbol for water?",
+            "answer": "H2O"
+        },
+        {
+            "question": "What year did the Titanic sink?",
+            "answer": "1912"
+        }
+    ]
+
+    const carouselData = { bg: "/images/plain-FFFFFF.svg", cards: data, queryType: "finalize"}
 
     return res.render('review', carouselData)
 })

@@ -58,7 +58,12 @@ function triggerAlert(e) {
     alert.classList.remove("alert-hidden")
     setTimeout(() => alert.classList.add("alert-hidden"), 3000)
 }
-document.getElementById("sharecode").addEventListener("touchstart", triggerAlert)
-document.getElementById("sharecode").addEventListener("click", triggerAlert)
+
+//only attach these eventListeners if the element exists
+if(document.getElementById("sharecode")) {
+    document.getElementById("sharecode").addEventListener("touchstart", triggerAlert)
+    document.getElementById("sharecode").addEventListener("click", triggerAlert)
+}
+
 
 
