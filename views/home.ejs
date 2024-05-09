@@ -14,13 +14,14 @@
 
     <div class="container-alert">
         <div class="alert alert-light custom-alert" role="alert">
-            Hi <%= name %>!<br>
-            You've been studying for <%= days %> days!
+            <p>Hi <%= name %>!</p>
+            <p>You've been studying for <%= days %> days!<img src="/images/fire.svg" width="30" height="30"></p>
         </div>
     </div>
         <!-- <img src="/images/depresso2.png"></img> -->
 
-        <%- include('calendar') %>
+    <%- include('calendar') %>
+
 
     <div class="footer">
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top custom-footer">

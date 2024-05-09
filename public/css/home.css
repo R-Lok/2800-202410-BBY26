@@ -28,9 +28,14 @@
 
 .custom-alert {
     margin: 1em;
-    padding: 1em;
+    padding: 0.75em;
     border-width: 2.5px;
     border-radius: 20px;
+}
+
+.custom-alert p {
+    margin: 0;
+    font-size: 13pt;
 }
 
 .container-calendar {
