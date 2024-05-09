@@ -1,0 +1,44 @@
+.container {
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  width: 80%;
+}
+
+#myTabContent {
+  width: 90%;
+  height: 40vh;
+  margin: 0 auto;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+#enterTextButton {
+  display: none;
+  animation: slideUp 0.8s ease forwards;
+}
+
+.modal-body {
+  width: 95%; /* Adjust the width of the container as needed */
+  margin: auto; /* Center the container */
+}
+
+.text-material-input {
+  width: 100%; /* Makes the textarea take the full width of its parent container */
+  padding: 10px;
+  box-sizing: border-box; /* Ensures padding does not affect the overall defined width */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical; /* Allows vertical resizing only */
+}
+
+
+

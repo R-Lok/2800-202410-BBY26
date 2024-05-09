@@ -1,0 +1,16 @@
+body, html {
+  height: 100%;  /* Full height */
+  margin: 0;     /* Remove default margin */
+}
+.container {
+  height: 100%;
+  display: flex;
+  align-items: center;  
+  justify-content: center;  
+}
+
+.form-signup {
+  width: 100%;  
+  max-width: 330px;  
+  margin: auto; 
+}

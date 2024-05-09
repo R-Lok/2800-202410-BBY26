@@ -23,7 +23,9 @@ app.set('view engine', 'ejs')
 
 const mongoUrl = process.env.NODE_ENV === 'local' ?
     `mongodb://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/` :
-    `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}/?retryWrites=true&w=majority`
+    `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}/?retryWrites=true&w=majority&appName=BBY26`
+
+console.log(mongoUrl)
 
 const options = {
     mongoUrl: mongoUrl,
@@ -53,7 +55,30 @@ app.get('/health', (_, res) => {
 })
 
 app.get('/test', (req, res) => {
-    return res.render('template');
+    return res.render('template')
+})
+
+app.get('/landing', (req, res) => {
+    return res.render('landing')
+})
+
+app.get('/signup', (req, res) => {
+    return res.render('signup')
+})
+
+app.get('/generate', (req, res) => {
+    return res.render('generate')
+})
+
+app.post('/signupSubmit', (req, res) => {
+    const userInfo = {
+        name: req.body.displayName,
+        email: req.body.email,
+        password: req.body.password,
+    }
+
+    console.log(userInfo)
+    res.send('Test')
 })
 
 app.get('/review/:setid', (req, res) => {
