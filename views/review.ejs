@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="../css/review.css">
 </head>
 <body>
+    <%- include("template/headerBar.ejs") %>
     <div class="content-container">
         <div class="alert alert-success alert-hidden" role="alert">
             Sharecode copied to clipboard!
@@ -40,7 +41,9 @@
             <p id="sharecode"><%= id %></p>
         </div>
     </div>
+    <%- include("template/footerBar.ejs") %>
     <script src="../scripts/review.js"></script>
 <%- include("template/footer") %>
+
 
 
