@@ -5,10 +5,10 @@
 <%- include("template/headerBar.ejs") %>
 
   <div class="d-flex justify-content-center mt-5 headerText space">
-    <h1>Flashcard Collection</h1>
+    <h1 style="font-size:38px">Flashcard Collection</h1>
   </div>
 
-  <div class="d-flex justify-content-center space">
+  <div class="d-flex justify-content-center space2">
     <h6>Here are your previously generated flashcards</h6>
   </div>
 
@@ -23,9 +23,9 @@
     </form>
   </div>
 
-<div class="list-group" style="margin-top:20px">
+<div class="list-group">
   <% for(var i = 0; i<collections.length; i++) { %>
-      <a href="/review/<%= collections[i].shareId %>" class="list-group-item list-group-item-action"><%= collections[i].setName %></a>
+      <b><a href="/review/<%= collections[i].shareId %>" class="list-group-item list-group-item-action setText"><%= collections[i].setName %></a></b>
   <% }; %>
 </div>
 
