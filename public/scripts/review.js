@@ -2,27 +2,6 @@ console.log("review.js loaded")
 
 
 //below functions: need to set a delay that prevents the counter incrementing faster than the cards swap.
-function incrementCounter() {
-    const numCards = Number(document.getElementById("numCards").textContent)
-    const counterElem = document.getElementById("counter")
-
-    if (Number(counterElem.textContent) >= numCards) {
-        counter.textContent = 1
-    } else {
-        counter.textContent = Number(counter.textContent) + 1
-    }
-}
-
-function decrementCounter() {
-    const numCards = Number(document.getElementById("numCards").textContent)
-    const counterElem = document.getElementById("counter")
-
-    if (Number(counterElem.textContent) <= 1) {
-        counter.textContent = numCards
-    } else {
-        counter.textContent = Number(counter.textContent) - 1
-    }
-}
 
 function resetCards(e) {
         const flippedCaption = document.querySelector(".carousel-caption[flipped]")
@@ -40,9 +19,15 @@ function resetCards(e) {
 const captions = document.querySelectorAll(".carousel-caption")
 console.log(captions)
 
-document.querySelector(".carousel-control-next").addEventListener("click", incrementCounter)
-document.querySelector(".carousel-control-prev").addEventListener("click", decrementCounter)
-document.querySelector(".carousel-control-next").addEventListener("click", resetCards)
+document.querySelectorAll(".carousel-item").forEach(ele => ele.addEventListener("transitionend", (e) => {
+    const activeCard = document.querySelector(".carousel-item-next") ? document.querySelector(".carousel-item-next") : document.querySelector(".carousel-item-prev")
+    console.log(activeCard)
+    const counter = document.getElementById("counter")
+
+    if(activeCard) {
+        counter.textContent = activeCard.getAttribute("number")
+    }
+}))
 
 //make each flashcard flippable
 captions.forEach(element => {
