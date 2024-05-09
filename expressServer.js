@@ -2,7 +2,7 @@ const express = require('express')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
 // const cors = require('cors')
-// const helmet = require('helmet')
+const helmet = require('helmet')
 const compression = require('compression')
 const userRouter = require('./routers/users')
 const { router: authRouter, isAuth } = require('./routers/auth')
@@ -24,7 +24,15 @@ const server = require('http').createServer(app)
 // const whitelist = ['http://localhost:3000']
 
 // app.use(cors({ credentials: true, origin: whitelist }))
-// app.use(helmet())
+app.use(helmet({
+    contentSecurityPolicy: {
+        useDefaults: true,
+        directives: {
+            'script-src': ['\'self\'', '\'unsafe-inline\'', 'https://cdn.jsdelivr.net/', 'https://code.jquery.com/'],
+            'script-src-attr': ['\'unsafe-inline\''],
+        },
+    },
+}))
 
 // const {x, y, generateDaysOfCurrMonth} = require('./public/scripts/calendar.js');
 
