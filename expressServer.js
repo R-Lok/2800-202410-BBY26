@@ -56,6 +56,35 @@ app.get('/test', (req, res) => {
     return res.render('template');
 })
 
+app.get('/review/:setid', (req, res) => {
+    const cards = [
+        {
+            question: "Element symbol for gold",
+            answer: "Au"
+        },
+        {
+            question: "Element symbol for Iron",
+            answer: "Fe"
+        },
+        {
+            question: "Element symbol for Nickel",
+            answer: "Ni"
+        },
+        {
+            question: "Element symbol for Zinc",
+            answer: "Zn"
+        },
+        {
+            question: "Element symbols for Mercury",
+            answer: "Hg"
+        }
+    ]
+    const carouselData = {bg: "/images/plain-FFFFFF.svg", cards: cards, id: req.params.setid}
+
+    return res.render('review', carouselData)
+})
+
+
 app.get('*', (req, res) => {
     return res.status(404).send('Page not found!')
 })
