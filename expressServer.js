@@ -1,7 +1,7 @@
 const express = require('express')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
-const cors = require('cors')
+// const cors = require('cors')
 // const helmet = require('helmet')
 const compression = require('compression')
 const userRouter = require('./routers/users')
@@ -11,9 +11,9 @@ const settingRouter = require('./routers/settings')
 const app = express()
 const server = require('http').createServer(app)
 
-const whitelist = ['http://localhost:3000']
+// const whitelist = ['http://localhost:3000']
 
-app.use(cors({ credentials: true, origin: whitelist }))
+// app.use(cors({ credentials: true, origin: whitelist }))
 // app.use(helmet())
 app.use(compression())
 app.use(express.json({ limit: '50mb' }))
