@@ -1,3 +1,7 @@
 .navbar-bg {
     background-color: #9984D4;
 }
+
+.nav-button{
+    border-width:0px;
+}
