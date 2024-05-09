@@ -13,28 +13,17 @@
   <div class="container">
 
   <div class="input-group justify-content-center">
-    <div class="form-outline" data-mdb-input-init>
-      <input type="search" placeholder="Search" id="form1" class="form-control" />
-    </div>
-    <button type="button" class="btn btn-primary" data-mdb-ripple-init>
-      <img class='image-fluid' src='images/search.svg'>
-    </button>
+    <form action='/searchCollection' method='post'>
+      <input name="search" type="search" placeholder="Search" />
+      <button type="submit" class="btn btn-primary" data-mdb-ripple-init>
+      <img src='images/search.svg'>
+      </button>
+    </form>
   </div>
 
-  <div class="dropdown justify-content-end">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Sort By
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-      <button class="dropdown-item" type="button">Action</button>
-      <button class="dropdown-item" type="button">Another action</button>
-      <button class="dropdown-item" type="button">Something else here</button>
-    </div>
-  </div>
-
-<div class="list-group">
+<div class="list-group" style="margin-top:20px">
   <% for(var i = 0; i<collections.length; i++) { %>
-      <a href="/review/<%= collections[i].shareid %>" class="list-group-item list-group-item-action"><%= collections[i].setName %></a>
+      <a href="/review/<%= collections[i].shareId %>" class="list-group-item list-group-item-action"><%= collections[i].setName %></a>
   <% }; %>
 </div>
 
