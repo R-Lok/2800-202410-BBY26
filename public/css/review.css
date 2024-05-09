@@ -18,12 +18,18 @@
     height: 100vh;
 }
 
-#sharecode-container {
-    background-color: grey;
-    border-radius: 10px;
-}
-
 #sharecode-container > * {
     margin: 0;
-    padding: 0;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+#sharecode {
+    background-color: grey;
+    border-radius: 20px;
+}
+
+#tap-notif {
+    margin: 20px 0px;
 }

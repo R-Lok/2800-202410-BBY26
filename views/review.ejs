@@ -3,6 +3,11 @@
 </head>
 <body>
     <div class="content-container">
+        <div id="counter-container">
+            <span id="counter"> 1 </span>
+            <span id="divide"> / </span>
+            <span id="numCards"> <%= cards.length%></span>
+        </div>
         <div id="carouselExampleCaptions" class="carousel slide" data-bs-theme="dark">
             <div class="carousel-indicators">
                 <% for(let i=0; i < cards.length; i++) { %>
@@ -23,14 +28,15 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
-        <div>
+        <div id="tap-notif">
             <p>Tap Card to flip</p>
         </div>
         <div id="sharecode-container">
-            <p>Share this set:</p>
-            <p><%= id %></p>
+            <p>Share this set</p>
+            <p id="sharecode"><%= id %></p>
         </div>
     </div>
+<script src="../scripts/review.js"></script>
 <%- include("template/footer") %>
 
 

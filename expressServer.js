@@ -73,7 +73,7 @@ app.get('/review/:setid', (req, res) => {
             answer: "man"
         }
     ]
-    const carouselData = {bg: "/images/white.jpeg", cards: cards, id: setid}
+    const carouselData = {bg: "/images/plain-FFFFFF.svg", cards: cards, id: setid}
 
     return res.render('review', carouselData)
 })
