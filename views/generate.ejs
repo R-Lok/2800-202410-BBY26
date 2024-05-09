@@ -6,7 +6,8 @@
   </head>
 
   <body>
-    <div class="container d-flex flex-column justify-content-center">
+    <%- include("template/headerBar.ejs") %>
+    <div class="generate-container d-flex flex-column justify-content-center">
       <h3 class="h3 mb-5 fw-normal text-center display-3">Generate Your Flashcards</h3>
 
       <ul class="nav nav-tabs d-flex flex-nowrap justify-content-center" id="myTab" role="tablist">
@@ -30,7 +31,7 @@
 
         <div class="tab-pane fade show active d-flex flex-column align-items-center" id="text-tab-pane" role="tabpanel"
           aria-labelledby="text-tab" tabindex="0">
-          <form action="/reviewResults" method="post">
+          <form action="/review" method="get">
             <p>Parameters for generation</p>
             <select class="form-select mb-3" id="selectDifficulty" aria-label="Large select example"
               name="difficulty">
@@ -66,7 +67,8 @@
 
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Change parameters</button>
-                      <button type="submit" class="btn btn-primary">Generate</button>
+                      <a href="/review/1">Generate</a> 
+                      <!-- <button type="button" class="btn btn-primary"></button> -->
                     </div>
                   </div>
                 </div>
@@ -79,4 +81,5 @@
         </div>
       </div>
     </div>
+    <%- include("template/footerBar.ejs") %>
     <%- include("template/footer") %>

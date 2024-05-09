@@ -1,12 +1,14 @@
 body, html {
-  height: 100%;  /* Full height */
-  margin: 0;     /* Remove default margin */
+  height: 100%;  
+  margin: 0;    
 }
-.container {
+
+.sign-up-container {
   height: 100%;
   display: flex;
   align-items: center;  
   justify-content: center;  
+  transform: translateY(-10%);
 }
 
 .form-signup {

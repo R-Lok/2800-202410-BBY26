@@ -84,27 +84,27 @@ app.post('/signupSubmit', (req, res) => {
 app.get('/review/:setid', (req, res) => {
     const cards = [
         {
-            question: "Element symbol for gold",
-            answer: "Au"
+            question: 'Element symbol for gold',
+            answer: 'Au',
         },
         {
-            question: "Element symbol for Iron",
-            answer: "Fe"
+            question: 'Element symbol for Iron',
+            answer: 'Fe',
         },
         {
-            question: "Element symbol for Nickel",
-            answer: "Ni"
+            question: 'Element symbol for Nickel',
+            answer: 'Ni',
         },
         {
-            question: "Element symbol for Zinc",
-            answer: "Zn"
+            question: 'Element symbol for Zinc',
+            answer: 'Zn',
         },
         {
-            question: "Element symbols for Mercury",
-            answer: "Hg"
-        }
+            question: 'Element symbols for Mercury',
+            answer: 'Hg',
+        },
     ]
-    const carouselData = {bg: "/images/plain-FFFFFF.svg", cards: cards, id: req.params.setid}
+    const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: cards, id: req.params.setid }
 
     return res.render('review', carouselData)
 })
