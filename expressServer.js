@@ -52,6 +52,10 @@ app.get('/health', (_, res) => {
     return res.status(200).send('ok')
 })
 
+app.get('/test', (req, res) => {
+    return res.render('template');
+})
+
 app.get('*', (req, res) => {
     return res.status(404).send('Page not found!')
 })
