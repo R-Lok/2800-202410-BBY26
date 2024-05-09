@@ -50,7 +50,6 @@ app.get('/health', (_, res) => {
 })
 
 app.get('/review/:setid', (req, res) => {
-    const setid = "123341233"
     const cards = [
         {
             question: "Hello bobby?",
@@ -73,7 +72,7 @@ app.get('/review/:setid', (req, res) => {
             answer: "man"
         }
     ]
-    const carouselData = {bg: "/images/plain-FFFFFF.svg", cards: cards, id: setid}
+    const carouselData = {bg: "/images/plain-FFFFFF.svg", cards: cards, id: req.params.setid}
 
     return res.render('review', carouselData)
 })

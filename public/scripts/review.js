@@ -24,5 +24,17 @@ function decrementCounter() {
     }
 }
 
+const captions = document.querySelectorAll(".carousel-caption")
+console.log(captions)
 document.querySelector(".carousel-control-next").addEventListener("click", incrementCounter)
 document.querySelector(".carousel-control-prev").addEventListener("click", decrementCounter)
+
+//make each flashcard flippable
+captions.forEach(element => {
+    element.addEventListener("click", (e) => {
+        console.log("flip")
+        const target = e.target.tagName == "H5" || "p" ? e.target.parentNode : e.target
+        target.querySelector("p").classList.toggle("hidden")
+        target.querySelector("h5").classList.toggle("hidden")
+    })
+})
