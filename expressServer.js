@@ -56,7 +56,7 @@ app.get('/health', (_, res) => {
     return res.status(200).send('ok')
 })
 
-<<<<<<< HEAD
+
 app.get('/collection', async (req, res) => {
     var flashcardCollection = database.db(process.env.DATABASE_NAME).collection('flashcardset')
     const collections = await flashcardCollection.find({userId:100}).toArray();
@@ -72,12 +72,6 @@ app.post('/searchCollection', async(req, res) => {
     
 });
 
-=======
-app.get('/test', (req, res) => {
-    return res.render('template');
-})
-
->>>>>>> dev
 app.get('*', (req, res) => {
     return res.status(404).send('Page not found!')
 })
