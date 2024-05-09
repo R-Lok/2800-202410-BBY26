@@ -1,0 +1,47 @@
+:root {
+    --main-color1: #CAA8F5;
+    --main-color2: #9984D4;
+    --main-color3: #FED766;
+    --main-color4: #3c0761;
+    --main-color5: #FFFFFF;
+}
+
+.headerText {
+    color:var(--main-color2);
+}
+
+.headerText2 {
+    color:var(--main-color3);
+}
+
+.setText{
+    color:var(--main-color4);
+}
+
+.space {
+    padding-bottom:6px;
+}
+
+.space2 {
+    padding-bottom:10px;
+}
+
+.button-bg{
+    background-color:var(--main-color2);
+    margin-bottom:7px;
+}
+
+.input-group input[type="search"] {
+    width: 300px; /* Adjust the width as per your requirement */
+    height: 40px; /* Adjust the height as per your requirement */
+    border-radius: 20px;
+    padding: 10px;
+    border: 1px solid #ced4da; /* Border color */
+  }
+
+  .list-group{
+    max-height: 400px;
+    margin-bottom: 10px;
+    overflow:scroll;
+    margin-top:20px
+}

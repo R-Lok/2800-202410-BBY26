@@ -27,6 +27,10 @@ const mongoUrl = process.env.NODE_ENV === 'local' ?
 
 console.log(mongoUrl)
 
+
+const MongoClient = require("mongodb").MongoClient; 
+var database = new MongoClient(mongoUrl, {useNewUrlParser: true, useUnifiedTopology: true});
+
 const options = {
     mongoUrl: mongoUrl,
     crypto: {
@@ -54,6 +58,21 @@ app.get('/health', (_, res) => {
     return res.status(200).send('ok')
 })
 
+
+app.get('/collection', async (req, res) => {
+    var flashcardCollection = database.db(process.env.DATABASE_NAME).collection('flashcardset')
+    const collections = await flashcardCollection.find({userId:100}).toArray();
+    return res.render('collection', {collections, collections});
+})
+
+app.post('/searchCollection', async(req, res) => {
+    var search = req.body.search;
+    var flashcardCollection = database.db(process.env.DATABASE_NAME).collection('flashcardset')
+    const regexPattern = new RegExp('^' + search, 'i');
+    const collections = await flashcardCollection.find({userId: 100, setName: { $regex: regexPattern } }).toArray();
+    return res.render('collection', {collections, collections});
+    
+});
 app.get('/test', (req, res) => {
     return res.render('template')
 })

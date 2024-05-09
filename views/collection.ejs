@@ -1,0 +1,35 @@
+<%- include("template/header.ejs") %>
+<link rel="stylesheet" href="/css/collections.css">
+</head>
+<body>
+<%- include("template/headerBar.ejs") %>
+
+  <div class="d-flex justify-content-center mt-5 headerText space">
+    <h1 style="font-size:38px">Flashcard Collection</h1>
+  </div>
+
+  <div class="d-flex justify-content-center space2">
+    <h6>Here are your previously generated flashcards</h6>
+  </div>
+
+  <div class="container">
+
+  <div class="input-group justify-content-center">
+    <form class= "justify-content-center" action='/searchCollection' method='post'>
+      <input name="search" type="search" placeholder="Search" />
+      <button type="submit" class="btn button-bg" data-mdb-ripple-init>
+      <img src='images/search.svg'>
+      </button>
+    </form>
+  </div>
+
+<div class="list-group">
+  <% for(var i = 0; i<collections.length; i++) { %>
+      <b><a href="/review/<%= collections[i].shareId %>" class="list-group-item list-group-item-action setText"><%= collections[i].setName %></a></b>
+  <% }; %>
+</div>
+
+</div>
+
+<%- include("template/footerBar.ejs") %>
+<%- include("template/footer.ejs") %>
