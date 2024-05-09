@@ -1,0 +1,18 @@
+.navbar-bg {
+    background-color: #9984D4;
+}
+
+.nav-item > button {
+    width: 25vw;
+    border: none;
+    background: none;
+}
+
+.nav-item {
+    text-align: center;
+    list-style-type:none;
+}
+
+.footer-button > img {
+    height: 50px;
+}
