@@ -38,11 +38,11 @@
 
 .custom-alert p {
     margin: 0;
-    font-size: 13pt;
+    font-size: 14pt;
 }
 
 .container-calendar {
-    margin: 1.25em;
+    margin: 1em;
 }
 
 .calendar {
@@ -65,9 +65,10 @@
 }
 
 .home-buttons {
-    margin-bottom: 0.25em;
+    margin-bottom: 0.5em;
     border-radius: 15px;
     background-color: #8714c9;
+    padding: 0.5em;
 }
 
 .footer {

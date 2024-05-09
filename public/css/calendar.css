@@ -57,7 +57,7 @@ body {font-family: Verdana, sans-serif;}
 
 /* Days (1-31) */
 .days {
-  padding: 10px 0;
+  padding: 0 0;
   background: #ffffff;
   margin: 0;
 }
@@ -71,6 +71,7 @@ body {font-family: Verdana, sans-serif;}
   margin-bottom: 5px;
   font-size:16px;
   color: #777;
+  padding-top: 10px;
 }
 
 /* Highlight the "current" day */
