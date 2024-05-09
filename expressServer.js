@@ -52,24 +52,24 @@ app.get('/health', (_, res) => {
 app.get('/review/:setid', (req, res) => {
     const cards = [
         {
-            question: "Hello bobby?",
-            answer: "yes"
+            question: "Element symbol for gold",
+            answer: "Au"
         },
         {
-            question: "biggest donut",
-            answer: "jreoeoe"
+            question: "Element symbol for Iron",
+            answer: "Fe"
         },
         {
-            question: "Abba?",
-            answer: "dabba"
+            question: "Element symbol for Nickel",
+            answer: "Ni"
         },
         {
-            question: "free?",
-            answer: "yes"
+            question: "Element symbol for Zinc",
+            answer: "Zn"
         },
         {
-            question: "tree?",
-            answer: "man"
+            question: "Element symbols for Mercury",
+            answer: "Hg"
         }
     ]
     const carouselData = {bg: "/images/plain-FFFFFF.svg", cards: cards, id: req.params.setid}
