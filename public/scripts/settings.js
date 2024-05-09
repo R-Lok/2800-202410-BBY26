@@ -1,6 +1,6 @@
 const changePwd = async (previousPwd, newPwd, ConfirmPwd) => {
     console.log(previousPwd, newPwd, ConfirmPwd)
-    const response = await fetch(`http://localhost:3000/settings/changePwd`, {
+    const response = await fetch(`/settings/changePwd`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -25,7 +25,7 @@ const changePwd = async (previousPwd, newPwd, ConfirmPwd) => {
 
 const editName = async (newName) => {
     console.log(newName)
-    const response = await fetch(`http://localhost:3000/settings/editName`, {
+    const response = await fetch(`/settings/editName`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
