@@ -18,6 +18,10 @@
     height: 100vh;
 }
 
+img {
+    max-height: 400px;
+}
+
 #sharecode-container > * {
     margin: 0;
     padding: 5px;
@@ -38,8 +42,17 @@
     display: none;
 }
 
+.alert {
+    position: absolute;
+    top: 10vh;
+}
+
 .alert-hidden {
     visibility: hidden;
     opacity: 0;
     transition: visibility 0s 2s, opacity 2s linear;
+}
+
+#carouselExampleCaptions {
+    margin-top: 5px;
 }
