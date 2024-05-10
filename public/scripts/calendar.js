@@ -19,7 +19,7 @@ const months = [
     "December"
 ];
 
-//generates html of calendar
+//generates days of current month
 function generateDaysOfMonth() {
     let firstDayDate = new Date(year, month, 1);
     let lastDayDate = new Date(year, month + 1, 0);
@@ -35,7 +35,36 @@ function generateDaysOfMonth() {
     }
     // console.log(`${i}, ${lastDayDate}`);
     console.log(`${html}`);
+    console.log(`${generateDaysOfPrevMonth()}`);
     return html;
+}
+
+function generateDaysOfPrevMonth() {
+    let prevMonthLastDate = new Date(year, month, 0);
+    let prevMonthLastWeekday = prevMonthLastDate.getDay();
+    let prevMonthTotalDays = prevMonthLastDate.getDate();
+    console.log(`last weekday of prev month ${prevMonthTotalDays} ${prevMonthLastWeekday}`);
+    
+    let html = '';
+    let i;
+    let d = prevMonthTotalDays - prevMonthLastWeekday;
+    for (i = 0; i <= prevMonthLastWeekday; i++) {
+        html += `<li>${d}</li>`;
+        d++;
+    }
+    return html;
+}
+
+function generateDaysOfNextMonth() {
+    let html = '';
+
+    return html;
+}
+
+function getLastDateOfMonth() {
+    let d = 
+    console.log(`${d}`);
+    return d;
 }
 
 function x() {
