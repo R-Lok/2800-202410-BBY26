@@ -18,10 +18,8 @@ const totalWeekDays = 7;
 let date = new Date();
 let year = date.getFullYear();
 let month = date.getMonth();
-let dayOfWeek = date.getDay();
 let dayOfMonth = date.getDate();
 
-let currMonthFirstDate = new Date(year, month, 1);
 let currMonthLastDate = new Date(year, month + 1, 0);
 
 //generates days of current month
@@ -35,7 +33,6 @@ function generateDaysOfCurrMonth() {
             html += `<li>${i}</li>`;
         }
     }
-    // console.log(`${i}, ${currMonthLastDate}`);
     console.log(`prev month days: ${generateDaysOfPrevMonth()}`);
     console.log(`curr month days: ${html}`);
     console.log(`next month days: ${generateDaysOfNextMonth()}`);
@@ -45,8 +42,13 @@ function generateDaysOfCurrMonth() {
 function generateDaysOfPrevMonth() {
     let prevMonthLastDate = new Date(year, month, 0);
     let prevMonthLastWeekday = prevMonthLastDate.getDay();
-    let prevMonthTotalDays = prevMonthLastDate.getDate();    
+    let prevMonthTotalDays = prevMonthLastDate.getDate();
+
     let html = '';
+    if (prevMonthLastWeekday == 6) {
+        return html;
+    } 
+
     let i;
     let d = prevMonthTotalDays - prevMonthLastWeekday;
     for (i = 0; i <= prevMonthLastWeekday; i++) {
@@ -57,13 +59,16 @@ function generateDaysOfPrevMonth() {
 }
 
 function generateDaysOfNextMonth() {
-    let nextMonthFirstDate  = new Date(year, month + 1, 1);
-    // let nextMonthFirstWeekday = nextMonthFirstDate.getDay();
     let currMonthLastWeekday = currMonthLastDate.getDay();
+    let nextMonthFirstWeekday = totalWeekDays - currMonthLastWeekday - 1;
 
     let html = '';
+    if (nextMonthFirstWeekday == 0) {
+        return html;
+    } 
+
     let d = 1;
-    for (d; d < totalWeekDays - currMonthLastWeekday; d++) {
+    for (d; d <= nextMonthFirstWeekday; d++) {
         html += `<li>${d}</li>`;
     };
 
