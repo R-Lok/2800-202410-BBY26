@@ -6,6 +6,7 @@ const MongoStore = require('connect-mongo')
 const compression = require('compression')
 const userRouter = require('./routers/users')
 const settingRouter = require('./routers/settings')
+const collectionsModel = require('./models/collections')
 
 
 const app = express()
@@ -24,10 +25,6 @@ app.set('view engine', 'ejs')
 const mongoUrl = process.env.NODE_ENV === 'local' ?
     `mongodb://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/` :
     `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}/?retryWrites=true&w=majority`
-
-
-const MongoClient = require("mongodb").MongoClient; 
-var database = new MongoClient(mongoUrl, {useNewUrlParser: true, useUnifiedTopology: true});
 
 const options = {
     mongoUrl: mongoUrl,
@@ -56,21 +53,17 @@ app.get('/health', (_, res) => {
     return res.status(200).send('ok')
 })
 
-
 app.get('/collection', async (req, res) => {
-    var flashcardCollection = database.db(process.env.DATABASE_NAME).collection('flashcardset')
-    const collections = await flashcardCollection.find({userId:100}).toArray();
-    return res.render('collection', {collections, collections});
+    const collections = await collectionsModel.find({ userId: 100 })
+    return res.render('collection', { collections: collections })
 })
 
-app.post('/searchCollection', async(req, res) => {
-    var search = req.body.search;
-    var flashcardCollection = database.db(process.env.DATABASE_NAME).collection('flashcardset')
-    const regexPattern = new RegExp('^' + search, 'i');
-    const collections = await flashcardCollection.find({userId: 100, setName: { $regex: regexPattern } }).toArray();
-    return res.render('collection', {collections, collections});
-    
-});
+app.post('/searchCollection', async (req, res) => {
+    const search = req.body.search
+    const regexPattern = new RegExp('^' + search, 'i')
+    const collections = await collectionsModel.find({ userId: 100, setName: { $regex: regexPattern } })
+    return res.render('collection', { collections: collections })
+})
 
 app.get('*', (req, res) => {
     return res.status(404).send('Page not found!')
