@@ -12,7 +12,7 @@ const server = require('http').createServer(app)
 
 const whitelist = ['http://localhost:3000']
 
-const {x, y, generateDaysOfMonth} = require('./public/scripts/calendar.js');
+const {x, y, generateDaysOfCurrMonth} = require('./public/scripts/calendar.js');
 
 app.use(cors({ credentials: true, origin: whitelist }))
 app.use(helmet())
@@ -46,7 +46,7 @@ app.use('/members', userRouter)
 
 app.get('/', (req, res) => {
     x();
-    generateDaysOfMonth();
+    generateDaysOfCurrMonth();
     let days = 3;
     return res.render('home', { days: days, name: req.session.name, email: req.session.email })
 })
