@@ -1,14 +1,28 @@
 {
-	"name": "assignment-1-wyliao76",
+	"name": "study_gen",
 	"version": "1.0.0",
-	"description": "Web dev II assignment 1",
+	"description": "project 2800 BBY-26",
 	"main": "index.js",
 	"scripts": {
 		"lint": "esw . --color --fix",
 		"local": "cross-env NODE_ENV=local nodemon index.js",
 		"dev": "cross-env NODE_ENV=dev nodemon index.js"
 	},
-	"author": "Will Liao",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/R-Lok/2800-202410-BBY26.git"
+	},
+	"author": {
+		"name": "Lok, Ryan",
+		"email": "rlok.pc@gmail.com",
+		"url": "https://github.com/R-Lok/"
+	},
+	"contributors": [
+		{ "name": "Kong, Jimmy", "email": "jimmyatwork368@gmail.com" },
+		{ "name": "Li, Louise", "email": "louiseyli.educ@gmail.com" },
+		{ "name": "Liao, Wei-Yu", "email": "wyliao76@gmail.com" },
+		{ "name": "Lin, Joe", "email": "jyyunlin@gmail.com" }
+	],
 	"license": "ISC",
 	"dependencies": {
 		"bcrypt": "^5.1.1",
