@@ -1,0 +1,34 @@
+<%
+    const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+    ];
+
+    const totalWeekDays = 7;
+
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = date.getMonth();
+    let dayOfMonth = date.getDate();
+
+    let currMonthLastDate = new Date(year, month + 1, 0);
+    let i;
+    for (i = 1; i <= currMonthLastDate.getDate(); i++) {
+        if (i == dayOfMonth) {
+            %><li><span class="active"><%= i %></span></li><%;
+        } else {
+            %><li><%= i %></li><%;
+        }
+    }
+
+%>

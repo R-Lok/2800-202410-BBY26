@@ -18,6 +18,7 @@ const totalWeekDays = 7;
 let date = new Date();
 let year = date.getFullYear();
 let month = date.getMonth();
+let monthName = months[month];
 let dayOfMonth = date.getDate();
 
 let currMonthLastDate = new Date(year, month + 1, 0);

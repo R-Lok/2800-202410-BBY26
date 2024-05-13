@@ -45,8 +45,8 @@ app.use(session({
 app.use('/members', userRouter)
 
 app.get('/', (req, res) => {
-    x();
-    generateDaysOfCurrMonth();
+    // x();
+    // generateDaysOfCurrMonth();
     let days = 3;
     return res.render('home', { days: days, name: req.session.name, email: req.session.email })
 })
