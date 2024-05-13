@@ -65,13 +65,12 @@ body {font-family: Verdana, sans-serif;}
 .days li {
   list-style-type: none;
   display: inline-block;
-  width: 11%;
-  margin: 0.15em;
+  width: 14.28%; /* Adjusted width for 7 columns */
+  margin: 0;
   text-align: center;
-  margin-bottom: 5px;
-  font-size:16px;
+  font-size: 16px;
   color: #777;
-  padding-top: 10px;
+  padding: 10px 0;
 }
 
 /* Highlight the "current" day */
