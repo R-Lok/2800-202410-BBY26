@@ -46,4 +46,16 @@
         }
     }
 
+    let currMonthLastWeekday = currMonthLastDate.getDay();
+    let nextMonthFirstWeekday = totalWeekDays - currMonthLastWeekday - 1;
+
+    if (nextMonthFirstWeekday == 0) {
+        return;
+    }
+
+    d = 1;
+    for (d; d <= nextMonthFirstWeekday; d++) {
+        %><li><%= d %></li><%;
+    };
+
 %>
