@@ -18,7 +18,7 @@ body {font-family: Verdana, sans-serif;}
 /* Month list */
 .month ul {
   margin: 0;
-  padding: 0;
+  padding: 0.5em;
 }
 
 .month ul li {

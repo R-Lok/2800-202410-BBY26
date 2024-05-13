@@ -32,17 +32,16 @@
     let i1;
     let d = prevMonthTotalDays - prevMonthLastWeekday;
     for (i1 = 0; i1 <= prevMonthLastWeekday; i1++) {
-        %><li><%= d %></li><%;
+        %><li><span class="text-secondary"><%= d %></span></li><%;
         d++;
     }
-
     let currMonthLastDate = new Date(year, month + 1, 0);
     let i;
     for (i = 1; i <= currMonthLastDate.getDate(); i++) {
         if (i == dayOfMonth) {
             %><li><span class="active"><%= i %></span></li><%;
         } else {
-            %><li><%= i %></li><%;
+            %><li><span class="text-dark"><%= i %></span></li><%;
         }
     }
 
@@ -55,7 +54,7 @@
 
     d = 1;
     for (d; d <= nextMonthFirstWeekday; d++) {
-        %><li><%= d %></li><%;
+        %><li><span class="text-secondary"><%= d %></span></li><%;
     };
 
 %>
