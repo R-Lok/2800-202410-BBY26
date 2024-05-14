@@ -1,0 +1,60 @@
+<%
+    const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+    ];
+
+    const totalWeekDays = 7;
+
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = date.getMonth();
+    let dayOfMonth = date.getDate();
+
+    let prevMonthLastDate = new Date(year, month, 0);
+    let prevMonthLastWeekday = prevMonthLastDate.getDay();
+    let prevMonthTotalDays = prevMonthLastDate.getDate();
+
+    if (prevMonthLastWeekday == 6) {
+        return html;
+    } 
+
+    let i1;
+    let d = prevMonthTotalDays - prevMonthLastWeekday;
+    for (i1 = 0; i1 <= prevMonthLastWeekday; i1++) {
+        %><li><span class="text-secondary"><%= d %></span></li><%;
+        d++;
+    }
+    let currMonthLastDate = new Date(year, month + 1, 0);
+    let i;
+    for (i = 1; i <= currMonthLastDate.getDate(); i++) {
+        if (i == dayOfMonth) {
+            %><li><span class="active"><%= i %></span></li><%;
+        } else {
+            %><li><span class="text-dark"><%= i %></span></li><%;
+        }
+    }
+
+    let currMonthLastWeekday = currMonthLastDate.getDay();
+    let nextMonthFirstWeekday = totalWeekDays - currMonthLastWeekday - 1;
+
+    if (nextMonthFirstWeekday == 0) {
+        return;
+    }
+
+    d = 1;
+    for (d; d <= nextMonthFirstWeekday; d++) {
+        %><li><span class="text-secondary"><%= d %></span></li><%;
+    };
+
+%>
