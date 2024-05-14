@@ -55,6 +55,7 @@ function triggerAlert(e) {
     navigator.clipboard.writeText(e.target.textContent)
 
     const alert = document.querySelector(".alert")
+    alert.textContent = "Sharecode copied to clipboard!"
     alert.classList.remove("alert-hidden")
     setTimeout(() => alert.classList.add("alert-hidden"), 3000)
 }
@@ -65,5 +66,20 @@ if(document.getElementById("sharecode")) {
     document.getElementById("sharecode").addEventListener("click", triggerAlert)
 }
 
+//this needs validation in the backend to prevent injections
+if(document.getElementById("save-button")) {
+    document.getElementById("save-button").addEventListener("click", (e) => {
+        const data = {
+            name: document.getElementById("setName").value,
+            cards: localStorage.getItem("cards")}
+        console.log("data:" + data);
 
+        fetch('/submitcards', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {'Content-Type': 'application/json'}
+            }
+        ).then(console.log("submission success")).catch("submission failed") //fill this in later 
+    }
+)}
 

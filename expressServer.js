@@ -153,6 +153,13 @@ app.get("/check/:json", (req, res) => {
     return res.render('review', carouselData)
 })
 
+app.post('/submitcards', (req, res) => {
+    console.log(req.body)
+    console.log(req.body.name)
+    console.log(JSON.parse(req.body.cards))
+    res.send()   
+})
+
 app.get('*', (req, res) => {
     return res.status(404).send('Page not found!')
 })
