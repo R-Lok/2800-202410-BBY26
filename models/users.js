@@ -30,7 +30,7 @@ const UsersSchema = new Schema({
             default: null,
         },
         shareId: {
-            type: mongoose.ObjectId,
+            type: Number,
             default: null,
         },
     },

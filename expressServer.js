@@ -8,6 +8,7 @@ const userRouter = require('./routers/users')
 const { router: authRouter, isAuth } = require('./routers/auth')
 const settingRouter = require('./routers/settings')
 const collectionsModel = require('./models/collections')
+const flashcardsModel = require('./models/flashcards')
 
 
 const app = express()
@@ -153,10 +154,31 @@ app.get("/check/:json", (req, res) => {
     return res.render('review', carouselData)
 })
 
-app.post('/submitcards', (req, res) => {
+app.post('/submitcards', async (req, res) => {
     console.log(req.body)
     console.log(req.body.name)
     console.log(JSON.parse(req.body.cards))
+
+    let lastShareCode
+    let shareId
+
+    //get the latest sharecode from collections
+    try {
+         let result  = await collectionsModel.findOne().sort({shareId: -1}).select('shareId').exec()
+         lastShareCode = result ? result.shareId : null
+    } catch (err) {
+        console.log("Failed to fetch latestShareCode")
+    }
+
+    if (!lastShareCode) {
+        shareId = 0;
+    } else {
+        shareId = lastShareCode + 1;
+    }
+    console.log(shareId)
+
+    //todo - write flashcards to db
+
     res.send()   
 })
 

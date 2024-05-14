@@ -2,10 +2,9 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const CollectionsSchema = new Schema({
-    // userId: {
-    //     type: mongoose.ObjectId,
-    //     required: true,
-    // },
+    setName: {type: String},
+    userId: {type: String},
+    shareId: {type: Number}
 }, {
     timestamps: true,
 })
