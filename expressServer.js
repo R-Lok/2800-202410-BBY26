@@ -72,6 +72,22 @@ app.post('/searchCollection', async (req, res) => {
     return res.render('collection', { collections: collections })
 })
 
+app.get('/deleteCollection/:shareid', async (req, res) => {
+    let shareId = req.params.shareid;
+    console.log("Inside delete, shareid: " + shareId)
+    deleteSet(shareId);
+    res.redirect('/collection');
+})
+
+async function deleteSet(shareID) {
+    try{
+        await collectionsModel.deleteOne({shareId:shareID});
+        console.log("Document deleted successfully");
+    } catch (err) {
+        console.error("Error deleting document: ", err);
+    }
+}
+
 app.get('/test', (req, res) => {
     return res.render('template')
 })
