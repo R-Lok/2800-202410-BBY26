@@ -82,6 +82,7 @@ router.post('/login', async (req, res, next) => {
         await userModel.findByIdAndUpdate(user.id, { lastLogin: Date.now() })
         req.session.email = user.email
         req.session.name = user.name
+        req.session._id = user._id
         return res.redirect('/users/profile')
     } catch (error) {
         next(error)

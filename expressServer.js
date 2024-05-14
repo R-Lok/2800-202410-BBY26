@@ -9,6 +9,7 @@ const { router: authRouter, isAuth } = require('./routers/auth')
 const settingRouter = require('./routers/settings')
 const collectionsModel = require('./models/collections')
 const flashcardsModel = require('./models/flashcards')
+const mongoose = require('mongoose')
 
 
 const app = express()
@@ -165,6 +166,7 @@ app.post('/submitcards', async (req, res) => {
     //get the latest sharecode from collections
     try {
          let result  = await collectionsModel.findOne().sort({shareId: -1}).select('shareId').exec()
+         console.log(result)
          lastShareCode = result ? result.shareId : null
     } catch (err) {
         console.log("Failed to fetch latestShareCode")
@@ -177,7 +179,31 @@ app.post('/submitcards', async (req, res) => {
     }
     console.log(shareId)
 
-    //todo - write flashcards to db
+    console.log(req.session._id) //user _id
+
+    const inputData = JSON.parse(req.body.cards).map(card => {
+        return {
+            shareId: `${shareId}`,
+            ...card
+        }
+    })
+
+    console.log(inputData)
+
+    const transactionSession = await mongoose.startSession();
+    transactionSession.startTransaction();
+    try{
+        await flashcardsModel.insertMany(inputData)
+        await collectionsModel.create({setName: `${req.body.name}`, userId: req.session._id, shareId: shareId })
+        await transactionSession.commitTransaction()
+        transactionSession.endSession()
+        console.log("Successfully wrote to flashcard collection")
+    } catch (err) {
+        await transactionSession.abortTransaction()
+        transactionSession.endSession()
+        console.log("Error inserting to flashcards collection")
+    }
+
 
     res.send()   
 })
