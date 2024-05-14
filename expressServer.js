@@ -49,7 +49,8 @@ app.use('/users', isAuth, userRouter)
 app.use('/settings', isAuth, settingRouter)
 
 app.get('/', (req, res) => {
-    return res.render('home', { email: req.session.email })
+    // return res.render('home', { email: req.session.email })
+    return res.render('template')
 })
 
 app.get('/health', (_, res) => {
