@@ -8,8 +8,6 @@ const userRouter = require('./routers/users')
 const { router: authRouter, isAuth } = require('./routers/auth')
 const settingRouter = require('./routers/settings')
 const collectionsModel = require('./models/collections')
-const Users = require('./models/users')
-// const UserSessions = require('./models/userSessions')
 
 const app = express()
 const server = require('http').createServer(app)
@@ -83,38 +81,6 @@ app.get('/generate', (req, res) => {
 
 app.get('/signup', (req, res) => {
     return res.render('signup')
-})
-
-app.post('/signupSubmit', (req, res) => {
-    const newUser = new Users({
-        name: req.body.name,
-        email: req.body.email,
-        loginId: req.body.id,
-        password: req.body.password,
-        securityQuestion: req.body.securityQues,
-        securityAnswer: req.body.securityAns,
-    })
-
-    newUser.save()
-        .then(() => console.log('User created'))
-        .catch((err) => console.log(err))
-
-    /*
-    const newUserSession = new UserSessions({
-        userId: req.body.id,
-        sessionId: req.session.id,
-        createdAt: Date.now(),
-    })
-
-    newUserSession.save()
-        .then(() => console.log('User session created'))
-        .catch((err) => console.log(err))
-
-    req.session.name = req.body.name
-    req.session.email = req.body.email
-    */
-
-    res.redirect('/generate')
 })
 
 app.get('/review/:setid', (req, res) => {
