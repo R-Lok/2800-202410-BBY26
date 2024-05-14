@@ -1,0 +1,77 @@
+<%- include('template/header') %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Settings</title>
+    <meta name="StudyGen" content="Settings">
+  </head>
+  <body>
+    <%- include('template/headerBar') %>
+    <nav id="navplaceholder"></nav>
+    <div class="px-4 py-5 my-5 text-center">
+      <img class="d-block mx-auto mb-4 settingsIcon" src="<%= image1 %>"  alt="" width="400">
+      <h1 class="display-5 fw-bold mb-5">Settings</h1>
+      <div class="col-lg-6 mx-auto">
+        <div class="d-flex gap-3 justify-content-sm-center align-items-center flex-column">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changePwdModal">
+            Change Password
+          </button>
+          <br>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editNameModal">
+            Edit Display Name
+          </button>
+          <br>
+          <br>
+          <button id="logout-btn" class="btn btn-primary btn-lg px-4" type="button" onclick="confirm('Are you sure you want to log out?') ? location.href = './goodbye.html' : event.preventDefault()">Log Out</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="changePwdModal" tabindex="-1" role="dialog" aria-labelledby="changePwdModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="changePwdModalLabel">Edit Display Name</h5>
+              <button id="closeChangePwd" type="button" class="close" data-dismiss="modal" aria-label="Close" hidden="true"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <input type="text" class="form-control" id="previousPwd" placeholder="Previous Password">
+                <input type="text" class="form-control" id="newPwd" placeholder="New Password">
+                <input type="text" class="form-control" id="ConfirmPwd" placeholder="Confirm Password">
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" onclick="changePwd(
+                    document.getElementById('previousPwd').value,
+                    document.getElementById('newPwd').value,
+                    document.getElementById('ConfirmPwd').value
+                )">Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="modal fade" id="editNameModal" tabindex="-1" role="dialog" aria-labelledby="editNameModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editNameModalLabel">Edit Display Name</h5>
+            <button id="closeEditName" type="button" class="close" data-dismiss="modal" aria-label="Close" hidden="true"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <input type="text" class="form-control" id="newName" placeholder="New display name">
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="editName(document.getElementById('newName').value)">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="scripts/settings.js"></script>
+    <%- include('template/footerBar') %>
+  </body>
+</html>

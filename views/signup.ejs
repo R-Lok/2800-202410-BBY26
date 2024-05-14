@@ -1,0 +1,58 @@
+<%- include("template/header") %>
+    <link rel="stylesheet" href="../css/signup.css">
+    </link>
+    </head>
+
+    <body>
+        <%- include("template/headerBar.ejs") %>
+            <div class="sign-up-container">
+                <div class="form-signup">
+                    <h1 class="h3 mb-5 fw-normal text-center display-1">Sign Up</h1>
+                    <form action="/signupSubmit" method="post">
+                        <div class="mb-1">
+                            <label for="displayName" class="form-label">Display Name</label>
+                            <input type="text" id="displayName" class="form-control" name="name" required>
+                        </div>
+
+                        <div class="mb-1">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" class="form-control" name="email" required>
+                        </div>
+
+                        <div class="mb-1">
+                            <label for="loginId" class="form-label">Login ID</label>
+                            <input type="text" id="loginId" class="form-control" name="id" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" id="password" class="form-control" name="password" required>
+                        </div>
+
+                        <select class="form-select mb-3" id="securityQues" aria-label="Large select example"
+                            name="securityQues">
+                            <option value="" selected>Security Question</option>
+                            <option value="What's your father's name?">What is your father's name?</option>
+                            <option value="What's is the last name of your favorite elementary school teacher?">What's is the last name of your favorite elementary school teacher?</option>
+                            <option value="What was the name of your first pet?">What was the name of your first pet?</option>
+                            <option value="What is the name of your favourite sports team?">What is the name of your favourite sports team?</option>
+                            <option value="What is the name of your best friend?">What is the name of your best friend?</option>
+                        </select>
+
+                        <div class="mb-1">
+                            <label for="securityAns" class="form-label">Security Answer</label>
+                            <input type="text" id="securityAns" class="form-control" name="securityAns" required>
+                        </div>
+
+                        <div class="d-grid">
+                            <button class="btn btn-primary btn-lg" type="submit">Sign Up</button>
+                        </div>
+
+                        <p class="mt-2 text-center">
+                            Already have an account? <a href="/login">Log In</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+            <%- include("template/footerBar.ejs") %>
+                <%- include("template/footer") %>

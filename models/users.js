@@ -11,6 +11,11 @@ const UsersSchema = new Schema({
         required: true,
         unique: true,
     },
+    loginId: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     password: {
         type: String,
         required: true,
@@ -23,6 +28,25 @@ const UsersSchema = new Schema({
     lastLogin: {
         type: Date,
         default: null,
+    },
+    lastActivity: {
+        timestamp: {
+            type: Date,
+            default: null,
+        },
+        shareId: {
+            type: mongoose.ObjectId,
+            default: null,
+        },
+    },
+    streak: {
+        type: Number,
+        default: 0,
+    },
+    picture: {
+        type: Number,
+        min: 0,
+        max: 9,
     },
     enable: {
         type: Boolean,
