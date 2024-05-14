@@ -5,6 +5,7 @@ const MongoStore = require('connect-mongo')
 // const helmet = require('helmet')
 const compression = require('compression')
 const userRouter = require('./routers/users')
+const { router: authRouter, isAuth } = require('./routers/auth')
 const settingRouter = require('./routers/settings')
 const collectionsModel = require('./models/collections')
 const Users = require('./models/users')
@@ -35,6 +36,7 @@ const options = {
     ttl: process.env.SESSION_TTL,
 }
 
+app.set('trust proxy', 1)
 app.use(session({
     secret: process.env.SECRET,
     store: MongoStore.create(options),
@@ -43,8 +45,9 @@ app.use(session({
     cookie: { secure: process.env.SECURE_COOKIE === 'true' },
 }))
 
-app.use('/members', userRouter)
-app.use('/settings', settingRouter)
+app.use('/', authRouter)
+app.use('/users', isAuth, userRouter)
+app.use('/settings', isAuth, settingRouter)
 
 app.get('/', (req, res) => {
     return res.render('home', { email: req.session.email })

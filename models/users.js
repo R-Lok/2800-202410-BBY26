@@ -37,6 +37,25 @@ const UsersSchema = new Schema({
         type: Date,
         default: null,
     },
+    lastActivity: {
+        timestamp: {
+            type: Date,
+            default: null,
+        },
+        shareId: {
+            type: mongoose.ObjectId,
+            default: null,
+        },
+    },
+    streak: {
+        type: Number,
+        default: 0,
+    },
+    picture: {
+        type: Number,
+        min: 0,
+        max: 9,
+    },
     enable: {
         type: Boolean,
         default: false,
