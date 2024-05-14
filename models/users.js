@@ -11,7 +11,20 @@ const UsersSchema = new Schema({
         required: true,
         unique: true,
     },
+    loginId: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     password: {
+        type: String,
+        required: true,
+    },
+    securityQuestion: {
+        type: String,
+        required: true,
+    },
+    securityAnswer: {
         type: String,
         required: true,
     },

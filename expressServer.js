@@ -7,7 +7,8 @@ const compression = require('compression')
 const userRouter = require('./routers/users')
 const settingRouter = require('./routers/settings')
 const collectionsModel = require('./models/collections')
-
+const Users = require('./models/users')
+// const UserSessions = require('./models/userSessions')
 
 const app = express()
 const server = require('http').createServer(app)
@@ -73,23 +74,44 @@ app.get('/landing', (req, res) => {
     return res.render('landing')
 })
 
-app.get('/signup', (req, res) => {
-    return res.render('signup')
-})
-
 app.get('/generate', (req, res) => {
     return res.render('generate')
 })
 
-app.post('/signupSubmit', (req, res) => {
-    const userInfo = {
-        name: req.body.displayName,
-        email: req.body.email,
-        password: req.body.password,
-    }
+app.get('/signup', (req, res) => {
+    return res.render('signup')
+})
 
-    console.log(userInfo)
-    res.send('Test')
+app.post('/signupSubmit', (req, res) => {
+    const newUser = new Users({
+        name: req.body.name,
+        email: req.body.email,
+        loginId: req.body.id,
+        password: req.body.password,
+        securityQuestion: req.body.securityQues,
+        securityAnswer: req.body.securityAns,
+    })
+
+    newUser.save()
+        .then(() => console.log('User created'))
+        .catch((err) => console.log(err))
+
+    /*
+    const newUserSession = new UserSessions({
+        userId: req.body.id,
+        sessionId: req.session.id,
+        createdAt: Date.now(),
+    })
+
+    newUserSession.save()
+        .then(() => console.log('User session created'))
+        .catch((err) => console.log(err))
+
+    req.session.name = req.body.name
+    req.session.email = req.body.email
+    */
+
+    res.redirect('/generate')
 })
 
 app.get('/review/:setid', (req, res) => {
