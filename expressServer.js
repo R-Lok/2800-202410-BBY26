@@ -16,6 +16,9 @@ const server = require('http').createServer(app)
 
 // app.use(cors({ credentials: true, origin: whitelist }))
 // app.use(helmet())
+
+// const {x, y, generateDaysOfCurrMonth} = require('./public/scripts/calendar.js');
+
 app.use(compression())
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ extended: true }))
@@ -40,15 +43,17 @@ app.use(session({
     store: MongoStore.create(options),
     saveUninitialized: false,
     resave: false,
-    cookie: { secure: process.env.SECURE_COOKIE === 'true' },
+    cookie: { secure: false },
 }))
 
 app.use('/', authRouter)
 app.use('/users', isAuth, userRouter)
 app.use('/settings', isAuth, settingRouter)
+app.use('/members', userRouter)
 
 app.get('/', (req, res) => {
-    return res.render('home', { email: req.session.email })
+    let days = 3;
+    return res.render('home', { days: days, name: req.session.name, email: req.session.email })
 })
 
 app.get('/health', (_, res) => {
