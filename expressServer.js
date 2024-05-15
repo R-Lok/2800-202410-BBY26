@@ -178,9 +178,9 @@ app.post('/submitcards', async (req, res) => {
     const transactionSession = await mongoose.startSession()
     transactionSession.startTransaction()
     try {
-        await flashcardsModel.insertMany(inputData)
+        await flashcardsModel.insertMany(inputData, {session: transactionSession})
         console.log("flashcards insert ok")
-        await collectionsModel.create({ setName: `${req.body.name}`, userId: req.session.userId, shareId: shareId })
+        await collectionsModel.create([{setName: `${req.body.name}`, userId: req.session.userId, shareId: shareId}], {session: transactionSession})
         console.log("set insert ok")
         await transactionSession.commitTransaction()
         transactionSession.endSession()
