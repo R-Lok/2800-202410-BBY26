@@ -25,8 +25,8 @@ const main = async () => {
         console.log('MongoDB connect successful.')
 
         const userObjects = [
-            { accountId: 'admin', name: 'admin', email: 'admin@gmail.com', password: await bcrypt.hash(process.env.ADMIN, saltRounds), role: 'admin', enable: true },
-            { accountId: 'test', name: 'test', email: 'test@gmail.com', password: await bcrypt.hash('123', saltRounds), role: 'normal', enable: true }]
+            { loginId: 'admin', name: 'admin', email: 'admin@gmail.com', password: await bcrypt.hash(process.env.ADMIN, saltRounds), role: 'admin', enable: true },
+            { loginId: 'test', name: 'test', email: 'test@gmail.com', password: await bcrypt.hash('123', saltRounds), role: 'normal', enable: true }]
         const results = await userModel.insertMany(userObjects)
         console.log(results)
 

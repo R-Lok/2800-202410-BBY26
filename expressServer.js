@@ -55,7 +55,7 @@ app.use('/users', isAuth, userRouter)
 app.use('/settings', isAuth, settingRouter)
 app.use('/securityQuestions', isAuth, securityQuestionsRouter)
 
-app.get('/', (req, res) => {
+app.get('/', isAuth, (req, res) => {
     const days = 3
     return res.render('home', { days: days, name: req.session.name, email: req.session.email })
 })
@@ -131,85 +131,82 @@ app.get('/review/:setid', (req, res) => {
             answer: 'Hg',
         },
     ]
-    const carouselData = {bg: "/images/plain-FFFFFF.svg", cards: cards, id: req.params.setid, queryType: "view"}
-    
+    const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: cards, id: req.params.setid, queryType: 'view' }
+
     return res.render('review', carouselData)
 })
 
-app.get("/check/:json", (req, res) => {
-
+app.get('/check/:json', (req, res) => {
     data = [
         {
-            "question": "What is the capital of France?",
-            "answer": "Paris"
+            'question': 'What is the capital of France?',
+            'answer': 'Paris',
         },
         {
-            "question": "Who wrote 'Romeo and Juliet'?",
-            "answer": "William Shakespeare"
+            'question': 'Who wrote \'Romeo and Juliet\'?',
+            'answer': 'William Shakespeare',
         },
         {
-            "question": "What is the powerhouse of the cell?",
-            "answer": "Mitochondria"
+            'question': 'What is the powerhouse of the cell?',
+            'answer': 'Mitochondria',
         },
         {
-            "question": "What is the chemical symbol for water?",
-            "answer": "H2O"
+            'question': 'What is the chemical symbol for water?',
+            'answer': 'H2O',
         },
         {
-            "question": "What year did the Titanic sink?",
-            "answer": "1912"
-        }
+            'question': 'What year did the Titanic sink?',
+            'answer': '1912',
+        },
     ]
 
-    const carouselData = { bg: "/images/plain-FFFFFF.svg", cards: data, queryType: "finalize"}
+    const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: data, queryType: 'finalize' }
 
     return res.render('review', carouselData)
 })
 
 app.post('/submitcards', async (req, res) => {
-
     let lastShareCode
     let shareId
 
-    //get the latest sharecode from collections
+    // get the latest sharecode from collections
     try {
-         let result  = await collectionsModel.findOne().sort({shareId: -1}).select('shareId').exec()
-         console.log("result:" + result)
-         lastShareCode = result ? result.shareId : null
+        const result = await collectionsModel.findOne().sort({ shareId: -1 }).select('shareId').exec()
+        console.log('result:' + result)
+        lastShareCode = result ? result.shareId : null
     } catch (err) {
-        console.log("Failed to fetch latestShareCode")
+        console.log('Failed to fetch latestShareCode')
     }
 
     if (lastShareCode === null) {
-        shareId = 0;
+        shareId = 0
     } else {
-        shareId = lastShareCode + 1;
+        shareId = lastShareCode + 1
     }
 
-    const inputData = JSON.parse(req.body.cards).map(card => {
+    const inputData = JSON.parse(req.body.cards).map((card) => {
         return {
             shareId: `${shareId}`,
-            ...card
+            ...card,
         }
     })
 
-    const transactionSession = await mongoose.startSession();
-    transactionSession.startTransaction();
-    try{
+    const transactionSession = await mongoose.startSession()
+    transactionSession.startTransaction()
+    try {
         await flashcardsModel.insertMany(inputData)
-        await collectionsModel.create({setName: `${req.body.name}`, userId: req.session._id, shareId: shareId })
+        await collectionsModel.create({ setName: `${req.body.name}`, userId: req.session._id, shareId: shareId })
         await transactionSession.commitTransaction()
         transactionSession.endSession()
         console.log(`Successfully wrote ${req.body.name} to db`)
-
     } catch (err) {
         await transactionSession.abortTransaction()
         transactionSession.endSession()
-        console.log("Error inserting db")
+        console.log('Error inserting db')
     }
-    
+
     res.status(200)
-    res.json(JSON.stringify({shareId: shareId}))
+    res.json(JSON.stringify({ shareId: shareId }))
 })
 
 app.get('*', (req, res) => {
