@@ -47,3 +47,18 @@ const editName = async (newName) => {
         })
     return response
 }
+
+function highlightIcon(clickedImage){
+    
+    //Remove 'profilePicBorder' class for all images
+    for(let i = 1; i <= 9; i++) {
+        let elementNum = 'image' + i;
+        let element = document.getElementById(elementNum);
+        element.classList.remove("profilePicBorder");
+        
+    }
+    
+    if(clickedImage) {
+        clickedImage.classList.add("profilePicBorder");
+    }
+}

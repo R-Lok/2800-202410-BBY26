@@ -50,8 +50,9 @@ const UsersSchema = new Schema({
     },
     picture: {
         type: Number,
-        min: 0,
+        min: 1,
         max: 9,
+        default: 1
     },
     enable: {
         type: Boolean,
