@@ -59,7 +59,7 @@ app.use('/users', isAuth, userRouter)
 app.use('/settings', isAuth, settingRouter)
 app.use('/securityQuestions', isAuth, securityQuestionsRouter)
 
-app.get('/', (req, res) => {
+app.get('/home', (req, res) => {
     const days = 3
     return res.render('home', { days: days, name: req.session.name, email: req.session.email })
 })
@@ -100,8 +100,8 @@ app.get('/test', (req, res) => {
     return res.render('template')
 })
 
-app.get('/landing', (req, res) => {
-    return res.render('landing')
+app.get('/', (req, res) => {
+    return req.session.email ? res.redirect('/home') : res.render('landing')
 })
 
 app.get('/generate', (req, res) => {
