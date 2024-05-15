@@ -40,7 +40,17 @@ const incrementStreak = async(req) => {
                 }},
                 {returnOriginal: false}
             );
-        } 
+        } else {
+            user = await usersModel.findOneAndUpdate(
+                { loginId: req.session.loginId },
+                { $set: {
+                    'lastActivity.timestamp': date,
+                    'lastActivity.shareId': shareId,
+                    streak: 0
+                }},
+                {returnOriginal: false}
+            );
+        }
         if (!user) {
             throw console.error();
         }
