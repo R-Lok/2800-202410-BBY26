@@ -1,0 +1,15 @@
+body {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: auto 1fr auto;
+}
+
+:root {
+    --main-color1: #CAA8F5;
+    --main-color2: #9984D4;
+    --main-color3: #FED766;
+    --main-color4: #230C33;
+    --main-color5: #FFFFFF;
+    --main-color6: #8714c9;
+}

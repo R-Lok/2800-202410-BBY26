@@ -61,7 +61,7 @@ app.use('/settings', isAuth, settingRouter)
 app.use('/securityQuestions', isAuth, securityQuestionsRouter)
 app.use('/collection', isAuth, collectionRouter)
 
-app.get('/', (req, res) => {
+app.get('/home', (req, res) => {
     const days = 3
     return res.render('home', { days: days, name: req.session.name, email: req.session.email })
 })
@@ -74,8 +74,8 @@ app.get('/test', (req, res) => {
     return res.render('template')
 })
 
-app.get('/landing', (req, res) => {
-    return res.render('landing')
+app.get('/', (req, res) => {
+    return req.session.email ? res.redirect('/home') : res.render('landing')
 })
 
 app.get('/generate', (req, res) => {
@@ -122,63 +122,31 @@ async function generate(difficulty, number, material) {
 app.post('/api/generate', async (req, res) => {
     try {
         const result = await generate(req.body.difficulty, req.body.numQuestions, req.body.material)
-        return res.redirect(`/check/${result}`)
+        return res.redirect(`/check/?data=${result}`)
     } catch (err) {
         console.log('Error calling Open AI API')
     }
 })
 
-app.get('/review/:setid', (req, res) => {
-    const cards = [
-        {
-            question: 'Element symbol for gold',
-            answer: 'Au',
-        },
-        {
-            question: 'Element symbol for Iron',
-            answer: 'Fe',
-        },
-        {
-            question: 'Element symbol for Nickel',
-            answer: 'Ni',
-        },
-        {
-            question: 'Element symbol for Zinc',
-            answer: 'Zn',
-        },
-        {
-            question: 'Element symbols for Mercury',
-            answer: 'Hg',
-        },
-    ]
-    const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: cards, id: req.params.setid, queryType: 'view' }
-
-    return res.render('review', carouselData)
+app.get('/review/:setid', async (req, res) => {
+    
+    try {
+        console.log("set" + req.params.setid)
+        const cards = await flashcardsModel.find({shareId: Number(req.params.setid)}).select("-_id question answer")
+        if (cards.length === 0) {
+            return res.render("404", { error: "Flashcard set does not exist!" })
+        }
+        const carouselData = { bg: "/images/plain-FFFFFF.svg", cards: cards, id: req.params.setid, queryType: "view" }
+        return res.render('review', carouselData)
+    } catch (err) {
+        console.log(`Failed to fetch cards for set ${req.params.setid}`)
+        res.render("404", {error: "Flashcard set does not exist!"})
+    }
 })
 
-app.get('/check/:json', (req, res) => {
-    const data = [
-        {
-            'question': 'What is the capital of France?',
-            'answer': 'Paris',
-        },
-        {
-            'question': 'Who wrote \'Romeo and Juliet\'?',
-            'answer': 'William Shakespeare',
-        },
-        {
-            'question': 'What is the powerhouse of the cell?',
-            'answer': 'Mitochondria',
-        },
-        {
-            'question': 'What is the chemical symbol for water?',
-            'answer': 'H2O',
-        },
-        {
-            'question': 'What year did the Titanic sink?',
-            'answer': '1912',
-        },
-    ]
+app.get('/check', (req, res) => {
+    const querydata = req.query.data
+    const data = (JSON.parse(querydata)).flashcards
 
     const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: data, queryType: 'finalize' }
 
@@ -192,7 +160,6 @@ app.post('/submitcards', async (req, res) => {
     // get the latest sharecode from collections
     try {
         const result = await collectionsModel.findOne().sort({ shareId: -1 }).select('shareId').exec()
-        console.log('result:' + result)
         lastShareCode = result ? result.shareId : null
     } catch (err) {
         console.log('Failed to fetch latestShareCode')
@@ -215,7 +182,9 @@ app.post('/submitcards', async (req, res) => {
     transactionSession.startTransaction()
     try {
         await flashcardsModel.insertMany(inputData)
-        await collectionsModel.create({ setName: `${req.body.name}`, userId: req.session._id, shareId: shareId })
+        console.log("flashcards insert ok")
+        await collectionsModel.create({ setName: `${req.body.name}`, userId: req.session.userId, shareId: shareId })
+        console.log("set insert ok")
         await transactionSession.commitTransaction()
         transactionSession.endSession()
         console.log(`Successfully wrote ${req.body.name} to db`)
