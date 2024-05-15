@@ -1,0 +1,21 @@
+<%- include("template/header") %>
+<link rel="stylesheet" href="/css/404.css">
+</head>
+<body>
+    <%- include("template/headerBar") %>
+
+        <div class="d-flex justify-content-center align-items-center">
+            <div>
+                <h1 class="text-center"> Resource not found - 404 </h1>
+                <% if (error) { %>
+                    <p class="text-center">
+                        <%= error %>
+                    </p>
+                <% } %>
+                <div class="d-flex justify-content-center">
+                    <button onclick="window.location.href = '/'" class="btn btn-primary">Go Home</button>
+                </div>
+            </div>
+        </div>
+    <%- include("template/footerBar") %>
+<%- include("template/footer") %>
