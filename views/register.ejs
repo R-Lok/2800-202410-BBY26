@@ -1,47 +1,53 @@
-<%- include("template/header.ejs") %>
-<%- include("template/headerBar.ejs") %>
-<div class="mt-3 ms-4">
-    <form action='/register' method='post'>
-        <div class="form-group m-2">
-            <label for="loginId">loginId</label>
-            <input type="text" class="form-control" id="loginId" name="loginId" placeholder="Enter Login ID">
-            <small id="loginIdHelp" class="form-text text-muted">Alphabet or Number max 20 characters</small>
-        </div>
-<<<<<<< HEAD
-        
-=======
->>>>>>> dev
-        <div class="form-group m-2">
-            <label for="name">name</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name">
-            <small id="nameHelp" class="form-text text-muted">Alphabet or Number max 20 characters</small>
-        </div>
-<<<<<<< HEAD
+<%- include("template/header") %>
+    <link rel="stylesheet" href="../css/register.css">
+    </link>
+    </head>
 
-=======
->>>>>>> dev
-        <div class="form-group m-2">
-            <label for="email">Email address</label>
-            <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp"
-                placeholder="Enter email">
-            <small id="emailHelp" class="form-text text-muted">example: name@gmail.com</small>
-        </div>
-<<<<<<< HEAD
+    <body>
+        <%- include("template/headerBar.ejs") %>
+            <div class="sign-up-container">
+                <div class="form-signup">
+                    <h1 class="h3 mb-3 fw-normal text-center display-1">Sign Up</h1>
+                    <form action="/register" method="post">
+                        <div class="mb-1">
+                            <label for="displayName" class="form-label">Display Name</label>
+                            <input type="text" id="displayName" class="form-control" name="name" required>
+                            <small id="loginIdHelp" class="form-text text-muted">Alphabet or Number max 20 characters</small>
+                        </div>
 
-=======
->>>>>>> dev
-        <div class="form-group m-2">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
-            <small id="passworldHelp" class="form-text text-muted">Alphabet or Number 3 to 20 characters</small>
-        </div>
-        <div class="form-group m-2">
-            <label for="confirmPassword">confirmPassword</label>
-            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Enter confirmPassword">
-            <small id="confirmPasswordHelp" class="form-text text-muted">must match password</small>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-</div>
-<%- include("template/footerBar.ejs") %>
-<%- include("template/footer.ejs") %>
+                        <div class="mb-1">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" class="form-control" name="email" required>
+                            <small id="nameHelp" class="form-text text-muted">Alphabet or Number max 20 characters</small>
+                        </div>
+
+                        <div class="mb-1">
+                            <label for="loginId" class="form-label">Login ID</label>
+                            <input type="text" id="loginId" class="form-control" name="loginId" required>
+                            <small id="emailHelp" class="form-text text-muted">example: name@gmail.com</small>
+                        </div>
+
+                        <div class="mb-1">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" id="password" class="form-control" name="password" required>
+                            <small id="passworldHelp" class="form-text text-muted">Alphabet or Number 3 to 20 characters</small>
+                        </div>
+
+                        <div class="mb-1">
+                            <label for="password" class="form-label">Confirm Password</label>
+                            <input type="password" id="password" class="form-control" name="confirmPassword" required>
+                            <small id="confirmPasswordHelp" class="form-text text-muted">Must match password</small>
+                        </div>
+
+                        <div class="d-grid">
+                            <button class="btn btn-primary btn-lg" type="submit">Sign Up</button>
+                        </div>
+
+                        <p class="mt-2 text-center">
+                            Already have an account? <a href="/login">Log In</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+            <%- include("template/footerBar.ejs") %>
+            <%- include("template/footer") %>
