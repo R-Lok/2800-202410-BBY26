@@ -123,7 +123,7 @@ async function generate(difficulty, number, material) {
 app.post('/api/generate', async (req, res) => {
     try {
         const result = await generate(req.body.difficulty, req.body.numQuestions, req.body.material)
-        return res.redirect(`/check/${result}`)
+        return res.redirect(`/check/?data=${result}`)
     } catch (err) {
         console.log('Error calling Open AI API')
     }
@@ -145,29 +145,9 @@ app.get('/review/:setid', async (req, res) => {
     }
 })
 
-app.get('/check/:json', (req, res) => {
-    const data = [
-        {
-            'question': 'What is the capital of France?',
-            'answer': 'Paris',
-        },
-        {
-            'question': 'Who wrote \'Romeo and Juliet\'?',
-            'answer': 'William Shakespeare',
-        },
-        {
-            'question': 'What is the powerhouse of the cell?',
-            'answer': 'Mitochondria',
-        },
-        {
-            'question': 'What is the chemical symbol for water?',
-            'answer': 'H2O',
-        },
-        {
-            'question': 'What year did the Titanic sink?',
-            'answer': '1912',
-        },
-    ]
+app.get('/check', (req, res) => {
+    const querydata = req.query.data
+    const data = (JSON.parse(querydata)).flashcards
 
     const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: data, queryType: 'finalize' }
 
@@ -181,7 +161,6 @@ app.post('/submitcards', async (req, res) => {
     // get the latest sharecode from collections
     try {
         const result = await collectionsModel.findOne().sort({ shareId: -1 }).select('shareId').exec()
-        console.log('result:' + result)
         lastShareCode = result ? result.shareId : null
     } catch (err) {
         console.log('Failed to fetch latestShareCode')
@@ -204,7 +183,9 @@ app.post('/submitcards', async (req, res) => {
     transactionSession.startTransaction()
     try {
         await flashcardsModel.insertMany(inputData)
-        await collectionsModel.create({ setName: `${req.body.name}`, userId: req.session._id, shareId: shareId })
+        console.log("flashcards insert ok")
+        await collectionsModel.create({ setName: `${req.body.name}`, userId: req.session.userId, shareId: shareId })
+        console.log("set insert ok")
         await transactionSession.commitTransaction()
         transactionSession.endSession()
         console.log(`Successfully wrote ${req.body.name} to db`)
