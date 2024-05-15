@@ -2,11 +2,20 @@
 <link rel="stylesheet" href="../css/review.css">
 </head>
 <body>
+    <% if (queryType === "finalize") { %>
+        <script>
+            const data = <%- JSON.stringify(cards) %>
+            localStorage.setItem("cards", JSON.stringify(data))
+        </script>
+    <% } %>
     <%- include("template/headerBar.ejs") %>
     <div class="content-container">
-        <div class="alert alert-success alert-hidden" role="alert">
-            Sharecode copied to clipboard!
-        </div>
+        <% if (queryType === "view") { %> 
+            <div class="alert alert-success alert-hidden" role="alert">
+                Sharecode copied to clipboard!
+            </div>
+        <% } %>
+        
         <div id="counter-container">
             <span id="counter"> 1 </span>
             <span id="divide"> / </span>
@@ -36,10 +45,17 @@
         <div id="tap-notif">
             <p>Tap Card to flip</p>
         </div>
-        <div id="sharecode-container">
-            <p>Share this set</p>
-            <p id="sharecode"><%= id %></p>
-        </div>
+        <% if (queryType === "view") { %>
+            <div id="sharecode-container">
+                <p>Share this set</p>
+                <p id="sharecode">
+                    <%= id %>
+                </p>
+            </div>
+        <% } else if (queryType === "finalize") { %>
+                <input type="text" id="setName" name = "setName" placeholder="Name this set..">
+                <button id="save-button">Save to collection</button>
+        <% } %>
     </div>
     <%- include("template/footerBar.ejs") %>
     <script src="../scripts/review.js"></script>
