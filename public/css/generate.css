@@ -70,5 +70,11 @@
   }
 }
 
+#cam {
+  border: 1px solid black;
+}
 
-
+video, #frame {
+  height: 640px;
+  width: 350px;
+}

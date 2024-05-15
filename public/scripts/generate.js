@@ -53,3 +53,74 @@ function sendApiRequest() {
     })
 }
 sendApiRequest()
+
+const photoTab = document.querySelector("#photo-tab")
+photoTab.addEventListener('click', (e) => {
+    const submitMaterialsBtn = document.querySelector("#enterTextButton")
+    submitMaterialsBtn.setAttribute("data-bs-target", '#photoModal')
+})
+
+const camOn = document.querySelector("#camOn")
+camOn.addEventListener('click' , (e) => {
+    console.log("hi")
+    getCamera()
+})
+
+const camOff = document.querySelector("#camOff")
+camOff.addEventListener('click', (e) => {
+    turnOffCamera()
+})
+
+const snap = document.querySelector("#snap")
+snap.addEventListener('click', (e) => {
+    takePhoto()
+})
+
+let mediaStream = null
+
+async function getCamera() {
+    try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+            audio: false,
+            video: {
+                width: { ideal: 350 },
+                height: { ideal: 640 },
+                facingMode: "environment"
+            }
+        })
+        let video = document.getElementById('cam')
+        video.srcObject = mediaStream
+        video.onloadedmetadata = (event) => {video.play()}
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+async function turnOffCamera() {
+    if(mediaStream) {
+        let tracks = mediaStream.getTracks()
+        tracks.forEach(track => track.stop())
+
+        let video = document.getElementById('cam')
+        video.srcObject = null
+    }
+}
+
+function takePhoto() {
+    let photoFrame = document.querySelector("#frame")
+    let video = document.querySelector("#cam")
+    let canvas = document.querySelector("#canv")
+    let context = canvas.getContext('2d')
+
+    canvas.width = video.videoWidth
+    canvas.height = video.videoHeight
+
+    const photoHeight = video.videoHeight
+    const photoWidth = video.videoWidth
+    context.drawImage(video, 0, 0, 350, 640)
+    const image = canvas.toDataURL('image/png')
+    photoFrame.setAttribute('src', image)
+
+    canvas.width = photoWidth
+    canvas.height = photoHeight
+}
