@@ -68,18 +68,25 @@ if(document.getElementById("sharecode")) {
 
 //this needs validation in the backend to prevent injections
 if(document.getElementById("save-button")) {
-    document.getElementById("save-button").addEventListener("click", (e) => {
+    document.getElementById("save-button").addEventListener("click", async (e) => {
         const data = {
             name: document.getElementById("setName").value,
             cards: localStorage.getItem("cards")}
         console.log("data:" + data);
 
-        fetch('/submitcards', {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {'Content-Type': 'application/json'}
+        try {
+            const response = await fetch('/submitcards', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'application/json' }
+            })
+            if(response.ok) {
+                const data = await response.json()
+                window.location.href= `/review/${JSON.parse(data).shareId}`
             }
-        ).then(console.log("submission success")).catch("submission failed") //fill this in later 
+        } catch {
+            console.log("Error in submission")
+        }
     }
 )}
 

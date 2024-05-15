@@ -121,7 +121,7 @@ app.get('/review/:setid', (req, res) => {
         },
     ]
     const carouselData = {bg: "/images/plain-FFFFFF.svg", cards: cards, id: req.params.setid, queryType: "view"}
-
+    
     return res.render('review', carouselData)
 })
 
@@ -156,9 +156,6 @@ app.get("/check/:json", (req, res) => {
 })
 
 app.post('/submitcards', async (req, res) => {
-    console.log(req.body)
-    console.log(req.body.name)
-    console.log(JSON.parse(req.body.cards))
 
     let lastShareCode
     let shareId
@@ -177,9 +174,6 @@ app.post('/submitcards', async (req, res) => {
     } else {
         shareId = lastShareCode + 1;
     }
-    console.log(shareId)
-
-    console.log(req.session._id) //user _id
 
     const inputData = JSON.parse(req.body.cards).map(card => {
         return {
@@ -188,8 +182,6 @@ app.post('/submitcards', async (req, res) => {
         }
     })
 
-    console.log(inputData)
-
     const transactionSession = await mongoose.startSession();
     transactionSession.startTransaction();
     try{
@@ -197,15 +189,16 @@ app.post('/submitcards', async (req, res) => {
         await collectionsModel.create({setName: `${req.body.name}`, userId: req.session._id, shareId: shareId })
         await transactionSession.commitTransaction()
         transactionSession.endSession()
-        console.log("Successfully wrote to flashcard collection")
+        console.log(`Successfully wrote ${req.body.name} to db`)
+
     } catch (err) {
         await transactionSession.abortTransaction()
         transactionSession.endSession()
-        console.log("Error inserting to flashcards collection")
+        console.log("Error inserting db")
     }
-
-
-    res.send()   
+    
+    res.status(200)
+    res.json(JSON.stringify({shareId: shareId}))
 })
 
 app.get('*', (req, res) => {
