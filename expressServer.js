@@ -14,6 +14,7 @@ const openai = new OpenAI({
 })
 const securityQuestionsRouter = require('./routers/securityQuestions')
 const flashcardsModel = require('./models/flashcards')
+const collectionRouter = require('./routers/collection')
 const mongoose = require('mongoose')
 
 
@@ -58,6 +59,7 @@ app.use('/', authRouter)
 app.use('/users', isAuth, userRouter)
 app.use('/settings', isAuth, settingRouter)
 app.use('/securityQuestions', isAuth, securityQuestionsRouter)
+app.use('/collection', isAuth, collectionRouter)
 
 app.get('/home', (req, res) => {
     const days = 3
@@ -68,33 +70,6 @@ app.get('/health', (_, res) => {
     return res.status(200).send('ok')
 })
 
-app.get('/collection', async (req, res) => {
-    const collections = await collectionsModel.find({ userId: '6643e18784cc34b06add4f2f' })
-    return res.render('collection', { collections: collections })
-})
-
-app.post('/searchCollection', async (req, res) => {
-    const search = req.body.search
-    const regexPattern = new RegExp('^' + search, 'i')
-    const collections = await collectionsModel.find({ userId: '6643e18784cc34b06add4f2f', setName: { $regex: regexPattern } })
-    return res.render('collection', { collections: collections })
-})
-
-app.get('/deleteCollection/:shareid', async (req, res) => {
-    const shareId = req.params.shareid
-    console.log('Inside delete, shareid: ' + shareId)
-    deleteSet(shareId)
-    res.redirect('/collection')
-})
-
-async function deleteSet(shareID) {
-    try {
-        await collectionsModel.deleteOne({ shareId: shareID })
-        console.log('Document deleted successfully')
-    } catch (err) {
-        console.error('Error deleting document: ', err)
-    }
-}
 
 app.get('/test', (req, res) => {
     return res.render('template')
