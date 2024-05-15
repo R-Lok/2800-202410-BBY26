@@ -8,8 +8,13 @@ const userRouter = require('./routers/users')
 const { router: authRouter, isAuth } = require('./routers/auth')
 const settingRouter = require('./routers/settings')
 const collectionsModel = require('./models/collections')
+const OpenAI = require('openai')
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+})
 const securityQuestionsRouter = require('./routers/securityQuestions')
 const flashcardsModel = require('./models/flashcards')
+const collectionRouter = require('./routers/collection')
 const mongoose = require('mongoose')
 
 
@@ -54,6 +59,7 @@ app.use('/', authRouter)
 app.use('/users', isAuth, userRouter)
 app.use('/settings', isAuth, settingRouter)
 app.use('/securityQuestions', isAuth, securityQuestionsRouter)
+app.use('/collection', isAuth, collectionRouter)
 
 app.get('/', (req, res) => {
     const days = 3
@@ -63,38 +69,6 @@ app.get('/', (req, res) => {
 app.get('/health', (_, res) => {
     return res.status(200).send('ok')
 })
-
-app.get('/collection', async (req, res) => {
-    const collections = await collectionsModel.find({ userId: '6643e18784cc34b06add4f2f'
-    })
-    return res.render('collection', { collections: collections })
-})
-
-app.post('/searchCollection', async (req, res) => {
-    const search = req.body.search
-    const regexPattern = new RegExp('^' + search, 'i')
-    const collections = await collectionsModel.find({ userId: '6643e18784cc34b06add4f2f'
-        , setName: { $regex: regexPattern } })
-    return res.render('collection', { collections: collections })
-})
-
-app.get('/deleteCollection/:shareid', async (req, res) => {
-    let shareId = req.params.shareid;
-    console.log("Inside delete, shareid: " + shareId)
-
-    async function deleteSet(shareID) {
-        try{
-            await collectionsModel.deleteOne({shareId:shareID});
-            console.log("Document deleted successfully");
-        } catch (err) {
-            console.error("Error deleting document: ", err);
-        }
-    }
-
-    await deleteSet(shareId);
-    res.redirect('/collection');
-});
-
 
 app.get('/test', (req, res) => {
     return res.render('template')
@@ -110,6 +84,48 @@ app.get('/generate', (req, res) => {
 
 app.get('/signup', (req, res) => {
     return res.render('signup')
+})
+
+async function generate(difficulty, number, material) {
+    let completion
+    try {
+        completion = await openai.chat.completions.create({
+            messages: [
+                {
+                    role: 'system',
+                    content:
+            'You are a assistant that generates flashcards for students studying quizzes and exam.',
+                },
+                {
+                    role: 'user',
+                    content: `Given the following studying material in text: ${material}.
+                Generate an array in json format that contains ${number} flashcards object elments with ${difficulty} difficulty.
+                Question and answer of flashcards should be the keys of each flashcard object element`,
+                },
+            ],
+            model: 'gpt-4o',
+            response_format: { type: 'json_object' },
+            temperature: 1,
+            max_tokens: 4096,
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0,
+        })
+    } catch (err) {
+        console.log(`API Call fails: ${err}`)
+    }
+    const jsonResult = completion.choices[0].message.content
+
+    return jsonResult
+}
+
+app.post('/api/generate', async (req, res) => {
+    try {
+        const result = await generate(req.body.difficulty, req.body.numQuestions, req.body.material)
+        return res.redirect(`/check/${result}`)
+    } catch (err) {
+        console.log('Error calling Open AI API')
+    }
 })
 
 app.get('/review/:setid', (req, res) => {
@@ -135,85 +151,82 @@ app.get('/review/:setid', (req, res) => {
             answer: 'Hg',
         },
     ]
-    const carouselData = {bg: "/images/plain-FFFFFF.svg", cards: cards, id: req.params.setid, queryType: "view"}
-    
+    const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: cards, id: req.params.setid, queryType: 'view' }
+
     return res.render('review', carouselData)
 })
 
-app.get("/check/:json", (req, res) => {
-
-    data = [
+app.get('/check/:json', (req, res) => {
+    const data = [
         {
-            "question": "What is the capital of France?",
-            "answer": "Paris"
+            'question': 'What is the capital of France?',
+            'answer': 'Paris',
         },
         {
-            "question": "Who wrote 'Romeo and Juliet'?",
-            "answer": "William Shakespeare"
+            'question': 'Who wrote \'Romeo and Juliet\'?',
+            'answer': 'William Shakespeare',
         },
         {
-            "question": "What is the powerhouse of the cell?",
-            "answer": "Mitochondria"
+            'question': 'What is the powerhouse of the cell?',
+            'answer': 'Mitochondria',
         },
         {
-            "question": "What is the chemical symbol for water?",
-            "answer": "H2O"
+            'question': 'What is the chemical symbol for water?',
+            'answer': 'H2O',
         },
         {
-            "question": "What year did the Titanic sink?",
-            "answer": "1912"
-        }
+            'question': 'What year did the Titanic sink?',
+            'answer': '1912',
+        },
     ]
 
-    const carouselData = { bg: "/images/plain-FFFFFF.svg", cards: data, queryType: "finalize"}
+    const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: data, queryType: 'finalize' }
 
     return res.render('review', carouselData)
 })
 
 app.post('/submitcards', async (req, res) => {
-
     let lastShareCode
     let shareId
 
-    //get the latest sharecode from collections
+    // get the latest sharecode from collections
     try {
-         let result  = await collectionsModel.findOne().sort({shareId: -1}).select('shareId').exec()
-         console.log("result:" + result)
-         lastShareCode = result ? result.shareId : null
+        const result = await collectionsModel.findOne().sort({ shareId: -1 }).select('shareId').exec()
+        console.log('result:' + result)
+        lastShareCode = result ? result.shareId : null
     } catch (err) {
-        console.log("Failed to fetch latestShareCode")
+        console.log('Failed to fetch latestShareCode')
     }
 
     if (lastShareCode === null) {
-        shareId = 0;
+        shareId = 0
     } else {
-        shareId = lastShareCode + 1;
+        shareId = lastShareCode + 1
     }
 
-    const inputData = JSON.parse(req.body.cards).map(card => {
+    const inputData = JSON.parse(req.body.cards).map((card) => {
         return {
             shareId: `${shareId}`,
-            ...card
+            ...card,
         }
     })
 
-    const transactionSession = await mongoose.startSession();
-    transactionSession.startTransaction();
-    try{
+    const transactionSession = await mongoose.startSession()
+    transactionSession.startTransaction()
+    try {
         await flashcardsModel.insertMany(inputData)
-        await collectionsModel.create({setName: `${req.body.name}`, userId: req.session._id, shareId: shareId })
+        await collectionsModel.create({ setName: `${req.body.name}`, userId: req.session._id, shareId: shareId })
         await transactionSession.commitTransaction()
         transactionSession.endSession()
         console.log(`Successfully wrote ${req.body.name} to db`)
-
     } catch (err) {
         await transactionSession.abortTransaction()
         transactionSession.endSession()
-        console.log("Error inserting db")
+        console.log('Error inserting db')
     }
-    
+
     res.status(200)
-    res.json(JSON.stringify({shareId: shareId}))
+    res.json(JSON.stringify({ shareId: shareId }))
 })
 
 app.get('*', (req, res) => {

@@ -21,7 +21,7 @@ const isAdmin = (req, res, next) => {
 
 const authorization = (req, user) => {
     req.session.userId = user._id
-    req.session.accountId = user.accountId
+    req.session.loginId = user.loginId
     req.session.email = user.email
     req.session.name = user.name
     req.session.role = user.role
@@ -34,9 +34,9 @@ router.get('/register', (req, res) => {
 
 router.post('/register', async (req, res, next) => {
     try {
-        const { accountId, name, email, password, confirmPassword } = req.body
+        const { loginId, name, email, password, confirmPassword } = req.body
         const schema = Joi.object({
-            accountId: Joi.string().max(20).required(),
+            loginId: Joi.string().max(20).required(),
             name: Joi.string().alphanum().max(20).required(),
             email: Joi.string().email(),
             password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
@@ -44,17 +44,17 @@ router.post('/register', async (req, res, next) => {
         })
             .with('password', 'confirmPassword')
 
-        await schema.validateAsync({ accountId, name, email, password, confirmPassword })
+        await schema.validateAsync({ loginId, name, email, password, confirmPassword })
             .catch((error) => {
                 throw new CustomError('422', error)
             })
 
-        const result = await userModel.countDocuments({ accountId: accountId })
+        const result = await userModel.countDocuments({ loginId: loginId })
         if (result) {
-            throw new CustomError('422', 'accountId already exists')
+            throw new CustomError('422', 'loginId already exists')
         }
         const user = await userModel.create({
-            accountId,
+            loginId,
             name,
             email,
             password: await bcrypt.hash(password, saltRounds),
@@ -74,24 +74,24 @@ router.get('/login', (req, res) => {
 
 router.post('/login', async (req, res, next) => {
     try {
-        const { accountId, password } = req.body
+        const { loginId, password } = req.body
         const schema = Joi.object({
-            accountId: Joi.string().max(20).required(),
+            loginId: Joi.string().max(20).required(),
             password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
         })
 
-        await schema.validateAsync({ accountId, password })
+        await schema.validateAsync({ loginId, password })
             .catch((error) => {
                 throw new CustomError('422', error)
             })
 
-        const user = await userModel.findOne({ accountId: accountId })
+        const user = await userModel.findOne({ loginId: loginId })
         if (!user) {
             throw new CustomError('422', 'user not found')
         }
         const result = await bcrypt.compare(password, user.password)
         if (!result) {
-            throw new CustomError('401', 'accountId or password incorrect!')
+            throw new CustomError('401', 'loginId or password incorrect!')
         }
         await userModel.findByIdAndUpdate(user.id, { lastLogin: Date.now() })
         authorization(req, user)

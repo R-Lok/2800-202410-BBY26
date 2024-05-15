@@ -9,4 +9,4 @@ const CollectionsSchema = new Schema({
     timestamps: true,
 })
 
-module.exports = mongoose.model('collections', CollectionsSchema)
+module.exports = mongoose.model('flashcardsets', CollectionsSchema)

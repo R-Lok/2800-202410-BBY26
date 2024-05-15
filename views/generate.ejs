@@ -1,12 +1,13 @@
 <%- include("template/header") %>
-  <link rel="stylesheet" href="../css/generate.css">
-  </link>
-  <script type="text/javascript" src="../scripts/generate.js"></script>
-
+  <link rel="stylesheet" href="../css/generate.css"></link>
   </head>
 
   <body>
     <%- include("template/headerBar.ejs") %>
+    <div class="loading-state" id="loader">
+      <div class="loading"></div>
+    </div>
+
     <div class="generate-container d-flex flex-column justify-content-center">
       <h3 class="h3 mb-5 fw-normal text-center display-3">Generate Your Flashcards</h3>
 
@@ -31,7 +32,8 @@
 
         <div class="tab-pane fade show active d-flex flex-column align-items-center" id="text-tab-pane" role="tabpanel"
           aria-labelledby="text-tab" tabindex="0">
-          <form action="/review" method="get">
+          <!-- Stored in req.body.difficulty, req.body.numFlashcards, req.body.material -->
+          <form>
             <p>Parameters for generation</p>
             <select class="form-select mb-3" id="selectDifficulty" aria-label="Large select example"
               name="difficulty">
@@ -41,7 +43,7 @@
               <option value="difficult">Difficult</option>
             </select>
 
-            <select class="form-select mb-3" id="selectNumber" aria-label="Large select example" name="numQuestions">
+            <select class="form-select mb-3" id="selectNumber" aria-label="Large select example" name="numFlashcards">
               <option value="" selected>Number of flashcards</option>
               <option value="1">1</option>
               <option value="2">2</option>
@@ -67,7 +69,7 @@
 
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Change parameters</button>
-                      <a href="/review/1">Generate</a> 
+                      <button type="button" id="generateButton" class="btn btn-success">Generate</button> 
                       <!-- <button type="button" class="btn btn-primary"></button> -->
                     </div>
                   </div>
@@ -81,5 +83,6 @@
         </div>
       </div>
     </div>
+    <script type="text/javascript" src="../scripts/generate.js"></script>
     <%- include("template/footerBar.ejs") %>
     <%- include("template/footer") %>
