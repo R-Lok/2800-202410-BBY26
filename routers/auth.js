@@ -5,6 +5,8 @@ const saltRounds = 12
 const router = new express.Router()
 const { CustomError } = require('../utilities/customError')
 const Joi = require('joi')
+const SecurityQuestionsModel = require('../models/securityQuestions')
+const userAnswersModel = require('../models/userAnswers')
 
 
 const isAuth = (req, res, next) => {
@@ -104,6 +106,78 @@ router.post('/login', async (req, res, next) => {
 router.get('/logout', (req, res) => {
     req.session.destroy()
     return res.redirect('/')
+})
+
+router.get('/getQuestion', async (req, res, next) => {
+    try {
+        const { email } = req.body
+        const result = await userAnswersModel
+            .findOne({ email: email }, { _id: 0, questionId: 1, userId: 1 })
+            .lean()
+        if (!result) {
+            throw new CustomError('422', 'You don\'t have a security question yet!')
+        }
+        const question = await SecurityQuestionsModel
+            .findById(result.questionId)
+            .lean()
+        result.question = question.question
+
+        return res.status(200).json({ result: result })
+    } catch (error) {
+        next(error)
+    }
+})
+
+router.post('/checkAnswer', async (req, res, next) => {
+    try {
+        const { userId, questionId, answer } = req.body
+        const result = await userAnswersModel
+            .findOne({
+                userId: userId,
+                questionId: questionId,
+            }, { _id: 0, answer: 1 })
+            .lean()
+
+        if (!result) {
+            throw new CustomError('422', 'You don\'t have a security question yet!')
+        }
+        if (result.answer !== answer) {
+            throw new CustomError('403', 'Incorrect answer!')
+        }
+
+        return res.status(200).json({ result: 'ok' })
+    } catch (error) {
+        next(error)
+    }
+})
+
+
+router.post('/resetPassword', async (req, res, next) => {
+    try {
+        const { userId, password, confirmPassword } = req.body
+        console.log(req.body)
+        const schema = Joi.object({
+            password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
+            confirmPassword: Joi.ref('password'),
+        })
+            .with('password', 'confirmPassword')
+
+        await schema.validateAsync({ password, confirmPassword })
+            .catch((error) => {
+                throw new CustomError('422', error)
+            })
+
+        const user = await userModel
+            .findByIdAndUpdate(userId, {
+                password: await bcrypt.hash(password, saltRounds),
+            })
+            .lean()
+
+        authorization(req, user)
+        return res.status(200).json({ result: 'ok' })
+    } catch (error) {
+        next(error)
+    }
 })
 
 module.exports = { router, isAuth, isAdmin }
