@@ -10,6 +10,7 @@ const settingRouter = require('./routers/settings')
 const collectionsModel = require('./models/collections')
 const securityQuestionsRouter = require('./routers/securityQuestions')
 const flashcardsModel = require('./models/flashcards')
+const collectionRouter = require('./routers/collection')
 const mongoose = require('mongoose')
 
 
@@ -54,6 +55,7 @@ app.use('/', authRouter)
 app.use('/users', isAuth, userRouter)
 app.use('/settings', isAuth, settingRouter)
 app.use('/securityQuestions', isAuth, securityQuestionsRouter)
+app.use('/collection', isAuth, collectionRouter)
 
 app.get('/', isAuth, (req, res) => {
     const days = 3
