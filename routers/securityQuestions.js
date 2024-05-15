@@ -33,27 +33,6 @@ router.get('/', async (req, res, next) => {
     }
 })
 
-router.get('/getAnswer', async (req, res, next) => {
-    try {
-        const { userId } = req.session
-        const result = await userAnswersModel
-            .findOne({ userId: userId }, { _id: 0, questionId: 1, answer: 1 })
-            .lean()
-        if (!result) {
-            throw new CustomError('422', 'Bad input!')
-        }
-        const question = await SecurityQuestionsModel
-            .findById(result.questionId)
-            .lean()
-        result.question = question.question
-        delete result.questionId
-
-        return res.status(200).json({ result: result })
-    } catch (error) {
-        next(error)
-    }
-})
-
 router.post('/insertAnswer', async (req, res, next) => {
     try {
         const { questionId, answer } = req.body
