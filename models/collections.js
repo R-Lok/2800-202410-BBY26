@@ -7,9 +7,8 @@ const CollectionsSchema = new Schema({
         required: true
     },
     userId: {
-        type: Number,
+        type: mongoose.ObjectId,
         required: true,
-        unique: true,
     },
     shareId: {
         type: Number,
@@ -20,4 +19,4 @@ const CollectionsSchema = new Schema({
     timestamps: true,
 })
 
-module.exports = mongoose.model('flashcardsets', CollectionsSchema)
+module.exports = mongoose.model('collections', CollectionsSchema)
