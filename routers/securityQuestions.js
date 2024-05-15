@@ -1,13 +1,36 @@
 const express = require('express')
 const router = new express.Router()
-const { CustomError } = require('../utilities/customError')
+const { CustomError, searcherObject } = require('../utilities')
 const Joi = require('joi')
 const SecurityQuestionsModel = require('../models/securityQuestions')
 const userAnswersModel = require('../models/userAnswers')
 
 
-router.get('/', (req, res) => {
-    return res.status(200).json({ msg: 'security questions' })
+const searcher = searcherObject({
+    filter: {
+        $eq: ['_id'],
+        $iLike: ['question'],
+    },
+    sorter: searcherObject().default.sorter,
+    pager: searcherObject().default.pager,
+})
+
+router.get('/', async (req, res, next) => {
+    try {
+        const filter = searcher.getFilter(req.query)
+        const sorter = searcher.getSorter(req.query)
+        const pager = searcher.getPager(req.query)
+
+        const securityQuestions = await SecurityQuestionsModel
+            .find(filter, { question: 1 })
+            .sort(sorter)
+            .skip(pager.skip)
+            .limit(pager.limit)
+            .lean()
+        return res.status(200).json({ securityQuestions: securityQuestions })
+    } catch (error) {
+        next(error)
+    }
 })
 
 router.post('/insertAnswer', async (req, res, next) => {
