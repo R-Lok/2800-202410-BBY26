@@ -8,6 +8,7 @@ const userRouter = require('./routers/users')
 const { router: authRouter, isAuth } = require('./routers/auth')
 const settingRouter = require('./routers/settings')
 const collectionsModel = require('./models/collections')
+const securityQuestionsRouter = require('./routers/securityQuestions')
 
 const app = express()
 const server = require('http').createServer(app)
@@ -49,10 +50,10 @@ app.use(session({
 app.use('/', authRouter)
 app.use('/users', isAuth, userRouter)
 app.use('/settings', isAuth, settingRouter)
-app.use('/members', userRouter)
+app.use('/securityQuestions', isAuth, securityQuestionsRouter)
 
 app.get('/', (req, res) => {
-    let days = 3;
+    const days = 3
     return res.render('home', { days: days, name: req.session.name, email: req.session.email })
 })
 
@@ -73,18 +74,18 @@ app.post('/searchCollection', async (req, res) => {
 })
 
 app.get('/deleteCollection/:shareid', async (req, res) => {
-    let shareId = req.params.shareid;
-    console.log("Inside delete, shareid: " + shareId)
-    deleteSet(shareId);
-    res.redirect('/collection');
+    const shareId = req.params.shareid
+    console.log('Inside delete, shareid: ' + shareId)
+    deleteSet(shareId)
+    res.redirect('/collection')
 })
 
 async function deleteSet(shareID) {
-    try{
-        await collectionsModel.deleteOne({shareId:shareID});
-        console.log("Document deleted successfully");
+    try {
+        await collectionsModel.deleteOne({ shareId: shareID })
+        console.log('Document deleted successfully')
     } catch (err) {
-        console.error("Error deleting document: ", err);
+        console.error('Error deleting document: ', err)
     }
 }
 
@@ -133,16 +134,12 @@ app.get('/review/:setid', (req, res) => {
 })
 
 app.get('*', (req, res) => {
-    return res.status(404).send('Page not found!')
+    return res.status(404).json({ msg: 'page not found' })
 })
 
 app.use((err, req, res, next) => {
     console.error(err)
-    return res.status(err.status || 500).send(`
-    <h1> ${err.message || err} </h1>
-    <h1> ${err.errors || ''} </h1>
-    <a href='/'><button>try again</button></a>
-    `)
+    return res.status(err.code || 500).json({ msg: err })
 })
 
 module.exports = { server, app, mongoUrl }

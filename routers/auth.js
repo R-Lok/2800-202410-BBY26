@@ -3,13 +3,29 @@ const bcrypt = require('bcrypt')
 const userModel = require('../models/users')
 const saltRounds = 12
 const router = new express.Router()
+const { CustomError } = require('../utilities/customError')
 const Joi = require('joi')
 
 
 const isAuth = (req, res, next) => {
-    // console.log(req.session)
-    // console.log(`email: ${req.session.email}`)
-    return req.session.email ? next() : res.redirect('/')
+    return req.session.email ? next() : res.redirect('/login')
+}
+
+const isAdmin = (req, res, next) => {
+    if (req.session.role === 'admin') {
+        return next()
+    } else {
+        throw new CustomError('403', 'Forbidden!')
+    }
+}
+
+const authorization = (req, user) => {
+    req.session.userId = user._id
+    req.session.accountId = user.accountId
+    req.session.email = user.email
+    req.session.name = user.name
+    req.session.role = user.role
+    console.log(req.session)
 }
 
 router.get('/register', (req, res) => {
@@ -18,8 +34,9 @@ router.get('/register', (req, res) => {
 
 router.post('/register', async (req, res, next) => {
     try {
-        const { name, email, password, confirmPassword } = req.body
+        const { accountId, name, email, password, confirmPassword } = req.body
         const schema = Joi.object({
+            accountId: Joi.string().max(20).required(),
             name: Joi.string().alphanum().max(20).required(),
             email: Joi.string().email(),
             password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
@@ -27,27 +44,25 @@ router.post('/register', async (req, res, next) => {
         })
             .with('password', 'confirmPassword')
 
-        const validationResult = await schema.validateAsync({ name, email, password, confirmPassword })
-        if (validationResult.error && validationResult.error !== null) {
-            console.log(validationResult.error)
-            return res.redirect('/register')
-        }
+        await schema.validateAsync({ accountId, name, email, password, confirmPassword })
+            .catch((error) => {
+                throw new CustomError('422', error)
+            })
 
-        const result = await userModel.countDocuments({ email: email })
+        const result = await userModel.countDocuments({ accountId: accountId })
         if (result) {
-            throw new Error('email already exists')
+            throw new CustomError('422', 'accountId already exists')
         }
         const user = await userModel.create({
+            accountId,
             name,
             email,
             password: await bcrypt.hash(password, saltRounds),
             lastLogin: Date.now(),
             enable: true,
         })
-        await userModel.findByIdAndUpdate(user.id, { lastLogin: Date.now() })
-        req.session.email = user.email
-        req.session.name = user.name
-        return res.redirect('/users/profile')
+        authorization(req, user)
+        return res.redirect('/')
     } catch (error) {
         next(error)
     }
@@ -59,30 +74,28 @@ router.get('/login', (req, res) => {
 
 router.post('/login', async (req, res, next) => {
     try {
-        const { email, password } = req.body
+        const { accountId, password } = req.body
         const schema = Joi.object({
-            email: Joi.string().email(),
+            accountId: Joi.string().max(20).required(),
             password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
         })
 
-        const validationResult = await schema.validateAsync({ email, password })
-        if (validationResult.error && validationResult.error !== null) {
-            console.log(validationResult.error)
-            return res.redirect('/')
-        }
+        await schema.validateAsync({ accountId, password })
+            .catch((error) => {
+                throw new CustomError('422', error)
+            })
 
-        const user = await userModel.findOne({ email: email })
+        const user = await userModel.findOne({ accountId: accountId })
         if (!user) {
-            throw new Error('user not found')
+            throw new CustomError('422', 'user not found')
         }
         const result = await bcrypt.compare(password, user.password)
         if (!result) {
-            throw new Error('email or password incorrect!')
+            throw new CustomError('401', 'accountId or password incorrect!')
         }
         await userModel.findByIdAndUpdate(user.id, { lastLogin: Date.now() })
-        req.session.email = user.email
-        req.session.name = user.name
-        return res.redirect('/users/profile')
+        authorization(req, user)
+        return res.redirect('/')
     } catch (error) {
         next(error)
     }
@@ -93,4 +106,4 @@ router.get('/logout', (req, res) => {
     return res.redirect('/')
 })
 
-module.exports = { router, isAuth }
+module.exports = { router, isAuth, isAdmin }
