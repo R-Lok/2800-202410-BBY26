@@ -79,6 +79,10 @@ app.get('/', (req, res) => {
     return req.session.email ? res.redirect('/home') : res.render('landing')
 })
 
+app.get('/setSecurityQuestion', (req, res) => {
+    return res.render('setSecurityQuestion')
+})
+
 app.get('/generate', (req, res) => {
     return res.render('generate')
 })
@@ -126,18 +130,17 @@ app.post('/api/generate', async (req, res) => {
 })
 
 app.get('/review/:setid', async (req, res) => {
-    
     try {
-        console.log("set" + req.params.setid)
-        const cards = await flashcardsModel.find({shareId: Number(req.params.setid)}).select("-_id question answer")
+        console.log('set' + req.params.setid)
+        const cards = await flashcardsModel.find({ shareId: Number(req.params.setid) }).select('-_id question answer')
         if (cards.length === 0) {
-            return res.render("404", { error: "Flashcard set does not exist!" })
+            return res.render('404', { error: 'Flashcard set does not exist!' })
         }
-        const carouselData = { bg: "/images/plain-FFFFFF.svg", cards: cards, id: req.params.setid, queryType: "view" }
+        const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: cards, id: req.params.setid, queryType: 'view' }
         return res.render('review', carouselData)
     } catch (err) {
         console.log(`Failed to fetch cards for set ${req.params.setid}`)
-        res.render("404", {error: "Flashcard set does not exist!"})
+        res.render('404', { error: 'Flashcard set does not exist!' })
     }
 })
 
@@ -178,10 +181,10 @@ app.post('/submitcards', async (req, res) => {
     const transactionSession = await mongoose.startSession()
     transactionSession.startTransaction()
     try {
-        await flashcardsModel.insertMany(inputData, {session: transactionSession})
-        console.log("flashcards insert ok")
-        await collectionsModel.create([{setName: `${req.body.name}`, userId: req.session.userId, shareId: shareId}], {session: transactionSession})
-        console.log("set insert ok")
+        await flashcardsModel.insertMany(inputData, { session: transactionSession })
+        console.log('flashcards insert ok')
+        await collectionsModel.create([{ setName: `${req.body.name}`, userId: req.session.userId, shareId: shareId }], { session: transactionSession })
+        console.log('set insert ok')
         await transactionSession.commitTransaction()
         transactionSession.endSession()
         console.log(`Successfully wrote ${req.body.name} to db`)
