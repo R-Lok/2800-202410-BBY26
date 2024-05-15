@@ -65,14 +65,14 @@ app.get('/health', (_, res) => {
 })
 
 app.get('/collection', async (req, res) => {
-    const collections = await collectionsModel.find({ userId: 100 })
+    const collections = await collectionsModel.find({ userId: '6643e18784cc34b06add4f2f' })
     return res.render('collection', { collections: collections })
 })
 
 app.post('/searchCollection', async (req, res) => {
     const search = req.body.search
     const regexPattern = new RegExp('^' + search, 'i')
-    const collections = await collectionsModel.find({ userId: 100, setName: { $regex: regexPattern } })
+    const collections = await collectionsModel.find({ userId: '6643e18784cc34b06add4f2f', setName: { $regex: regexPattern } })
     return res.render('collection', { collections: collections })
 })
 
