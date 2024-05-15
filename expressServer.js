@@ -174,13 +174,13 @@ app.post('/submitcards', async (req, res) => {
     //get the latest sharecode from collections
     try {
          let result  = await collectionsModel.findOne().sort({shareId: -1}).select('shareId').exec()
-         console.log(result)
+         console.log("result:" + result)
          lastShareCode = result ? result.shareId : null
     } catch (err) {
         console.log("Failed to fetch latestShareCode")
     }
 
-    if (!lastShareCode) {
+    if (lastShareCode === null) {
         shareId = 0;
     } else {
         shareId = lastShareCode + 1;
