@@ -12,6 +12,7 @@ const securityQuestionsRouter = require('./routers/securityQuestions')
 const flashcardsModel = require('./models/flashcards')
 const mongoose = require('mongoose')
 
+const { incrementStreak } = require('./public/scripts/incrementStreak')
 
 const app = express()
 const server = require('http').createServer(app)
@@ -20,8 +21,6 @@ const server = require('http').createServer(app)
 
 // app.use(cors({ credentials: true, origin: whitelist }))
 // app.use(helmet())
-
-// const {x, y, generateDaysOfCurrMonth} = require('./public/scripts/calendar.js');
 
 app.use(compression())
 app.use(express.json({ limit: '50mb' }))
@@ -109,6 +108,7 @@ app.get('/signup', (req, res) => {
 })
 
 app.get('/review/:setid', (req, res) => {
+    incrementStreak(req)
     const cards = [
         {
             question: 'Element symbol for gold',
