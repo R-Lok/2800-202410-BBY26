@@ -8,6 +8,10 @@ const userRouter = require('./routers/users')
 const { router: authRouter, isAuth } = require('./routers/auth')
 const settingRouter = require('./routers/settings')
 const collectionsModel = require('./models/collections')
+const OpenAI = require('openai')
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+})
 const securityQuestionsRouter = require('./routers/securityQuestions')
 const flashcardsModel = require('./models/flashcards')
 const collectionRouter = require('./routers/collection')
@@ -57,7 +61,7 @@ app.use('/settings', isAuth, settingRouter)
 app.use('/securityQuestions', isAuth, securityQuestionsRouter)
 app.use('/collection', isAuth, collectionRouter)
 
-app.get('/', isAuth, (req, res) => {
+app.get('/', (req, res) => {
     const days = 3
     return res.render('home', { days: days, name: req.session.name, email: req.session.email })
 })
@@ -81,6 +85,48 @@ app.get('/generate', (req, res) => {
 
 app.get('/signup', (req, res) => {
     return res.render('signup')
+})
+
+async function generate(difficulty, number, material) {
+    let completion
+    try {
+        completion = await openai.chat.completions.create({
+            messages: [
+                {
+                    role: 'system',
+                    content:
+            'You are a assistant that generates flashcards for students studying quizzes and exam.',
+                },
+                {
+                    role: 'user',
+                    content: `Given the following studying material in text: ${material}.
+                Generate an array in json format that contains ${number} flashcards object elments with ${difficulty} difficulty.
+                Question and answer of flashcards should be the keys of each flashcard object element`,
+                },
+            ],
+            model: 'gpt-4o',
+            response_format: { type: 'json_object' },
+            temperature: 1,
+            max_tokens: 4096,
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0,
+        })
+    } catch (err) {
+        console.log(`API Call fails: ${err}`)
+    }
+    const jsonResult = completion.choices[0].message.content
+
+    return jsonResult
+}
+
+app.post('/api/generate', async (req, res) => {
+    try {
+        const result = await generate(req.body.difficulty, req.body.numQuestions, req.body.material)
+        return res.redirect(`/check/${result}`)
+    } catch (err) {
+        console.log('Error calling Open AI API')
+    }
 })
 
 app.get('/review/:setid', (req, res) => {
@@ -112,7 +158,7 @@ app.get('/review/:setid', (req, res) => {
 })
 
 app.get('/check/:json', (req, res) => {
-    data = [
+    const data = [
         {
             'question': 'What is the capital of France?',
             'answer': 'Paris',
