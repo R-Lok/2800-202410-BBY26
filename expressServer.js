@@ -50,7 +50,7 @@ app.use('/users', isAuth, userRouter)
 app.use('/settings', isAuth, settingRouter)
 app.use('/securityQuestions', isAuth, securityQuestionsRouter)
 
-app.get('/', (req, res) => {
+app.get('/', isAuth, (req, res) => {
     return res.render('home', { email: req.session.email })
 })
 

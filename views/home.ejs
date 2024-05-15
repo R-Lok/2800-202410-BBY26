@@ -1,18 +1,12 @@
-<% if(email){ %>
-    <a href='/users/profile'> 
-        <button>profile</button>
-    </a>
-    <br><br>
-    <a href='/logout'> 
-        <button>log out</button>
-    </a>
-  <% } else{ %>  
-    <a href='/login'> 
-        <button>login</button>
-    </a>
-    <br>
-    <br>
-    <a href='/register'> 
-        <button>register</button>
-    </a>
-<% } %>
+<%- include("template/header.ejs") %>
+<%- include("template/headerBar.ejs") %>
+<% const items = email ? ['collection', 'logout'] : ['login', 'register']; %>
+<% items.forEach((item) => { %>
+    <div class="d-flex flex-column mt-3 ms-1">
+        <a href="/<%- item%>"> 
+            <button class="btn btn-outline-secondary"><%- item%></button>
+        </a>
+    </div>
+<% }) %>
+<%- include("template/footerBar.ejs") %>
+<%- include("template/footer.ejs") %>
