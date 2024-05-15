@@ -2,6 +2,11 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const UsersSchema = new Schema({
+    accountId: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     name: {
         type: String,
         required: true,
@@ -52,6 +57,7 @@ const UsersSchema = new Schema({
 })
 
 UsersSchema.index({ email: 1 })
+UsersSchema.index({ userId: 1 })
 
 module.exports = mongoose.model('Users', UsersSchema)
 

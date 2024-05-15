@@ -8,6 +8,7 @@ const userRouter = require('./routers/users')
 const { router: authRouter, isAuth } = require('./routers/auth')
 const settingRouter = require('./routers/settings')
 const collectionsModel = require('./models/collections')
+const securityQuestionsRouter = require('./routers/securityQuestions')
 
 
 const app = express()
@@ -47,6 +48,7 @@ app.use(session({
 app.use('/', authRouter)
 app.use('/users', isAuth, userRouter)
 app.use('/settings', isAuth, settingRouter)
+app.use('/securityQuestions', isAuth, securityQuestionsRouter)
 
 app.get('/', (req, res) => {
     return res.render('home', { email: req.session.email })
@@ -124,16 +126,12 @@ app.get('/review/:setid', (req, res) => {
 })
 
 app.get('*', (req, res) => {
-    return res.status(404).send('Page not found!')
+    return res.status(404).json({ msg: 'page not found' })
 })
 
 app.use((err, req, res, next) => {
     console.error(err)
-    return res.status(err.status || 500).send(`
-    <h1> ${err.message || err} </h1>
-    <h1> ${err.errors || ''} </h1>
-    <a href='/'><button>try again</button></a>
-    `)
+    return res.status(err.code || 500).json({ msg: err })
 })
 
 module.exports = { server, app, mongoUrl }
