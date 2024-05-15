@@ -55,10 +55,38 @@ function triggerAlert(e) {
     navigator.clipboard.writeText(e.target.textContent)
 
     const alert = document.querySelector(".alert")
+    alert.textContent = "Sharecode copied to clipboard!"
     alert.classList.remove("alert-hidden")
     setTimeout(() => alert.classList.add("alert-hidden"), 3000)
 }
-document.getElementById("sharecode").addEventListener("touchstart", triggerAlert)
-document.getElementById("sharecode").addEventListener("click", triggerAlert)
 
+//only attach these eventListeners if the element exists
+if(document.getElementById("sharecode")) {
+    document.getElementById("sharecode").addEventListener("touchstart", triggerAlert)
+    document.getElementById("sharecode").addEventListener("click", triggerAlert)
+}
+
+//this needs validation in the backend to prevent injections
+if(document.getElementById("save-button")) {
+    document.getElementById("save-button").addEventListener("click", async (e) => {
+        const data = {
+            name: document.getElementById("setName").value,
+            cards: localStorage.getItem("cards")}
+        console.log("data:" + data);
+
+        try {
+            const response = await fetch('/submitcards', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'application/json' }
+            })
+            if(response.ok) {
+                const data = await response.json()
+                window.location.href= `/review/${JSON.parse(data).shareId}`
+            }
+        } catch {
+            console.log("Error in submission")
+        }
+    }
+)}
 

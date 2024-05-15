@@ -4,18 +4,18 @@
     --main-color3: #FED766;
     --main-color4: #3c0761;
     --main-color5: #FFFFFF;
+    --main-color6:#8714c9;
 }
 
 .headerText {
-    color:var(--main-color2);
+    color:var(--main-color6);
 }
 
-.headerText2 {
-    color:var(--main-color3);
-}
 
 .setText{
     color:var(--main-color4);
+    font-weight:bolder;
+    text-decoration:none;
 }
 
 .space {
@@ -27,7 +27,7 @@
 }
 
 .button-bg{
-    background-color:var(--main-color2);
+    background-color:var(--main-color6);
     margin-bottom:7px;
 }
 
