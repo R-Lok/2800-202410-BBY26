@@ -7,21 +7,31 @@ console.log('incrementStreak.js loaded')
 const incrementStreak = async(req) => {
     try {
         let shareId = req.params.setid;
-        let currentDate = new Date();
+        let currentActivityDate = new Date();
 
-        let user = await usersModel.findOneAndUpdate(
+        let user = await usersModel.findOne({ loginId: req.session.loginId });
+        let lastActivity = user.lastActivity
+        let prevDate = lastActivity.timestamp.getDate();
+        console.log(`${prevDate}`)
+        user = await usersModel.findOneAndUpdate(
             { loginId: req.session.loginId },
             { $set: {
-                'lastActivity.timestamp': currentDate,
+                'lastActivity.timestamp': currentActivityDate,
                 'lastActivity.shareId': shareId
             }},
             {returnOriginal: false}
         );
+        
+        if (user.lastActivity.timestamp.getDate() != prevDate) {
+            //reset here
+        } else {
+            // increment
+        }
         if (!user) {
             throw console.error();
         }
         console.log(`after:${user}`);
-        // log currentdate - will use later to check if date changed (eg 3->4)
+        // log currentActivityDate - will use later to check if date changed (eg 3->4)
         // if diff date than before, inc, as long as consecutive day
         // what update to db: user.streak
         await user.save();
