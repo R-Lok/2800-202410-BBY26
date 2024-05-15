@@ -60,9 +60,21 @@ photoTab.addEventListener('click', (e) => {
     submitMaterialsBtn.setAttribute("data-bs-target", '#photoModal')
 })
 
+const textTab = document.querySelector("#text-tab").addEventListener('click', (e) => {
+    const submitMaterialsBtn = document.querySelector("#enterTextButton")
+    submitMaterialsBtn.setAttribute("data-bs-target", "#textModal")
+})
+
+document.querySelector('#enterTextButton').addEventListener('click', (e) => {
+    const uploadMaterialButton = document.querySelector('#enterTextButton')
+    
+    if (uploadMaterialButton.getAttribute('data-bs-target') === '#photoModal') {
+        getCamera()
+    }
+})
+
 const camOn = document.querySelector("#camOn")
 camOn.addEventListener('click' , (e) => {
-    console.log("hi")
     getCamera()
 })
 
@@ -74,11 +86,33 @@ camOff.addEventListener('click', (e) => {
 const snap = document.querySelector("#snap")
 snap.addEventListener('click', (e) => {
     takePhoto()
+    const frame = document.querySelector("#frame")
+    const video = document.querySelector("#cam")
+    const retake = document.querySelector("#retake")
+    frame.classList.toggle('hidden')
+    video.classList.toggle('hidden')
+    retake.classList.toggle('hidden')
+
+    
+    turnOffCamera()
+})
+
+document.querySelector('#retake').addEventListener('click', (e) => {
+    getCamera()
 })
 
 let mediaStream = null
 
 async function getCamera() {
+    if (!document.querySelector('#frame').classList.contains('hidden')) {
+        const frame = document.querySelector("#frame")
+        const video = document.querySelector("#cam")
+        const retake = document.querySelector("#retake")
+        frame.classList.toggle('hidden')
+        video.classList.toggle('hidden')
+        retake.classList.toggle('hidden')
+    }
+
     try {
         mediaStream = await navigator.mediaDevices.getUserMedia({
             audio: false,
@@ -124,3 +158,18 @@ function takePhoto() {
     canvas.width = photoWidth
     canvas.height = photoHeight
 }
+
+const targetNode = document.querySelector('#photoModal')
+const config = { attributes: true, attributeFilter: ['class'] }
+
+const callback = (mutationsList, observer) => {
+    for (let mutation of mutationsList) {
+        const classList = mutation.target.classList
+        if (!classList.contains('show')) {
+            turnOffCamera()
+        }
+    }
+}
+
+const observer = new MutationObserver(callback)
+observer.observe(targetNode, config)

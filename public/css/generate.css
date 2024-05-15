@@ -78,3 +78,7 @@ video, #frame {
   height: 640px;
   width: 350px;
 }
+
+.hidden {
+  display: none;
+}
