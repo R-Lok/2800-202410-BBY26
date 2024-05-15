@@ -31,6 +31,15 @@ const incrementStreak = async(req) => {
                 },
                 {returnOriginal: false}
             );
+        } else if (currActivityDate === prevActivityDate) {
+            user = await usersModel.findOneAndUpdate(
+                { loginId: req.session.loginId },
+                { $set: {
+                    'lastActivity.timestamp': date,
+                    'lastActivity.shareId': shareId
+                }},
+                {returnOriginal: false}
+            );
         } 
         if (!user) {
             throw console.error();
