@@ -83,10 +83,6 @@ app.get('/generate', (req, res) => {
     return res.render('generate')
 })
 
-app.get('/signup', (req, res) => {
-    return res.render('signup')
-})
-
 async function generate(difficulty, number, material) {
     let completion
     try {
