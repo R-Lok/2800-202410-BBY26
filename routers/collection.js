@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
     return res.render('collection', { collections: collections })
 })
 
-router.post('/searchCollection', async (req, res) => {
+router.post('/search', async (req, res) => {
     let userId = req.session.userId;
     const search = req.body.search
     const regexPattern = new RegExp('^' + search, 'i')
@@ -16,7 +16,7 @@ router.post('/searchCollection', async (req, res) => {
     return res.render('collection', { collections: collections })
 })
 
-router.get('/deleteCollection/:shareid', async (req, res) => {
+router.get('/delete/:shareid', async (req, res) => {
     const shareId = req.params.shareid
     console.log('Inside delete, shareid: ' + shareId)
 
