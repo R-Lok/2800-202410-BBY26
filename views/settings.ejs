@@ -31,16 +31,36 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="changePwdModalLabel">Edit Display Name</h5>
+              <h5 class="modal-title" id="changePwdModalLabel">Reset Password</h5>
               <button id="closeChangePwd" type="button" class="close" data-dismiss="modal" aria-label="Close" hidden="true"></button>
             </div>
+
             <div class="modal-body">
               <form>
-                <input type="text" class="form-control" id="previousPwd" placeholder="Previous Password">
-                <input type="text" class="form-control" id="newPwd" placeholder="New Password">
-                <input type="text" class="form-control" id="ConfirmPwd" placeholder="Confirm Password">
+                <div class="mb-3">
+                  <p>Your security question: </p>
+                  <p id="securityQues">Placeholder</p>
+                </div>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label">Provide your security answer: </label>
+                  <input type="password" id="securityAns" class="form-control" name="securityAns" placeholder="Type your answer" autocomplete="my-answer" required>
+                </div>
+              </form>
+
+              <form>
+                <div class="mb-3">
+                  <label for="password" class="form-label">New password: </label>
+                  <input type="password" id="newPwd" class="form-control" name="newPwd" placeholder="Type your new password" autocomplete="new-password" required>
+                </div>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label">Confirm your new password: </label>
+                  <input type="password" id="confirmPwd" class="form-control" name="confirmPwd" placeholder="Repeat your new password" autocomplete="new-password" required>
+                </div>
               </form>
             </div>
+
             <div class="modal-footer">
               <button type="button" class="btn btn-primary" onclick="changePwd(
                     document.getElementById('previousPwd').value,
@@ -48,7 +68,7 @@
                     document.getElementById('ConfirmPwd').value
                 )">Submit
               </button>
-            </div>
+            </div>            
           </div>
         </div>
       </div>
@@ -60,11 +80,13 @@
             <h5 class="modal-title" id="editNameModalLabel">Edit Display Name</h5>
             <button id="closeEditName" type="button" class="close" data-dismiss="modal" aria-label="Close" hidden="true"></button>
           </div>
+
           <div class="modal-body">
             <form>
               <input type="text" class="form-control" id="newName" placeholder="New display name">
             </form>
           </div>
+
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" onclick="editName(document.getElementById('newName').value)">Submit</button>
           </div>
