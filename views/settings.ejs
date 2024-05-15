@@ -4,13 +4,55 @@
   <head>
     <title>Settings</title>
     <meta name="StudyGen" content="Settings">
+    <link rel="stylesheet" href="/css/settings.css">
   </head>
   <body>
     <%- include('template/headerBar') %>
-    <nav id="navplaceholder"></nav>
-    <div class="px-4 py-5 my-5 text-center">
-      <img class="d-block mx-auto mb-4 settingsIcon" src="<%= image1 %>"  alt="" width="400">
-      <h1 class="display-5 fw-bold mb-5">Settings</h1>
+
+    <div class="d-flex justify-content-center fw-bold mt-5 headerText space">
+      <h1 style="font-size:38px">User Settings</h1>
+    </div>
+
+    <div class="px-4 text-center">
+      <a data-toggle="modal" data-target="#profileModal">
+        <img class="d-block mx-auto mb-4 settingsIcon rounded-circle" src="/images/depresso2.png"  alt="" width="300">
+      </a>
+      <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header justify-content-center">
+              <h5 class="modal-title" id="profileModalTitle">Choose your Profile Picture</h5>
+            </div>
+            <div class="modal-body">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-md-4">
+                    <img id="image1" class="settingsIcon rounded-circle img-fluid profilePicBorder" src="/images/depresso2.png"  alt="" width="100">
+                    <img id="image2" class="settingsIcon rounded-circle img-fluid" src="/images/depresso2.png"  alt="" width="100">
+                    <img id="image3" class="settingsIcon rounded-circle img-fluid" src="/images/depresso2.png"  alt="" width="100">
+                  </div>
+                  <div class="col-md-4">
+                    <img id="image4" class="settingsIcon rounded-circle img-fluid" src="/images/depresso2.png"  alt="" width="100">
+                    <img id="image5" class="settingsIcon rounded-circle img-fluid" src="/images/depresso2.png"  alt="" width="100">
+                    <img id="image6" class="settingsIcon rounded-circle img-fluid" src="/images/depresso2.png"  alt="" width="100">
+                  </div>
+                  <div class="col-md-4">
+                    <img class="settingsIcon rounded-circle img-fluid" src="/images/depresso2.png"  alt="" width="100">
+                    <img class="settingsIcon rounded-circle img-fluid" src="/images/depresso2.png"  alt="" width="100">
+                    <img class="settingsIcon rounded-circle img-fluid" src="/images/depresso2.png"  alt="" width="100">
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="col-lg-6 mx-auto">
         <div class="d-flex gap-3 justify-content-sm-center align-items-center flex-column">
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changePwdModal">

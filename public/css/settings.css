@@ -1,0 +1,14 @@
+:root {
+    --main-color1: #CAA8F5;
+    --main-color2: #9984D4;
+    --main-color3: #FED766;
+    --main-color4: #230C33;
+    --main-color5: #FFFFFF;
+    --main-color6:#8714c9;
+}
+
+.profilePicBorder {
+    border-style: solid;
+    border-width: 5px;
+    border-color:var(--main-color6);
+}

@@ -2,7 +2,7 @@ const express = require('express')
 const router = new express.Router()
 
 router.get('/', (req, res) => {
-    return res.render('settings', { image1: 'images/depresso2.png' })
+    return res.render('settings')
 })
 
 router.post('/editName', (req, res) => {
