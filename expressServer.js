@@ -8,6 +8,10 @@ const userRouter = require('./routers/users')
 const { router: authRouter, isAuth } = require('./routers/auth')
 const settingRouter = require('./routers/settings')
 const collectionsModel = require('./models/collections')
+const securityQuestionsRouter = require('./routers/securityQuestions')
+const flashcardsModel = require('./models/flashcards')
+const mongoose = require('mongoose')
+
 
 const app = express()
 const server = require('http').createServer(app)
@@ -49,10 +53,10 @@ app.use(session({
 app.use('/', authRouter)
 app.use('/users', isAuth, userRouter)
 app.use('/settings', isAuth, settingRouter)
-app.use('/members', userRouter)
+app.use('/securityQuestions', isAuth, securityQuestionsRouter)
 
 app.get('/', (req, res) => {
-    let days = 3;
+    const days = 3
     return res.render('home', { days: days, name: req.session.name, email: req.session.email })
 })
 
@@ -131,22 +135,94 @@ app.get('/review/:setid', (req, res) => {
             answer: 'Hg',
         },
     ]
-    const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: cards, id: req.params.setid }
+    const carouselData = {bg: "/images/plain-FFFFFF.svg", cards: cards, id: req.params.setid, queryType: "view"}
+    
+    return res.render('review', carouselData)
+})
+
+app.get("/check/:json", (req, res) => {
+
+    data = [
+        {
+            "question": "What is the capital of France?",
+            "answer": "Paris"
+        },
+        {
+            "question": "Who wrote 'Romeo and Juliet'?",
+            "answer": "William Shakespeare"
+        },
+        {
+            "question": "What is the powerhouse of the cell?",
+            "answer": "Mitochondria"
+        },
+        {
+            "question": "What is the chemical symbol for water?",
+            "answer": "H2O"
+        },
+        {
+            "question": "What year did the Titanic sink?",
+            "answer": "1912"
+        }
+    ]
+
+    const carouselData = { bg: "/images/plain-FFFFFF.svg", cards: data, queryType: "finalize"}
 
     return res.render('review', carouselData)
 })
 
+app.post('/submitcards', async (req, res) => {
+
+    let lastShareCode
+    let shareId
+
+    //get the latest sharecode from collections
+    try {
+         let result  = await collectionsModel.findOne().sort({shareId: -1}).select('shareId').exec()
+         console.log("result:" + result)
+         lastShareCode = result ? result.shareId : null
+    } catch (err) {
+        console.log("Failed to fetch latestShareCode")
+    }
+
+    if (lastShareCode === null) {
+        shareId = 0;
+    } else {
+        shareId = lastShareCode + 1;
+    }
+
+    const inputData = JSON.parse(req.body.cards).map(card => {
+        return {
+            shareId: `${shareId}`,
+            ...card
+        }
+    })
+
+    const transactionSession = await mongoose.startSession();
+    transactionSession.startTransaction();
+    try{
+        await flashcardsModel.insertMany(inputData)
+        await collectionsModel.create({setName: `${req.body.name}`, userId: req.session._id, shareId: shareId })
+        await transactionSession.commitTransaction()
+        transactionSession.endSession()
+        console.log(`Successfully wrote ${req.body.name} to db`)
+
+    } catch (err) {
+        await transactionSession.abortTransaction()
+        transactionSession.endSession()
+        console.log("Error inserting db")
+    }
+    
+    res.status(200)
+    res.json(JSON.stringify({shareId: shareId}))
+})
+
 app.get('*', (req, res) => {
-    return res.status(404).send('Page not found!')
+    return res.status(404).json({ msg: 'page not found' })
 })
 
 app.use((err, req, res, next) => {
     console.error(err)
-    return res.status(err.status || 500).send(`
-    <h1> ${err.message || err} </h1>
-    <h1> ${err.errors || ''} </h1>
-    <a href='/'><button>try again</button></a>
-    `)
+    return res.status(err.code || 500).json({ msg: err })
 })
 
 module.exports = { server, app, mongoUrl }

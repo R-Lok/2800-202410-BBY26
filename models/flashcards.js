@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 
-const FlashcardsSchema = new Schema({
+const flashcardsSchema = new Schema({
     shareId: {
-        type: Schema.Types.ObjectId,
+        type: Number,
         required: true,
         unique: true,
         ref: 'collections',
@@ -20,6 +20,4 @@ const FlashcardsSchema = new Schema({
     timestamps: true,
 })
 
-FlashcardsSchema.index({ email: 1 })
-
-module.exports = mongoose.model('Flashcards', FlashcardsSchema)
+module.exports = mongoose.model('Flashcards', flashcardsSchema)
