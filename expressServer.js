@@ -60,6 +60,11 @@ app.use('/users', isAuth, userRouter)
 app.use('/settings', isAuth, settingRouter)
 app.use('/securityQuestions', isAuth, securityQuestionsRouter)
 app.use('/collection', isAuth, collectionRouter)
+app.use('/check', isAuth)
+app.use('/review', isAuth)
+app.use('/submitcards', isAuth)
+app.use('/generate', isAuth)
+app.use('/api/generate', isAuth)
 
 app.get('/home', (req, res) => {
     const days = 3
