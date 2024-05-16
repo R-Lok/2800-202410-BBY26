@@ -21,7 +21,7 @@
             type="button" role="tab" aria-controls="text-tab-pane" aria-selected="false">Text upload</button>
         </li>
         <li class="nav-item flex-grow-1 text-center" role="presentation">
-          <button class="nav-link disabled w-100" id="photo-tab" data-bs-toggle="tab" data-bs-target="#photo-tab-pane"
+          <button class="nav-link w-100" id="photo-tab" data-bs-toggle="tab" data-bs-target="#text-tab-pane"
             type="button" role="tab" aria-controls="photo-tab-pane" aria-selected="false">Take Photo</button>
         </li>
       </ul>
@@ -62,11 +62,9 @@
                       <h1 class="modal-title fs-5" id="exampleModalLabel">Text Upload</h1>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-
                     <div class="modal-body">
                       <textarea id="material" class="text-material-input" name="material" rows="15" placeholder="Happy flashcards..." required></textarea>
                     </div>
-
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Change parameters</button>
                       <button type="button" id="generateButton" class="btn btn-success">Generate</button> 
@@ -83,6 +81,32 @@
         </div>
       </div>
     </div>
+    <!--camera-->
+    <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="photoModalLabel">Take a photo</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" style="padding: 0">
+            <div class='d-flex justify-content-center'>
+              <video id="cam" autoplay muted playsinline></video>
+              <canvas id="canv" class="hidden"></canvas>
+              <img src="" alt="" id="frame" class="hidden">
+            </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-between">
+            <button id="snap"class="btn btn-success">Take Photo</button>
+            <button id="retake" class="hidden btn btn-danger">Retake</button>
+            <button type="button" id="generatePhotoButton" class="btn btn-secondary">Generate</button>
+            <!-- <button type="button" class="btn btn-primary"></button> -->
+          </div>
+        </div>
+      </div>
+    </div>
     <script type="text/javascript" src="../scripts/generate.js"></script>
     <%- include("template/footerBar.ejs") %>
     <%- include("template/footer") %>
+
+   
