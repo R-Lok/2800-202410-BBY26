@@ -108,9 +108,10 @@ router.get('/logout', (req, res) => {
     return res.redirect('/')
 })
 
-router.get('/getQuestion', async (req, res, next) => {
+router.post('/getQuestion', async (req, res, next) => {
     try {
         const { email } = req.body
+        console.log('Email :' + email)
         const result = await userAnswersModel
             .findOne({ email: email }, { _id: 0, questionId: 1, userId: 1 })
             .lean()
@@ -130,10 +131,11 @@ router.get('/getQuestion', async (req, res, next) => {
 
 router.post('/checkAnswer', async (req, res, next) => {
     try {
-        const { userId, questionId, answer } = req.body
+        // const { userId, questionId, answer } = req.body
+        const { email, questionId, answer } = req.body
         const result = await userAnswersModel
             .findOne({
-                userId: userId,
+                email: email,
                 questionId: questionId,
             }, { _id: 0, answer: 1 })
             .lean()
@@ -154,7 +156,8 @@ router.post('/checkAnswer', async (req, res, next) => {
 
 router.post('/resetPassword', async (req, res, next) => {
     try {
-        const { userId, password, confirmPassword } = req.body
+        // const { userId, password, confirmPassword } = req.body
+        const { email, password, confirmPassword } = req.body
         console.log(req.body)
         const schema = Joi.object({
             password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
@@ -167,13 +170,14 @@ router.post('/resetPassword', async (req, res, next) => {
                 throw new CustomError('422', error)
             })
 
-        const user = await userModel
-            .findByIdAndUpdate(userId, {
+        await userModel
+            .findOneAndUpdate({
+                email: email,
+            }, {
                 password: await bcrypt.hash(password, saltRounds),
             })
             .lean()
 
-        authorization(req, user)
         return res.status(200).json({ result: 'ok' })
     } catch (error) {
         next(error)
