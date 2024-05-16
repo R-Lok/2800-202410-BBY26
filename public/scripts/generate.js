@@ -106,6 +106,10 @@ async function getCamera() {
         snapBtn.classList.toggle('hidden')
     }
 
+    const generatePhotoButton = document.getElementById("generatePhotoButton")
+    generatePhotoButton.disabled = true
+
+
     try {
         mediaStream = await navigator.mediaDevices.getUserMedia({
             audio: false,
@@ -151,8 +155,12 @@ function takePhoto() {
 
     canvas.width = photoWidth
     canvas.height = photoHeight
+
+    const generatePhotoButton = document.getElementById("generatePhotoButton")
+    generatePhotoButton.disabled = false
 }
 
+//Attach eventListener for 'generate' button of photoModal
 document.querySelector("#generatePhotoButton").addEventListener('click', async (e) => {
     const photo = sessionStorage.getItem('imageURL')
     console.log(photo)
@@ -162,7 +170,11 @@ document.querySelector("#generatePhotoButton").addEventListener('click', async (
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ image: photo })
+            body: JSON.stringify({
+                image: photo,
+                difficulty: document.getElementById("selectDifficulty").value,
+                numQuestions: document.getElementById("selectNumber").value
+            })
         })
     } catch (err) {
 
