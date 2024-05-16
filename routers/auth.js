@@ -1,9 +1,9 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
-const userModel = require('../models/users')
+const usersModel = require('../models/users')
 const saltRounds = 12
 const router = new express.Router()
-const { CustomError } = require('../utilities/customError')
+const { CustomError, encrypt, decrypt, hash } = require('../utilities/index')
 const Joi = require('joi')
 const SecurityQuestionsModel = require('../models/securityQuestions')
 const userAnswersModel = require('../models/userAnswers')
@@ -51,18 +51,21 @@ router.post('/register', async (req, res, next) => {
                 throw new CustomError('422', error)
             })
 
-        const result = await userModel.countDocuments({ loginId: loginId })
+        const result = await usersModel.countDocuments({ loginId: loginId })
         if (result) {
             throw new CustomError('422', 'loginId already exists')
         }
-        const user = await userModel.create({
+        const userObject = {
             loginId,
             name,
-            email,
+            email: await encrypt(email),
+            emailHash: await hash(email),
             password: await bcrypt.hash(password, saltRounds),
             lastLogin: Date.now(),
             enable: true,
-        })
+        }
+        const user = await usersModel.create(userObject)
+        user.email = email
         authorization(req, user)
         return res.redirect('/')
     } catch (error) {
@@ -87,7 +90,7 @@ router.post('/login', async (req, res, next) => {
                 throw new CustomError('422', error)
             })
 
-        const user = await userModel.findOne({ loginId: loginId })
+        const user = await usersModel.findOne({ loginId: loginId }).lean()
         if (!user) {
             throw new CustomError('422', 'user not found')
         }
@@ -95,7 +98,8 @@ router.post('/login', async (req, res, next) => {
         if (!result) {
             throw new CustomError('401', 'loginId or password incorrect!')
         }
-        await userModel.findByIdAndUpdate(user.id, { lastLogin: Date.now() })
+        await usersModel.findByIdAndUpdate(user.id, { lastLogin: Date.now() }).lean()
+        user.email = await decrypt(user.email)
         authorization(req, user)
         return res.redirect('/')
     } catch (error) {
@@ -108,11 +112,18 @@ router.get('/logout', (req, res) => {
     return res.redirect('/')
 })
 
-router.get('/getQuestion', async (req, res, next) => {
+router.post('/getQuestion', async (req, res, next) => {
     try {
         const { email } = req.body
+        const emailHash = await hash(email)
+        const user = await usersModel
+            .findOne({ emailHash: emailHash }, { _id: 1 })
+            .lean()
+        if (!user) {
+            throw new CustomError('404', 'User not found.')
+        }
         const result = await userAnswersModel
-            .findOne({ email: email }, { _id: 0, questionId: 1, userId: 1 })
+            .findOne({ userId: user._id }, { _id: 0, questionId: 1, userId: 1 })
             .lean()
         if (!result) {
             throw new CustomError('422', 'You don\'t have a security question yet!')
@@ -155,7 +166,6 @@ router.post('/checkAnswer', async (req, res, next) => {
 router.post('/resetPassword', async (req, res, next) => {
     try {
         const { userId, password, confirmPassword } = req.body
-        console.log(req.body)
         const schema = Joi.object({
             password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
             confirmPassword: Joi.ref('password'),
@@ -167,7 +177,7 @@ router.post('/resetPassword', async (req, res, next) => {
                 throw new CustomError('422', error)
             })
 
-        const user = await userModel
+        const user = await usersModel
             .findByIdAndUpdate(userId, {
                 password: await bcrypt.hash(password, saltRounds),
             })
