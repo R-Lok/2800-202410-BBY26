@@ -134,6 +134,19 @@ app.post('/api/generate', async (req, res) => {
     }
 })
 
+app.get('/api/getUserImage', async(req, res) => {
+    const userId = req.session.userId;
+    if (!userId) {
+        return res.status(400).json({error: "No userId"});
+    } else {
+        let pictureId = await usersModel.findById(userId).select("-_id picture").lean();
+        pictureId = pictureId.picture;
+        const imagePath = `/images/${pictureId}.png`;
+        res.json({ imagePath })
+    }
+
+});
+
 app.get('/review/:setid', async (req, res) => {
     incrementStreak(req)
     try {
