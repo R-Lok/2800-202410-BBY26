@@ -15,8 +15,10 @@ const openai = new OpenAI({
 const securityQuestionsRouter = require('./routers/securityQuestions')
 const flashcardsModel = require('./models/flashcards')
 const collectionRouter = require('./routers/collection')
+const usersModel = require('./models/users')
 const mongoose = require('mongoose')
 
+const { incrementStreak } = require('./public/scripts/incrementStreak')
 
 const app = express()
 const server = require('http').createServer(app)
@@ -25,8 +27,6 @@ const server = require('http').createServer(app)
 
 // app.use(cors({ credentials: true, origin: whitelist }))
 // app.use(helmet())
-
-// const {x, y, generateDaysOfCurrMonth} = require('./public/scripts/calendar.js');
 
 app.use(compression())
 app.use(express.json({ limit: '50mb' }))
@@ -66,8 +66,9 @@ app.use('/submitcards', isAuth)
 app.use('/generate', isAuth)
 app.use('/api/generate', isAuth)
 
-app.get('/home', (req, res) => {
-    const days = 3
+app.get('/home', async (req, res) => {
+    let user = await usersModel.findOne({ loginId: req.session.loginId })
+    let days = user.streak
     return res.render('home', { days: days, name: req.session.name, email: req.session.email })
 })
 
@@ -134,6 +135,7 @@ app.post('/api/generate', async (req, res) => {
 })
 
 app.get('/review/:setid', async (req, res) => {
+    incrementStreak(req)
     try {
         console.log('set' + req.params.setid)
         const cards = await flashcardsModel.find({ shareId: Number(req.params.setid) }).select('-_id question answer')
