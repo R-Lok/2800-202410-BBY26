@@ -1,13 +1,11 @@
 async function getQuestion(email) {
-    try {
-        const res = await axios.post('getQuestion', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            email: email,
-        })
-
+    axios.post('getQuestion', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        email: email,
+    }).then((res) => {
         console.log(res)
 
         if (res.status === 200) {
@@ -15,14 +13,13 @@ async function getQuestion(email) {
             setStepTwoQuestion(res.data.result)
             setTimeout(() => {
                 switchStep(2)
-                closeLoader()
+                closeLoader('.wrapper')
             }, 1500)
-        } else {
-            displayErrorMsg(res.statusText)
         }
-    } catch (err) {
-        console.log(err)
-    }
+    }).catch((err) => {
+        console.log(err.response)
+        displayerErrorLoader(err.response.data.msg)
+    })
 }
 
 function startStepOne() {
@@ -62,7 +59,7 @@ async function checkAnswer() {
             displayLoader()
             setTimeout(() => {
                 switchStep(3)
-                closeLoader()
+                closeLoader('.wrapper')
             }, 1500)
         }
     } catch (err) {
@@ -88,7 +85,7 @@ async function resetPassword() {
             displayLoader()
             setTimeout(() => {
                 switchStep(4)
-                closeLoader()
+                closeLoader('.wrapper')
             }, 1500)
         }
     } catch (err) {
@@ -118,30 +115,25 @@ function displayLoader() {
     modalBody.appendChild(loader)
 }
 
-function closeLoader() {
-    const loader = document.querySelector('.wrapper')
-    loader.remove()
+function displayerErrorLoader(message) {
+    const modalBody = document.querySelector('.modal-body')
+
+    const loader = document.createElement('div')
+    loader.classList.add('errorWrapper')
+    loader.innerHTML = `
+    <svg class="error" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+        <circle class="error_circle" cx="26" cy="26" r="25" fill="none"/>
+        <path class="error_check" fill="none" d="M14.1 14.1l23.8 23.8 m0,-23.8 l-23.8,23.8"/>
+    </svg>
+    `
+    const text = document.createElement('p')
+    text.innerHTML = message
+    text.classList.add('error-message')
+
+    loader.appendChild(text)
+    modalBody.appendChild(loader)
 }
 
-function displayErrorMsg(err) {
-    document.getElementById('step-1-form').innerHTML = `${err}`
-}
-
-const modal = document.getElementById('resetPasswordModal')
-const config = { attributes: true }
-const callback = (mutationList, observer) => {
-    for (const mutation of mutationList) {
-        if (mutation.type === 'attributes' && !modal.classList.contains('show')) {
-            const loader = document.querySelector('.wrapper')
-
-            if (loader) {
-                loader.remove()
-            }
-        }
-    }
-}
-const observer = new MutationObserver(callback)
-observer.observe(modal, config)
 
 /* Change steps for the modal */
 function switchStep(step) {
@@ -157,3 +149,28 @@ function switchStep(step) {
         }
     }
 }
+
+const modal = document.getElementById('resetPasswordModal')
+const config = { attributes: true }
+const callback = (mutationList, observer) => {
+    for (const mutation of mutationList) {
+        if (mutation.type === 'attributes' && !modal.classList.contains('show')) {
+            switchStep(1)
+
+            document.querySelectorAll('input').forEach((input) => input.value = '')
+
+            const loader = document.querySelector('.wrapper')
+            if (loader) {
+                loader.remove()
+            }
+            const errorLoader = document.querySelector('.errorWrapper')
+            if (errorLoader) {
+                errorLoader.remove()
+            }
+        }
+    }
+}
+const observer = new MutationObserver(callback)
+observer.observe(modal, config)
+
+

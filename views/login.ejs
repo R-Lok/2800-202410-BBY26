@@ -15,7 +15,7 @@
                             <input type="text" id="loginId" class="form-control" name="loginId" required>
                         </div>
 
-                        <div class="mb-3">
+                        <div class="mb-3 password-box">
                             <label for="password" class="form-label">Password</label>
                             <input type="password" id="password" class="form-control" name="password" autocomplete="current-password">
                         </div>
@@ -63,7 +63,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
-                        <div class="modal-body step-1-modal-body">
+                        <div class="modal-body">
                             <form id="step-1">
                                 <div id="step-1-main">
                                     <div class="mb-4">
@@ -112,14 +112,15 @@
                                         <h1>Step 3: Set your new password</h1>
                                     </div>
 
-                                    <div class="mb-3">
+                                    <div class="mb-4">
                                         <label for="newPassword" class="form-label">New Password</label>
-                                        <input type="password" id="newPassword" class="form-control" name="password" autocomplete="new-password" required>
+                                        <input type="password" id="newPassword" class="form-control" name="password" placeholder="Type your new password here" required>
+                                        <small id="passworldHelp" class="form-text text-muted">Alphabet or Number 3 to 20 characters</small>
                                     </div>
             
                                     <div class="mb-3">
                                         <label for="confirmPassword" class="form-label">Confirm Password</label>
-                                        <input type="password" id="confirmPassword" class="form-control" name="confirmPassword" autocomplete="new-password" required>
+                                        <input type="password" id="confirmPassword" class="form-control" name="confirmPassword" placeholder="Repeat your new password" required>
                                     </div>
 
                                     <div class="d-grid">

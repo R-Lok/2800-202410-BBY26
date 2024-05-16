@@ -208,7 +208,7 @@ app.get('*', (req, res) => {
 
 app.use((err, req, res, next) => {
     console.error(err)
-    return res.status(err.code || 500).json({ msg: err })
+    return res.status(err.code || 500).json({ msg: err.msg })
 })
 
 module.exports = { server, app, mongoUrl }
