@@ -1,5 +1,4 @@
 require('dotenv').config({ path: `${process.cwd()}/.env.${process.env.NODE_ENV}` })
-const usersModel = require('../../models/users')
 
 // console.log('incrementStreak.js loaded')
 

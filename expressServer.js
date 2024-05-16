@@ -10,6 +10,7 @@ const settingRouter = require('./routers/settings')
 const collectionsModel = require('./models/collections')
 const securityQuestionsRouter = require('./routers/securityQuestions')
 const flashcardsModel = require('./models/flashcards')
+const usersModel = require('./models/users')
 const mongoose = require('mongoose')
 
 const { incrementStreak } = require('./public/scripts/incrementStreak')
@@ -54,8 +55,9 @@ app.use('/users', isAuth, userRouter)
 app.use('/settings', isAuth, settingRouter)
 app.use('/securityQuestions', isAuth, securityQuestionsRouter)
 
-app.get('/', isAuth, (req, res) => {
-    const days = 3
+app.get('/', isAuth, async (req, res) => {
+    let user = await usersModel.findOne({ loginId: req.session.loginId })
+    let days = user.streak
     return res.render('home', { days: days, name: req.session.name, email: req.session.email })
 })
 
