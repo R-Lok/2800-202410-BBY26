@@ -112,6 +112,11 @@ router.post('/getQuestion', async (req, res, next) => {
     try {
         const { email } = req.body
         console.log('Email :' + email)
+        const user = await userModel.findOne({ email: email }, { _id: 0 }).lean()
+        if (!user) {
+            throw new CustomError('422', 'Email is not found')
+        }
+
         const result = await userAnswersModel
             .findOne({ email: email }, { _id: 0, questionId: 1, userId: 1 })
             .lean()

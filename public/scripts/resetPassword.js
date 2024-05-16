@@ -126,9 +126,10 @@ function displayerErrorLoader(message) {
         <path class="error_check" fill="none" d="M14.1 14.1l23.8 23.8 m0,-23.8 l-23.8,23.8"/>
     </svg>
     `
-    const text = document.createElement('p')
+    const text = document.createElement('h4')
     text.innerHTML = message
     text.classList.add('error-message')
+    text.style.textAlign = 'center'
 
     loader.appendChild(text)
     modalBody.appendChild(loader)
