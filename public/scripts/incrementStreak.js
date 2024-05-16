@@ -1,13 +1,11 @@
-require('dotenv').config({ path: `${process.cwd()}/.env.${process.env.NODE_ENV}` })
+// require('dotenv').config({ path: `${process.cwd()}/.env.${process.env.NODE_ENV}` })
 const usersModel = require('../../models/users')
-
 // console.log('incrementStreak.js loaded')
-
 const incrementStreak = async(req) => {
     try {
         let shareId = req.params.setid;
         let date = new Date();
-        let currActivityDate = date.getDate();
+        let currActivityDate = date.getDate() + 1;
 
         let user = await usersModel.findOne({ loginId: req.session.loginId });
         if (!user) {
@@ -15,7 +13,6 @@ const incrementStreak = async(req) => {
         }
         let lastActivity = user.lastActivity;
         let prevActivityDate = lastActivity.timestamp.getDate();
-        // console.log(`prev ${prevActivityDate} curr ${currActivityDate}`)
 
         // reset or increment streak
         if (currActivityDate === prevActivityDate + 1) {
