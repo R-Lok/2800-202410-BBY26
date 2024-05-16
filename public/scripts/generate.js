@@ -146,11 +146,28 @@ function takePhoto() {
     const photoWidth = video.videoWidth
     context.drawImage(video, 0, 0, 350, 640)
     const image = canvas.toDataURL('image/png')
+    sessionStorage.setItem('imageURL', JSON.stringify(image))
     photoFrame.setAttribute('src', image)
 
     canvas.width = photoWidth
     canvas.height = photoHeight
 }
+
+document.querySelector("#generatePhotoButton").addEventListener('click', async (e) => {
+    const photo = sessionStorage.getItem('imageURL')
+    console.log(photo)
+    try {
+        const response = await fetch('/upload-image', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ image: photo })
+        })
+    } catch (err) {
+
+    }
+})
 
 const targetNode = document.querySelector('#photoModal')
 const config = { attributes: true, attributeFilter: ['class'] }
