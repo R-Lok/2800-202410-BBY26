@@ -73,7 +73,7 @@ app.get('/home', async (req, res) => {
     }
     let days = user.streak;
     let date = new Date();
-    let currActivityDate = date.getDate() + 5;
+    let currActivityDate = date.getDate();
     let lastActivity = user.lastActivity;
     if (!lastActivity || !lastActivity.timestamp) {
         return res.render('home', { days: days, name: req.session.name, email: req.session.email })
