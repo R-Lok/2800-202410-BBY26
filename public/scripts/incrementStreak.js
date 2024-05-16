@@ -15,7 +15,8 @@ const incrementStreak = async(req) => {
         let prevActivityDate = lastActivity.timestamp.getDate();
 
         // reset or increment streak
-        if (currActivityDate === prevActivityDate + 1) {
+        if ((currActivityDate === prevActivityDate + 1) || (user.streak === 0)) {
+            console.log(1);
             user = await usersModel.findOneAndUpdate(
                 { loginId: req.session.loginId },
                 {$set: {
@@ -28,21 +29,13 @@ const incrementStreak = async(req) => {
                 {returnOriginal: false}
             );
         } else if (currActivityDate === prevActivityDate) {
-            user = await usersModel.findOneAndUpdate(
-                { loginId: req.session.loginId },
-                { $set: {
-                    'lastActivity.timestamp': date,
-                    'lastActivity.shareId': shareId
-                }},
-                {returnOriginal: false}
-            );
-        } else {
+            let value = user.streak
             user = await usersModel.findOneAndUpdate(
                 { loginId: req.session.loginId },
                 { $set: {
                     'lastActivity.timestamp': date,
                     'lastActivity.shareId': shareId,
-                    streak: 0
+                    streak: value
                 }},
                 {returnOriginal: false}
             );
