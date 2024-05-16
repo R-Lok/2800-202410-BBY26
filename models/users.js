@@ -16,10 +16,9 @@ const UsersSchema = new Schema({
         required: true,
         unique: true,
     },
-    loginId: {
+    emailHash: {
         type: String,
         required: true,
-        unique: true,
     },
     password: {
         type: String,
@@ -54,6 +53,10 @@ const UsersSchema = new Schema({
         max: 9,
     },
     enable: {
+        type: Boolean,
+        default: false,
+    },
+    security: {
         type: Boolean,
         default: false,
     },
