@@ -151,6 +151,11 @@ function switchStep(step) {
     }
 }
 
+function closeLoader(className) {
+    const loader = document.querySelector(`${className}`)
+    loader.remove()
+}
+
 const modal = document.getElementById('resetPasswordModal')
 const config = { attributes: true }
 const callback = (mutationList, observer) => {
