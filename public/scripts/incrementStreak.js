@@ -5,7 +5,7 @@ const incrementStreak = async(req) => {
     try {
         let shareId = req.params.setid;
         let date = new Date();
-        let currActivityDate = date.getDate() + 1;
+        let currActivityDate = date.getDate();
 
         let user = await usersModel.findOne({ loginId: req.session.loginId });
         if (!user) {
