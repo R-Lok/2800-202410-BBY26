@@ -73,27 +73,18 @@ document.querySelector('#enterTextButton').addEventListener('click', (e) => {
     }
 })
 
-const camOn = document.querySelector("#camOn")
-camOn.addEventListener('click' , (e) => {
-    getCamera()
-})
-
-const camOff = document.querySelector("#camOff")
-camOff.addEventListener('click', (e) => {
-    turnOffCamera()
-})
-
 const snap = document.querySelector("#snap")
 snap.addEventListener('click', (e) => {
     takePhoto()
     const frame = document.querySelector("#frame")
     const video = document.querySelector("#cam")
     const retake = document.querySelector("#retake")
+    const snapBtn = document.querySelector("#snap")
     frame.classList.toggle('hidden')
     video.classList.toggle('hidden')
     retake.classList.toggle('hidden')
+    snapBtn.classList.toggle('hidden')
 
-    
     turnOffCamera()
 })
 
@@ -108,9 +99,11 @@ async function getCamera() {
         const frame = document.querySelector("#frame")
         const video = document.querySelector("#cam")
         const retake = document.querySelector("#retake")
+        const snapBtn = document.querySelector("#snap")
         frame.classList.toggle('hidden')
         video.classList.toggle('hidden')
         retake.classList.toggle('hidden')
+        snapBtn.classList.toggle('hidden')
     }
 
     try {
