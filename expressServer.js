@@ -69,12 +69,15 @@ app.use('/api/generate', isAuth)
 app.get('/home', async (req, res) => {
     let user = await usersModel.findOne({ loginId: req.session.loginId })
     if (!user) {
-        throw console.error();
+        throw new Error("User not found");
     }
-    let days = user.streak
+    let days = user.streak;
     let date = new Date();
-    let currActivityDate = date.getDate();
+    let currActivityDate = date.getDate() + 5;
     let lastActivity = user.lastActivity;
+    if (!lastActivity || !lastActivity.timestamp) {
+        return res.render('home', { days: days, name: req.session.name, email: req.session.email })
+    }
     let prevActivityDate = lastActivity.timestamp.getDate();
     
     if ((currActivityDate != prevActivityDate + 1) && (currActivityDate != prevActivityDate)) {
