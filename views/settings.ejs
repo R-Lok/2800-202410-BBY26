@@ -26,28 +26,26 @@
             <div class="modal-body">
               <div class="container-fluid">
                 <div class="row">
-                  <div class="col-md-4">
-                    <img id="image1" onclick = "highlightIcon(this)" class= "settingsIcon rounded-circle img-fluid profilePicBorder" src="/images/1.png"  alt="" width="100">
-                    <img id="image2" onclick="highlightIcon(this)" class="settingsIcon rounded-circle img-fluid" src="/images/2.png"  alt="" width="100">
-                    <img id="image3" onclick="highlightIcon(this)" class="settingsIcon rounded-circle img-fluid" src="/images/1.png"  alt="" width="100">
-                  </div>
-                  <div class="col-md-4">
-                    <img id="image4" onclick="highlightIcon(this)" class="settingsIcon rounded-circle img-fluid" src="/images/1.png"  alt="" width="100">
-                    <img id="image5" onclick="highlightIcon(this)" class="settingsIcon rounded-circle img-fluid" src="/images/1.png"  alt="" width="100">
-                    <img id="image6" onclick="highlightIcon(this)" class="settingsIcon rounded-circle img-fluid" src="/images/1.png"  alt="" width="100">
-                  </div>
-                  <div class="col-md-4">
-                    <img id="image7" onclick="highlightIcon(this)" class="settingsIcon rounded-circle img-fluid" src="/images/1.png"  alt="" width="100">
-                    <img id="image8" onclick="highlightIcon(this)" class="settingsIcon rounded-circle img-fluid" src="/images/1.png"  alt="" width="100">
-                    <img id="image9" onclick="highlightIcon(this)" class="settingsIcon rounded-circle img-fluid" src="/images/1.png"  alt="" width="100">
-                  </div>
+                  <% for (let i = 1; i <= 9; i++) { %>
+                    <%	if (i % 3 == 1) {	%>
+                      <div class="col-md-4">
+                    <%      }                       %>
+                      <img id="<%= "image" + i %>" onclick="highlightIcon(this)"
+                      class="settingsIcon rounded-circle profilePicBorder img-fluid mb-1
+                      <% if (i == imageId) { %>
+                      profilePicBorderHighlight
+                      <% } %>" 
+                      src="<%= "/images/" + i + ".png"%>" alt="" width="100">
+                    <%	if (i % 3 == 0) { %>
+                      </div>
+                    <%      }};	       	%>
                 </div>
 
               </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
+              <button id="SaveButton" type="button" class="btn btn-primary" data-dismiss="modal">Save Changes</button>
             </div>
           </div>
         </div>
@@ -113,7 +111,7 @@
         </div>
       </div>
     </div>
-    <script src="scripts/settings.js"></script>
+    <script src="/scripts/settings.js"></script>
     <%- include('template/footerBar') %>
   </body>
 </html>
