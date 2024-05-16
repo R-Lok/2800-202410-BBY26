@@ -13,10 +13,10 @@ const incrementStreak = async(req) => {
         }
         let lastActivity = user.lastActivity;
         let prevActivityDate = lastActivity.timestamp.getDate();
-        console.log(`user: ${user}`)
-        console.log(`prev date: ${prevActivityDate}\n curr date: ${currActivityDate}`)
+
         // reset or increment streak
-        if (currActivityDate === prevActivityDate + 1) {
+        if ((currActivityDate === prevActivityDate + 1) || (user.streak === 0)) {
+            console.log(1);
             user = await usersModel.findOneAndUpdate(
                 { loginId: req.session.loginId },
                 {$set: {
