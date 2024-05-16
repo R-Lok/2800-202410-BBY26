@@ -1,4 +1,5 @@
 require('dotenv').config({ path: `${process.cwd()}/.env.${process.env.NODE_ENV}` })
+const usersModel = require('../../models/users')
 
 // console.log('incrementStreak.js loaded')
 
@@ -14,7 +15,7 @@ const incrementStreak = async(req) => {
         }
         let lastActivity = user.lastActivity;
         let prevActivityDate = lastActivity.timestamp.getDate();
-        console.log(`prev ${prevActivityDate} curr ${currActivityDate}`)
+        // console.log(`prev ${prevActivityDate} curr ${currActivityDate}`)
 
         // reset or increment streak
         if (currActivityDate === prevActivityDate + 1) {
@@ -49,13 +50,11 @@ const incrementStreak = async(req) => {
                 {returnOriginal: false}
             );
         }
-        console.log(`after:${user}`);
         await user.save();
     } catch (err) {
-        console.log(`error occured`);
+        console.log(`Error found in incrementStreak.js`);
         return;
     }
-    console.log(`outside of try catch`);
     return;
 }
 
