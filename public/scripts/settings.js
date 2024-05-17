@@ -1,84 +1,88 @@
-const changePwd = async (previousPwd, newPwd, confirmPwd) => {
-    console.log(previousPwd, newPwd, confirmPwd)
-    const response = await fetch(`/settings/changePwd`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            previousPwd, newPwd, confirmPwd,
-        }),
-    })
-        .then(async (response) => {
-            console.log(response)
-            if (response.ok) {
-                document.getElementById('closeChangePwd').click()
-                alert('Password successfully changed')
-                location.reload()
-                return
-            }
-            throw new Error('Incorrect input')
+const changePwd = async (securityAns, currentPwd, newPwd, confirmPwd) => {
+    console.log(securityAns, currentPwd, newPwd, confirmPwd)
+    try {
+        const response = await fetch(`/settings/changePwd`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                securityAns, currentPwd, newPwd, confirmPwd,
+            }),
         })
-        .catch((error) => {
+        const responseData = await response.json()
+
+        if (response.ok) {
             document.getElementById('closeChangePwd').click()
-            alert(error.message)
+            alert('Password successfully changed')
+            location.reload()
             return
-        })
-    return response
+        } else {
+            const errorMessage = responseData.message || 'Password change failed'
+            alert(`${errorMessage}`)
+        }
+    } catch (error) {
+        console.error('Error:', error)
+        alert('An unexpected error occured. Please try again later')
+    }
 }
 
+
 const editName = async (newName) => {
-    console.log(newName)
-    const response = await fetch(`/settings/editName`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            newName: newName,
-        }),
-    })
-        .then((response) => {
-            console.log(response)
-            if (response.ok) {
-                document.getElementById('closeEditName').click()
-                alert('Name successfully changed')
-                location.reload()
-                return
-            }
-            throw new Error('Something went wrong')
+    try {
+        console.log(newName)
+        const response = await fetch(`/settings/editName`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                newName: newName,
+            }),
         })
-        .catch((error) => {
-            console.error('Error:', error)
-        })
-    return response
+        const responseData = await response.json()
+
+        if (response.ok) {
+            document.getElementById('closeEditName').click()
+            alert('Display Name successfully changed')
+            location.reload()
+            return
+        } else {
+            const errorMessage = responseData.message || 'Name change failed'
+            alert(`${errorMessage}`)
+        }
+    } catch (error) {
+        console.error('Error:', error)
+        alert('An unexpected error occured. Please try again later')
+    }
 }
 
 const editLoginId = async (loginId) => {
-    console.log(loginId)
-    const response = await fetch(`/settings/editLoginId`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            loginId: loginId,
-        }),
-    })
-        .then((response) => {
-            console.log(response.json())
-            if (response.ok) {
-                document.getElementById('closeLoginId').click()
-                alert('LoginId successfully changed')
-                location.reload()
-                return
-            }
-            throw new Error('Something went wrong')
+    try {
+        const response = await fetch(`/settings/editLoginId`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                loginId: loginId,
+            }),
         })
-        .catch((error) => {
-            console.error('Error:', error)
-        })
-    return response
+        const responseData = await response.json()
+
+        if (response.ok) {
+            document.getElementById('closeLoginId').click()
+            alert('Login Id successfully changed')
+            location.reload()
+            return
+        } else {
+            const errorMessage = responseData.message || 'Login Id change failed'
+            alert(`${errorMessage}`)
+        }
+    } catch (error) {
+        console.error('Error:', error)
+        alert('An unexpected error occured. Please try again later')
+    }
 }
 
 const editEmail = async (email) => {
@@ -101,7 +105,7 @@ const editEmail = async (email) => {
             location.reload()
             return
         } else {
-            const errorMessage = responseData.message || 'Email change Failed'
+            const errorMessage = responseData.message || 'Email change failed'
             alert(`${errorMessage}`)
         }
     } catch (error) {
