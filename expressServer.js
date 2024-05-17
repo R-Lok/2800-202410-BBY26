@@ -72,7 +72,6 @@ app.get('/home', async (req, res) => {
     let activityName;
     try {
         let user = await usersModel.findOne({ loginId: req.session.loginId })
-        console.log(`${req.session.loginId}`)
         if (!user) {
             throw console.error(`Not logged in`);
         }
@@ -107,6 +106,11 @@ app.get('/home', async (req, res) => {
         console.log(`Error occurred in /home`)
     }
     return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
+})
+
+app.post('/home/shareCode', (req, res) => {
+    let shareId = req.body.shareId
+    res.redirect(`/review/${shareId}`)
 })
 
 app.get('/health', (_, res) => {
