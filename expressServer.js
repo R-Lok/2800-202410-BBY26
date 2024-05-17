@@ -68,29 +68,50 @@ app.use('/api/generate', isAuth)
 app.use('/home', isAuth)
 
 app.get('/home', async (req, res) => {
-    let user = await usersModel.findOne({ loginId: req.session.loginId })
-    let days = user.streak;
-    let date = new Date();
-    let currActivityDate = date.getDate();
-    let lastActivity = user.lastActivity;
-    if (!lastActivity || !lastActivity.timestamp) {
-        return res.render('home', { days: days, name: req.session.name, email: req.session.email })
+    let existingActivity;
+    let activityName;
+    try {
+        let user = await usersModel.findOne({ loginId: req.session.loginId })
+        if (!user) {
+            throw console.error(`Not logged in`);
+        }
+        days = user.streak;
+        let date = new Date();
+        let currActivityDate = date.getDate();
+        let lastActivity = user.lastActivity;
+        if (!lastActivity || !lastActivity.timestamp || !lastActivity.shareId) {
+            existingActivity = 0;
+            return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
+        }
+        let prevActivityDate = lastActivity.timestamp.getDate();
+        
+        if ((currActivityDate != prevActivityDate + 1) && (currActivityDate != prevActivityDate)) {
+            user = await usersModel.findOneAndUpdate(
+                { loginId: req.session.loginId },
+                { $set: {
+                    'lastActivity.timestamp': user.lastActivity.timestamp,
+                    'lastActivity.shareId': user.lastActivity.shareId,
+                    streak: 0
+                }},
+                {returnOriginal: false}
+            );
+            await user.save();
+        }
+        existingActivity = `/review/${lastActivity.shareId}`;
+        let collection = await collectionsModel.findOne({ shareId: lastActivity.shareId });
+        if (!collection) {
+            throw new Error("No collection found")
+        }
+        activityName = collection.setName;
+    } catch (err) {
+        console.log(`Error occurred in /home`)
     }
-    let prevActivityDate = lastActivity.timestamp.getDate();
-    
-    if ((currActivityDate != prevActivityDate + 1) && (currActivityDate != prevActivityDate)) {
-        // console.log(`\n\nhome ${user}\nprev ${prevActivityDate}\ncurr ${currActivityDate}`)
-        user = await usersModel.findOneAndUpdate(
-            { loginId: req.session.loginId },
-            { $set: {
-                'lastActivity.timestamp': user.lastActivity.timestamp,
-                'lastActivity.shareId': user.lastActivity.shareId,
-                streak: 0
-            }},
-            {returnOriginal: false}
-        );
-    }
-    return res.render('home', { days: days, name: req.session.name, email: req.session.email })
+    return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
+})
+
+app.post('/home/shareCode', (req, res) => {
+    let shareId = req.body.shareId
+    res.redirect(`/review/${shareId}`)
 })
 
 app.get('/health', (_, res) => {

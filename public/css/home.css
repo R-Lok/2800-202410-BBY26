@@ -76,4 +76,25 @@
     align-items:end;
 }
 
+.button-bg{
+    background-color:var(--main-color6);
+    margin-bottom:7px;
+}
+
+.input-group input[type="search"] {
+    width: 300px; /* Adjust the width as per your requirement */
+    height: 40px; /* Adjust the height as per your requirement */
+    border-radius: 20px;
+    padding: 10px;
+    border: 1px solid #ced4da; /* Border color */
+}
+
+.input-group input[type="text"] {
+    width: 270px; /* Adjust the width as per your requirement */
+    height: 40px; /* Adjust the height as per your requirement */
+    border-radius: 20px;
+    padding: 10px;
+    border: 1px solid #ced4da; /* Border color */
+}
+
 /* ++++++++++++++ */
