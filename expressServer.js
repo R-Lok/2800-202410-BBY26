@@ -67,37 +67,45 @@ app.use('/generate', isAuth)
 app.use('/api/generate', isAuth)
 
 app.get('/home', async (req, res) => {
-    let user = await usersModel.findOne({ loginId: req.session.loginId })
-    if (!user) {
-        throw console.error();
-    }
-    let days = user.streak;
-    let date = new Date();
-    let currActivityDate = date.getDate();
-    let lastActivity = user.lastActivity;
-    let prevActivityDate = lastActivity.timestamp.getDate();
+    let days;
     let existingActivity;
     let activityName;
-    
-    if ((currActivityDate != prevActivityDate + 1) && (currActivityDate != prevActivityDate)) {
-        // console.log(`\n\nhome ${user}\nprev ${prevActivityDate}\ncurr ${currActivityDate}`)
-        user = await usersModel.findOneAndUpdate(
-            { loginId: req.session.loginId },
-            { $set: {
-                'lastActivity.timestamp': user.lastActivity.timestamp,
-                'lastActivity.shareId': user.lastActivity.shareId,
-                streak: 0
-            }},
-            {returnOriginal: false}
-        );
+    try {
+        let user = await usersModel.findOne({ loginId: req.session.loginId })
+        console.log(`${req.session.loginId}`)
+        if (!user) {
+            throw console.error(`Not logged in`);
+        }
+        days = user.streak;
+        let date = new Date();
+        let currActivityDate = date.getDate();
+        let lastActivity = user.lastActivity;
+        let prevActivityDate = lastActivity.timestamp.getDate();
+        
+        if ((currActivityDate != prevActivityDate + 1) && (currActivityDate != prevActivityDate)) {
+            user = await usersModel.findOneAndUpdate(
+                { loginId: req.session.loginId },
+                { $set: {
+                    'lastActivity.timestamp': user.lastActivity.timestamp,
+                    'lastActivity.shareId': user.lastActivity.shareId,
+                    streak: 0
+                }},
+                {returnOriginal: false}
+            );
+        }
+        if (!lastActivity.shareId) {
+            existingActivity = 0;
+        } else { // REMEMBER TO ADD STYLING FOR FLASHCARD NAME
+            existingActivity = `/review/${lastActivity.shareId}`;
+            let collection = await collectionsModel.findOne({ shareId: lastActivity.shareId });
+            if (!collection) {
+                throw new Error("No collection found")
+            }
+            activityName = collection.setName;
+        } // ADD ARGS TO PASS INTO APP LOCALS LATER WHEN REFACTOR
+    } catch (err) {
+        console.log(`Error occurred in /home`)
     }
-    if (!lastActivity.shareId) {
-        existingActivity = 0;
-    } else { // REMEMBER TO ADD STYLING FOR FLASHCARD NAME
-        existingActivity = `/review/${lastActivity.shareId}`;
-        let collection = await collectionsModel.findOne({ shareId: lastActivity.shareId });
-        activityName = collection.setName;
-    } // ADD ARGS TO PASS INTO APP LOCALS LATER WHEN REFACTOR
     return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
 })
 
