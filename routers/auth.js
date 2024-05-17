@@ -115,6 +115,7 @@ router.get('/logout', (req, res) => {
 router.post('/getQuestion', async (req, res, next) => {
     try {
         const { email } = req.body
+        console.log(email)
         const emailHash = await hash(email)
         const user = await usersModel
             .findOne({ emailHash: emailHash }, { _id: 1 })
@@ -141,10 +142,11 @@ router.post('/getQuestion', async (req, res, next) => {
 
 router.post('/checkAnswer', async (req, res, next) => {
     try {
-        const { userId, questionId, answer } = req.body
+        // const { userId, questionId, answer } = req.body
+        const { email, questionId, answer } = req.body
         const result = await userAnswersModel
             .findOne({
-                userId: userId,
+                email: email,
                 questionId: questionId,
             }, { _id: 0, answer: 1 })
             .lean()
@@ -174,6 +176,7 @@ router.post('/resetPassword', async (req, res, next) => {
 
         await schema.validateAsync({ password, confirmPassword })
             .catch((error) => {
+                console.log(error)
                 throw new CustomError('422', error)
             })
 
@@ -183,7 +186,6 @@ router.post('/resetPassword', async (req, res, next) => {
             })
             .lean()
 
-        authorization(req, user)
         return res.status(200).json({ result: 'ok' })
     } catch (error) {
         next(error)
