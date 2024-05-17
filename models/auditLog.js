@@ -10,4 +10,4 @@ const AuditLogSchema = new Schema({
     timestamps: true,
 })
 
-module.exports = mongoose.model('auditlogs', CollectionsSchema)
+module.exports = mongoose.model('auditlogs', AuditLogSchema)

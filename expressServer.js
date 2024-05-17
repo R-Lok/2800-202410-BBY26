@@ -71,11 +71,12 @@ app.get('/home', async (req, res) => {
     if (!user) {
         throw console.error();
     }
-    let days = user.streak
+    let days = user.streak;
     let date = new Date();
     let currActivityDate = date.getDate();
     let lastActivity = user.lastActivity;
     let prevActivityDate = lastActivity.timestamp.getDate();
+    let existingActivity;
     
     if ((currActivityDate != prevActivityDate + 1) && (currActivityDate != prevActivityDate)) {
         // console.log(`\n\nhome ${user}\nprev ${prevActivityDate}\ncurr ${currActivityDate}`)
@@ -89,7 +90,13 @@ app.get('/home', async (req, res) => {
             {returnOriginal: false}
         );
     }
-    return res.render('home', { days: days, name: req.session.name, email: req.session.email })
+    if (!lastActivity.shareId) {
+        existingActivity = 0;
+    } else {
+        existingActivity = `/review/${lastActivity.shareId}`;
+        
+    }
+    return res.render('home', { existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
 })
 
 app.get('/health', (_, res) => {
