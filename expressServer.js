@@ -77,6 +77,7 @@ app.get('/home', async (req, res) => {
     let lastActivity = user.lastActivity;
     let prevActivityDate = lastActivity.timestamp.getDate();
     let existingActivity;
+    let activityName;
     
     if ((currActivityDate != prevActivityDate + 1) && (currActivityDate != prevActivityDate)) {
         // console.log(`\n\nhome ${user}\nprev ${prevActivityDate}\ncurr ${currActivityDate}`)
@@ -92,11 +93,12 @@ app.get('/home', async (req, res) => {
     }
     if (!lastActivity.shareId) {
         existingActivity = 0;
-    } else {
+    } else { // REMEMBER TO ADD STYLING FOR FLASHCARD NAME
         existingActivity = `/review/${lastActivity.shareId}`;
-        
-    }
-    return res.render('home', { existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
+        let collection = await collectionsModel.findOne({ shareId: lastActivity.shareId });
+        activityName = collection.setName;
+    } // ADD ARGS TO PASS INTO APP LOCALS LATER WHEN REFACTOR
+    return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
 })
 
 app.get('/health', (_, res) => {
