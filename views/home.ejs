@@ -12,13 +12,13 @@
     </div>
 
     <%- include('calendar') %>
-    <div class="container-search-bar">       
-        <div class="input-group mb-3">
-            <input type="text" class="form-control custom-search-bar" placeholder="Flashcards" aria-label="Recipient's username" aria-describedby="basic-addon2">
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button"><img src="images/search.svg" width="30" height="30"></button>
-            </div>
-        </div>
+    <div class="input-group justify-content-center">
+        <form class= "justify-content-center" action='/collection/search' method='post'>
+          <input name="search" type="search" placeholder="Search" />
+          <button type="submit" class="btn button-bg" data-mdb-ripple-init>
+          <img src='/images/search.svg'>
+          </button>
+        </form>
     </div>
 
     <div class="container-buttons">
@@ -27,34 +27,31 @@
         <%} else {%>
             <button type="button" onclick="location.href='<%= existingActivity %>'" class="btn btn-primary btn-lg w-100 home-buttons">Review <span style="font-weight: 800;"><%= activityName %></span></button>
         <% } %>
-        <button type="button" class="btn btn-primary btn-lg w-100 home-buttons" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-primary btn-lg w-100 home-buttons" data-bs-toggle="modal" data-bs-target="#openByCodeModal">
             Open by code
         </button>
     </div>
       
       <!-- Modal -->
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Enter share code</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="input-group justify-content-center">
-                    <form class= "justify-content-center" action='/collection/search' method='post'>
-                      <input name="search" type="search" placeholder="Search" />
-                      <button type="submit" class="btn button-bg" data-mdb-ripple-init>
-                      <img src='/images/search.svg'>
-                      </button>
-                    </form>
-                  </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-primary">Submit</button>
-            </div>
-          </div>
+    <div class="modal fade" id="openByCodeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Enter share code</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-      </div>
+        <div class="modal-body">
+            <div class="input-group justify-content-center share-code-search-bar">
+                <form class= "justify-content-center" action='/home' method='post'>
+                    <input name="search" type="search" placeholder="Code" />
+                    <button type="submit" class="btn button-bg" data-mdb-ripple-init>
+                    <img src='/images/search.svg'></button>
+
+                </form>
+                </div>
+        </div>
+        </div>
+    </div>
+    </div>
 <%- include('template/footerBar') %>
 <%- include('template/footer') %>
