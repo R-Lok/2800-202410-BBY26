@@ -2,20 +2,20 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Settings</title>
+    <title>Profile</title>
     <meta name="StudyGen" content="Settings">
     <link rel="stylesheet" href="/css/settings.css">
   </head>
   <body>
     <%- include('template/headerBar') %>
 
-    <div class="d-flex justify-content-center fw-bold mt-5 headerText space">
-      <h1 style="font-size:38px">User Settings</h1>
+    <div class="d-flex justify-content-center mt-3 fw-bold headerText space">
+      <h1 style="font-size:38px">User Profile</h1>
     </div>
 
     <div class="px-4 text-center">
       <a data-toggle="modal" data-target="#profileModal">
-        <img class="d-block mx-auto mb-4 settingsIcon rounded-circle" src="/images/<%= imageId %>.png"  alt="" width="300">
+        <img class="d-block mx-auto mb-1 settingsIcon rounded-circle" src="/images/<%= imageId %>.png"  alt="" width="250">
       </a>
       <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -51,41 +51,76 @@
         </div>
       </div>
 
-      <div class="col-lg-6 mx-auto">
-        <div class="d-flex gap-3 justify-content-sm-center align-items-center flex-column">
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changePwdModal">
-            Change Password
-          </button>
-          <br>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editNameModal">
-            Edit Display Name
-          </button>
-          <br>
-          <br>
-          <button id="logout-btn" class="btn btn-primary btn-lg px-4" type="button" onclick="confirm('Are you sure you want to log out?') ? location.href = '/logout' : event.preventDefault()">Log Out</button>
+      <div class="h1">Hello <%= name %>!</div>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editNameModal">
+        Edit Display Name
+      </button>
+      <hr>
+      <div class="d-flex justify-content-between align-items-center flex-row">
+        <div class="d-inline">Login ID</div>
+        <div class="d-inline"><%= loginId %></div>
+        <button type="button" class="btn btn-primary inline-block" data-toggle="modal" data-target="#loginIdModal">
+          Edit Login ID
+        </button>
+      </div>
+      <hr>
+      <div class="d-flex justify-content-between align-items-center flex-row">
+        <div class="d-inline">Password</div>
+        <div class="d-inline">**********</div>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changePwdModal">
+          Edit Password
+        </button>
+      </div>
+      <div class="d-flex justify-content-between align-items-center flex-row">
+        <div class="d-inline">Email</div>
+        <div class="d-inline"><%= email %></div>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changePwdModal">
+          Edit Email
+        </button>
+      </div>
+      <hr>
+      <button id="logout-btn" class="btn btn-primary btn-lg px-4" type="button" onclick="confirm('Are you sure you want to log out?') ? location.href = '/logout' : event.preventDefault()">Log Out</button>
+
+      <div class="modal fade" id="loginIdModal" tabindex="-1" role="dialog" aria-labelledby="editLoginIdModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editLoginIdModalLabel">Edit Login Id</h5>
+              <button id="closeLoginId" type="button" class="close" data-dismiss="modal" aria-label="Close" hidden="true"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <input type="text" name="newLoginId" class="form-control" id="newLoginId" placeholder="New Login Id">
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="editLoginId(document.getElementById('newLoginId').value)">Submit</button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
     <div class="modal fade" id="changePwdModal" tabindex="-1" role="dialog" aria-labelledby="changePwdModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="changePwdModalLabel">Edit Display Name</h5>
+              <h5 class="modal-title" id="changePwdModalLabel">Edit Password</h5>
               <button id="closeChangePwd" type="button" class="close" data-dismiss="modal" aria-label="Close" hidden="true"></button>
             </div>
             <div class="modal-body">
               <form>
                 <input type="text" class="form-control" id="previousPwd" placeholder="Previous Password">
                 <input type="text" class="form-control" id="newPwd" placeholder="New Password">
-                <input type="text" class="form-control" id="ConfirmPwd" placeholder="Confirm Password">
+                <input type="text" class="form-control" id="confirmPwd" placeholder="Confirm Password">
               </form>
             </div>
             <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               <button type="button" class="btn btn-primary" onclick="changePwd(
                     document.getElementById('previousPwd').value,
                     document.getElementById('newPwd').value,
-                    document.getElementById('ConfirmPwd').value
+                    document.getElementById('confirmPwd').value
                 )">Submit
               </button>
             </div>
@@ -106,6 +141,7 @@
             </form>
           </div>
           <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-primary" onclick="editName(document.getElementById('newName').value)">Submit</button>
           </div>
         </div>

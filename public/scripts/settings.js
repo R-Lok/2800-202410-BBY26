@@ -1,24 +1,28 @@
-const changePwd = async (previousPwd, newPwd, ConfirmPwd) => {
-    console.log(previousPwd, newPwd, ConfirmPwd)
+const changePwd = async (previousPwd, newPwd, confirmPwd) => {
+    console.log(previousPwd, newPwd, confirmPwd)
     const response = await fetch(`/settings/changePwd`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            previousPwd, newPwd, ConfirmPwd,
+            previousPwd, newPwd, confirmPwd,
         }),
     })
-        .then((response) => {
+        .then(async (response) => {
             console.log(response)
             if (response.ok) {
                 document.getElementById('closeChangePwd').click()
-                return response.json()
+                alert("Password successfully changed");
+                location.reload();
+                return;
             }
-            throw new Error('Something went wrong')
+            throw new Error("Incorrect input");
         })
         .catch((error) => {
-            console.error('Error:', error)
+            document.getElementById('closeChangePwd').click()
+            alert(error.message);
+            return;
         })
     return response
 }
@@ -38,7 +42,33 @@ const editName = async (newName) => {
             console.log(response)
             if (response.ok) {
                 document.getElementById('closeEditName').click()
-                return response.json()
+                window.location.href='/settings';
+                return;
+            }
+            throw new Error('Something went wrong')
+        })
+        .catch((error) => {
+            console.error('Error:', error)
+        })
+    return response
+}
+
+const editLoginId = async (loginId) => {
+    console.log(loginId)
+    const response = await fetch(`/settings/editLoginId`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            loginId: loginId,
+        })
+    })
+        .then((response) => {
+            console.log(response.json());
+            if (response.ok) {
+                document.getElementById('closeLoginId').click()
+                window.location.href='/settings';
             }
             throw new Error('Something went wrong')
         })
