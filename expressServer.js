@@ -65,6 +65,7 @@ app.use('/review', isAuth)
 app.use('/submitcards', isAuth)
 app.use('/generate', isAuth)
 app.use('/api/generate', isAuth)
+app.use('/home', isAuth)
 
 app.get('/home', async (req, res) => {
     let days;
