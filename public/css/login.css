@@ -1,21 +1,154 @@
 body, html {
-  height: 100%;  
-  margin: 0;    
+  height: 100%;
+  margin: 0;
 }
 
 .sign-up-container {
   height: 80vh;
   display: flex;
-  align-items: center;  
-  justify-content: center;  
+  align-items: center;
+  justify-content: center;
 }
 
 .form-signup {
-  width: 100%;  
-  max-width: 330px;  
-  margin: auto; 
+  width: 100%;
+  max-width: 330px;
+  margin: auto;
 }
 
 .accordion-button {
   font-weight: bold;
 }
+
+.step-1-modal-body {
+  position: relative;
+  width: 100%;
+}
+
+/* Centering and Container Styles */
+.wrapper, .errorWrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column; /* Allow vertical stacking of children */
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  background-color: white;
+}
+
+/* .checkmark Styles */
+.checkmark__circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: #caa8f5;
+  fill: none;
+  animation: checkmarkStroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 2;
+  stroke: #fff;
+  stroke-miterlimit: 10;
+  margin: 10% auto;
+  box-shadow: inset 0px 0px 0px #caa8f5;
+  animation: checkmarkFill .4s ease-in-out .4s forwards, checkmarkScale .3s ease-in-out .9s both;
+}
+
+.checkmark__check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: checkmarkStroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+@keyframes checkmarkStroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes checkmarkScale {
+  0%, 100% {
+    transform: none;
+  }
+  50% {
+    transform: scale3d(1.1, 1.1, 1);
+  }
+}
+
+@keyframes checkmarkFill {
+  100% {
+    box-shadow: inset 0px 0px 0px 30px #caa8f5;
+  }
+}
+
+/* .error Styles */
+.error {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 2;
+  stroke: #fff;
+  stroke-miterlimit: 10;
+  box-shadow: inset 0px 0px 0px #7ac142;
+  animation: errorFill .4s ease-in-out .4s forwards, errorScale .3s ease-in-out .9s both;
+  z-index: 10;
+}
+
+.error_circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: #ff0033;
+  fill: none;
+  animation: errorStroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.error_check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: errorStroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+@keyframes errorStroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes errorScale {
+  0%, 100% {
+    transform: none;
+  }
+  50% {
+    transform: scale3d(1.1, 1.1, 1);
+  }
+}
+
+@keyframes errorFill {
+  100% {
+    box-shadow: inset 0px 0px 0px 30px #ff0033;
+  }
+}
+
+.error-message {
+  margin-top: 20px; /* Add some space between the SVG and the text */
+  z-index: 10; /* Ensure it's above other elements */
+  color: #000; /* Ensure text color contrasts against the background */
+}
+
+

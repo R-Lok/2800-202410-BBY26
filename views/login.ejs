@@ -1,62 +1,149 @@
 <%- include("template/header") %>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="../css/login.css">
 </head>
 
-<body>
-    <%- include("template/headerBar.ejs") %>
-    <div class="sign-up-container">
-        <div class="form-signup">
-            <h1 class="h3 mb-5 fw-normal text-center display-1">Log in</h1>
-            <form action="/login" method="post" class="mb-3">
-                <div class="mb-3">
-                    <label for="loginId" class="form-label">Login ID</label>
-                    <input type="text" id="loginId" class="form-control" name="loginId" required>
-                </div>
+    <body>
+        
+        <%- include("template/headerBar.ejs") %>
+            <div class="sign-up-container">
+                <div class="form-signup">
+                    <h1 class="h3 mb-5 fw-normal text-center display-1">Log in</h1>
+                    <form action="/login" method="post" class="mb-3">
+                        <div class="mb-3">
+                            <label for="loginId" class="form-label">Login ID</label>
+                            <input type="text" id="loginId" class="form-control" name="loginId" required>
+                        </div>
 
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" id="password" class="form-control" name="password" required>
-                </div>
+                        <div class="mb-3 password-box">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" id="password" class="form-control" name="password" autocomplete="current-password">
+                        </div>
 
-                <div class="d-grid">
-                    <button class="btn btn-primary btn-lg" type="submit">Log in</button>
-                </div>
+                        <div class="d-grid">
+                            <button class="btn btn-primary btn-lg" type="submit">Log in</button>
+                        </div>
 
-                <div class="mt-2 text-center">
-                    Don't have an account? <a href="/register">Sign up here</a>
-                </div>
-            </form>
+                        <div class="mt-2 text-center">
+                            Don't have an account? <a href="/register">Sign up here</a>
+                        </div>
+                    </form>
 
-            <div class="accordion accordion-flush" id="accordionPanelsStayOpenExample">
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
-                            Forgot your password?
-                        </button>
-                    </h2>
-                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
-                        <div class="accordion-body">
-                            <p>Reset your password by using your email and answering the security question</p>
-                            <a href="#" id="resetPasswordButton" data-bs-toggle="modal" data-bs-target="#resetPasswordModal">Reset password</a> 
+                    <div class="accordion accordion-flush" id="accordionPanelsStayOpenExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false"
+                                    aria-controls="panelsStayOpen-collapseOne">
+                                    Forgot your password?
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse"
+                                aria-labelledby="panelsStayOpen-headingOne">
+                                <div class="accordion-body">
+                                    <p>Reset your password by using your email and answering the security question</p>
+                                    <a href="#" id="resetPasswordButton" data-bs-toggle="modal"
+                                        data-bs-target="#resetPasswordModal">Reset password</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>            
-        </div>  
-    </div>
+            </div>
 
-    
 
-    <!-- Reset Password Modal -->
-    <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="resetPasswordModalLabel">Reset Password</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                
-                <div class="modal-body">
+
+            <!-- Reset Password Modal -->
+            <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="resetPasswordModalLabel">Reset Password</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form id="step-1">
+                                <div id="step-1-main">
+                                    <div class="mb-4">
+                                        <h1>Step 1: Tell us your email</h1>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="securityAns" class="form-label">Email Address: </label>
+                                        <input type="text" id="userEmail" class="form-control" name="email"
+                                            placeholder="Type your email used for registration" required>
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <button type="button" id="step-1-submit" class="btn btn-primary">Next
+                                            Step</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <form id="step-2" style="visibility: hidden; max-height: 0;">
+                                <div id="step-2-main">
+                                    <div class="mb-4">
+                                        <h1>Step 2: Answer security question</h1>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="securityQues" class="form-label">Security Question set up by you: </label>
+                                        <input type="text" id="securityQues" class="form-control" value="Placeholder" name="securityQues" disabled>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="securityAns" class="form-label">Answer: </label>
+                                        <input type="text" id="securityAns" class="form-control" name="securityAns" placeholder="Type your answer here" required>
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <button type="button" id="step-2-submit" class="btn btn-primary">Next
+                                            Step</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <form id="step-3" style="visibility: hidden; max-height: 0;">
+                                <div id="step-3-main">
+                                    <div class="mb-4">
+                                        <h1>Step 3: Set your new password</h1>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="newPassword" class="form-label">New Password</label>
+                                        <input type="password" id="newPassword" class="form-control" name="password" placeholder="Type your new password here" required>
+                                        <small id="passworldHelp" class="form-text text-muted">Alphabet or Number 3 to 20 characters</small>
+                                    </div>
+            
+                                    <div class="mb-3">
+                                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                        <input type="password" id="confirmPassword" class="form-control" name="confirmPassword" placeholder="Repeat your new password" required>
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <button type="button" id="step-3-submit" class="btn btn-primary">Reset</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <div id="step-4" style="visibility: hidden; max-height: 0;">
+                                <div class="mb-4">
+                                    <h3>Password Reset is successful</h3>
+                                </div>
+
+                                <div class="mb-3">
+                                    <p>You can login with your new password now.</p>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="button" id="step-4-submit" class="btn btn-primary">Log in now</button>
+                                </div>
+                            </div>
+
+                            <!--
                     <form action="/resetPassword" method="post">
                         <select class="form-select mb-3" id="securityQues" aria-label="Large select example"
                             name="securityQues">
@@ -85,13 +172,13 @@
 
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">Reset Password</button>
-                        </div>
+                        </div>  
                     </form>
+                    -->
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <%- include("template/footerBar.ejs") %>
-    <%- include("template/footer") %>
-
+            <script type="module" src="../scripts/resetPassword.js"></script>
+            <%- include("template/footerBar.ejs") %>
+            <%- include("template/footer") %>
