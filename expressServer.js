@@ -50,7 +50,7 @@ app.set('trust proxy', 1)
 app.use(session({
     secret: process.env.SECRET,
     store: MongoStore.create(options),
-    saveUninitialized: false,   
+    saveUninitialized: false,
     resave: false,
     cookie: { secure: false },
 }))
@@ -68,41 +68,41 @@ app.use('/api/generate', isAuth)
 app.use('/home', isAuth)
 
 app.get('/home', async (req, res) => {
-    let existingActivity;
-    let activityName;
+    let existingActivity
+    let activityName
     try {
         let user = await usersModel.findOne({ loginId: req.session.loginId })
         if (!user) {
-            throw console.error(`Not logged in`);
+            throw console.error(`Not logged in`)
         }
-        days = user.streak;
-        let date = new Date();
-        let currActivityDate = date.getDate();
-        let lastActivity = user.lastActivity;
+        days = user.streak
+        const date = new Date()
+        const currActivityDate = date.getDate()
+        const lastActivity = user.lastActivity
         if (!lastActivity || !lastActivity.timestamp || !lastActivity.shareId) {
-            existingActivity = 0;
+            existingActivity = 0
             return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
         }
-        let prevActivityDate = lastActivity.timestamp.getDate();
-        
+        const prevActivityDate = lastActivity.timestamp.getDate()
+
         if ((currActivityDate != prevActivityDate + 1) && (currActivityDate != prevActivityDate)) {
             user = await usersModel.findOneAndUpdate(
                 { loginId: req.session.loginId },
                 { $set: {
                     'lastActivity.timestamp': user.lastActivity.timestamp,
                     'lastActivity.shareId': user.lastActivity.shareId,
-                    streak: 0
-                }},
-                {returnOriginal: false}
-            );
-            await user.save();
+                    'streak': 0,
+                } },
+                { returnOriginal: false },
+            )
+            await user.save()
         }
-        existingActivity = `/review/${lastActivity.shareId}`;
-        let collection = await collectionsModel.findOne({ shareId: lastActivity.shareId });
+        existingActivity = `/review/${lastActivity.shareId}`
+        const collection = await collectionsModel.findOne({ shareId: lastActivity.shareId })
         if (!collection) {
-            throw new Error("No collection found")
+            throw new Error('No collection found')
         }
-        activityName = collection.setName;
+        activityName = collection.setName
     } catch (err) {
         console.log(`Error occurred in /home`)
     }
@@ -110,7 +110,7 @@ app.get('/home', async (req, res) => {
 })
 
 app.post('/home/shareCode', (req, res) => {
-    let shareId = req.body.shareId
+    const shareId = req.body.shareId
     res.redirect(`/review/${shareId}`)
 })
 
@@ -134,11 +134,11 @@ app.get('/generate', (req, res) => {
     return res.render('generate')
 })
 
-//route for receiving image input from user
+// route for receiving image input from user
 app.post('/upload-image', (req, res) => {
     console.log(req.body)
     res.send()
-    //Jimmy will work on the backend for this endpoint - this is the endpoint for receiving image input
+    // Jimmy will work on the backend for this endpoint - this is the endpoint for receiving image input
 })
 
 async function generate(difficulty, number, material) {
@@ -183,18 +183,17 @@ app.post('/api/generate', async (req, res) => {
     }
 })
 
-app.get('/api/getUserImage', async(req, res) => {
-    const userId = req.session.userId;
+app.get('/api/getUserImage', async (req, res) => {
+    const userId = req.session.userId
     if (!userId) {
-        return res.status(400).json({error: "No userId"});
+        return res.status(400).json({ error: 'No userId' })
     } else {
-        let pictureId = await usersModel.findById(userId).select("-_id picture").lean();
-        pictureId = pictureId.picture;
-        const imagePath = `/images/${pictureId}.png`;
+        let pictureId = await usersModel.findById(userId).select('-_id picture').lean()
+        pictureId = pictureId.picture
+        const imagePath = `/images/${pictureId}.png`
         res.json({ imagePath })
     }
-
-});
+})
 
 app.get('/review/:setid', async (req, res) => {
     incrementStreak(req)
