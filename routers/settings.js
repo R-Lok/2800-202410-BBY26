@@ -61,6 +61,7 @@ router.post('/editName', async (req, res) => {
             })
 
         await usersModel.findByIdAndUpdate(userId, { name: newName })
+        req.session.name = newName
         return res.status(200).json({
             msg: 'ok',
         })
