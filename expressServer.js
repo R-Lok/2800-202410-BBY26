@@ -65,12 +65,10 @@ app.use('/review', isAuth)
 app.use('/submitcards', isAuth)
 app.use('/generate', isAuth)
 app.use('/api/generate', isAuth)
+app.use('/home', isAuth)
 
 app.get('/home', async (req, res) => {
     let user = await usersModel.findOne({ loginId: req.session.loginId })
-    if (!user) {
-        throw new Error("User not found");
-    }
     let days = user.streak;
     let date = new Date();
     let currActivityDate = date.getDate();
