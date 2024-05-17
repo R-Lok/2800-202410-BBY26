@@ -7,11 +7,13 @@ const bcrypt = require('bcrypt')
 const saltRounds = 12
 const Joi = require('joi')
 const { CustomError } = require('../utilities/customError')
+const { decrypt } = require('../utilities/index')
 
 router.get('/', async (req, res) => {
     let userId = req.session.userId
     let user = await usersModel.findById(userId).select("-_id picture name loginId email").lean();
-    return res.render('settings', {imageId: user.picture, name:user.name, loginId:user.loginId, email:user.email})
+    let email = await decrypt(user.email);
+    return res.render('settings', {imageId: user.picture, name:user.name, loginId:user.loginId, email:email})
 })
 
 router.post('/editName', async (req, res) => {

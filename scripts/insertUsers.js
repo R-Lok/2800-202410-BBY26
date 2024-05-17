@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const saltRounds = 12
 const userModel = require('../models/users')
+const { CustomError, encrypt, decrypt, hash } = require('../utilities/index')
 
 
 const mongoUrl = process.env.NODE_ENV === 'local' ?
@@ -25,8 +26,16 @@ const main = async () => {
         console.log('MongoDB connect successful.')
 
         const userObjects = [
-            { loginId: 'admin', name: 'admin', email: 'admin@gmail.com', password: await bcrypt.hash(process.env.ADMIN, saltRounds), role: 'admin', enable: true },
-            { loginId: 'test', name: 'test', email: 'test@gmail.com', password: await bcrypt.hash('123', saltRounds), role: 'normal', enable: true }]
+            {
+                loginId: 'admin', name: 'admin', email: await encrypt('admin@gmail.com'),
+                emailHash: await hash('admin@gmail.com'), password: await bcrypt.hash(process.env.ADMIN, saltRounds), role: 'admin',
+                enable: true, security: true,
+            },
+            {
+                loginId: 'test', name: 'test', email: await encrypt('test@gmail.com'),
+                emailHash: await hash('test@gmail.com'), password: await bcrypt.hash('123', saltRounds), role: 'normal',
+                enable: true, security: true,
+            }]
         const results = await userModel.insertMany(userObjects)
         console.log(results)
 

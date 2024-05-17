@@ -50,7 +50,7 @@ app.set('trust proxy', 1)
 app.use(session({
     secret: process.env.SECRET,
     store: MongoStore.create(options),
-    saveUninitialized: false,
+    saveUninitialized: false,   
     resave: false,
     cookie: { secure: false },
 }))
@@ -68,7 +68,30 @@ app.use('/api/generate', isAuth)
 
 app.get('/home', async (req, res) => {
     let user = await usersModel.findOne({ loginId: req.session.loginId })
-    let days = user.streak
+    if (!user) {
+        throw new Error("User not found");
+    }
+    let days = user.streak;
+    let date = new Date();
+    let currActivityDate = date.getDate();
+    let lastActivity = user.lastActivity;
+    if (!lastActivity || !lastActivity.timestamp) {
+        return res.render('home', { days: days, name: req.session.name, email: req.session.email })
+    }
+    let prevActivityDate = lastActivity.timestamp.getDate();
+    
+    if ((currActivityDate != prevActivityDate + 1) && (currActivityDate != prevActivityDate)) {
+        // console.log(`\n\nhome ${user}\nprev ${prevActivityDate}\ncurr ${currActivityDate}`)
+        user = await usersModel.findOneAndUpdate(
+            { loginId: req.session.loginId },
+            { $set: {
+                'lastActivity.timestamp': user.lastActivity.timestamp,
+                'lastActivity.shareId': user.lastActivity.shareId,
+                streak: 0
+            }},
+            {returnOriginal: false}
+        );
+    }
     return res.render('home', { days: days, name: req.session.name, email: req.session.email })
 })
 
@@ -230,7 +253,7 @@ app.get('*', (req, res) => {
 
 app.use((err, req, res, next) => {
     console.error(err)
-    return res.status(err.code || 500).json({ msg: err })
+    return res.status(err.code || 500).json({ msg: err.msg })
 })
 
 module.exports = { server, app, mongoUrl }
