@@ -50,7 +50,7 @@ app.set('trust proxy', 1)
 app.use(session({
     secret: process.env.SECRET,
     store: MongoStore.create(options),
-    saveUninitialized: false,   
+    saveUninitialized: false,
     resave: false,
     cookie: { secure: false },
 }))
@@ -69,28 +69,28 @@ app.use('/api/generate', isAuth)
 app.get('/home', async (req, res) => {
     let user = await usersModel.findOne({ loginId: req.session.loginId })
     if (!user) {
-        throw new Error("User not found");
+        throw new Error('User not found')
     }
-    let days = user.streak;
-    let date = new Date();
-    let currActivityDate = date.getDate();
-    let lastActivity = user.lastActivity;
+    const days = user.streak
+    const date = new Date()
+    const currActivityDate = date.getDate()
+    const lastActivity = user.lastActivity
     if (!lastActivity || !lastActivity.timestamp) {
         return res.render('home', { days: days, name: req.session.name, email: req.session.email })
     }
-    let prevActivityDate = lastActivity.timestamp.getDate();
-    
-    if ((currActivityDate != prevActivityDate + 1) && (currActivityDate != prevActivityDate)) {
+    const prevActivityDate = lastActivity.timestamp.getDate()
+
+    if ((currActivityDate !== prevActivityDate + 1) && (currActivityDate != prevActivityDate)) {
         // console.log(`\n\nhome ${user}\nprev ${prevActivityDate}\ncurr ${currActivityDate}`)
         user = await usersModel.findOneAndUpdate(
             { loginId: req.session.loginId },
             { $set: {
                 'lastActivity.timestamp': user.lastActivity.timestamp,
                 'lastActivity.shareId': user.lastActivity.shareId,
-                streak: 0
-            }},
-            {returnOriginal: false}
-        );
+                'streak': 0,
+            } },
+            { returnOriginal: false },
+        )
     }
     return res.render('home', { days: days, name: req.session.name, email: req.session.email })
 })
@@ -115,11 +115,11 @@ app.get('/generate', (req, res) => {
     return res.render('generate')
 })
 
-//route for receiving image input from user
+// route for receiving image input from user
 app.post('/upload-image', (req, res) => {
     console.log(req.body)
     res.send()
-    //Jimmy will work on the backend for this endpoint - this is the endpoint for receiving image input
+    // Jimmy will work on the backend for this endpoint - this is the endpoint for receiving image input
 })
 
 async function generate(difficulty, number, material) {
@@ -164,18 +164,17 @@ app.post('/api/generate', async (req, res) => {
     }
 })
 
-app.get('/api/getUserImage', async(req, res) => {
-    const userId = req.session.userId;
+app.get('/api/getUserImage', async (req, res) => {
+    const userId = req.session.userId
     if (!userId) {
-        return res.status(400).json({error: "No userId"});
+        return res.status(400).json({ error: 'No userId' })
     } else {
-        let pictureId = await usersModel.findById(userId).select("-_id picture").lean();
-        pictureId = pictureId.picture;
-        const imagePath = `/images/${pictureId}.png`;
+        let pictureId = await usersModel.findById(userId).select('-_id picture').lean()
+        pictureId = pictureId.picture
+        const imagePath = `/images/${pictureId}.png`
         res.json({ imagePath })
     }
-
-});
+})
 
 app.get('/review/:setid', async (req, res) => {
     incrementStreak(req)
