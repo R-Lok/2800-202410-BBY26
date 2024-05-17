@@ -6,7 +6,8 @@
 	"scripts": {
 		"lint": "esw . --color --fix",
 		"local": "cross-env NODE_ENV=local nodemon index.js",
-		"dev": "cross-env NODE_ENV=dev nodemon index.js"
+		"dev": "cross-env NODE_ENV=dev nodemon index.js",
+		"prod": "cross-env NODE_ENV=prod nodemon index.js"
 	},
 	"repository": {
 		"type": "git",

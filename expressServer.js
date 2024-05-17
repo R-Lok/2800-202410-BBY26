@@ -35,11 +35,14 @@ app.use(express.static(__dirname + '/public'))
 app.set('view engine', 'ejs')
 
 const mongoUrl = process.env.NODE_ENV === 'local' ?
-    `mongodb://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/` :
+    `mongodb://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}//?authSource=admin` :
     `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}/?retryWrites=true&w=majority&appName=BBY26`
 
 const options = {
     mongoUrl: mongoUrl,
+    mongoOptions: {
+        dbName: process.env.DATABASE_NAME,
+    },
     crypto: {
         secret: process.env.MONGODB_SESSION_SECRET,
     },
@@ -74,14 +77,14 @@ app.get('/home', async (req, res) => {
     try {
         let user = await usersModel.findOne({ loginId: req.session.loginId })
         days = user.streak
-        let date = new Date()
-        let currActivityDate = date.getDate()
-        let lastActivity = user.lastActivity
-        if (lastActivity === null || lastActivity.timestamp === null || lastActivity.timestamp === undefined || lastActivity.shareId === null || lastActivity.shareId === undefined ) {
+        const date = new Date()
+        const currActivityDate = date.getDate()
+        const lastActivity = user.lastActivity
+        if (lastActivity === null || lastActivity.timestamp === null || lastActivity.timestamp === undefined || lastActivity.shareId === null || lastActivity.shareId === undefined) {
             existingActivity = 0
             return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
         }
-        let prevActivityDate = lastActivity.timestamp.getDate()
+        const prevActivityDate = lastActivity.timestamp.getDate()
 
         if ((currActivityDate != prevActivityDate + 1) && (currActivityDate != prevActivityDate)) {
             user = await usersModel.findOneAndUpdate(
