@@ -9,7 +9,7 @@ const incrementStreak = async(req) => {
         let user = await usersModel.findOne({ loginId: req.session.loginId });
 
         let lastActivity = user.lastActivity;
-        if (!lastActivity || !lastActivity.timestamp || !lastActivity.shareId) {
+        if (lastActivity === null || lastActivity.timestamp === null || lastActivity.timestamp === undefined || lastActivity.shareId === null || lastActivity.shareId === undefined ) {
             user = await usersModel.findOneAndUpdate(
                 { loginId: req.session.loginId },
                 {$set: {

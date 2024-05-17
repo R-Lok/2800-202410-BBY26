@@ -79,7 +79,7 @@ app.get('/home', async (req, res) => {
         let date = new Date();
         let currActivityDate = date.getDate();
         let lastActivity = user.lastActivity;
-        if (!lastActivity || !lastActivity.timestamp || !lastActivity.shareId) {
+        if (lastActivity === null || lastActivity.timestamp === null || lastActivity.timestamp === undefined || lastActivity.shareId === null || lastActivity.shareId === undefined ) {
             existingActivity = 0;
             return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
         }
