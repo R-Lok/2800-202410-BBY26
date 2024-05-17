@@ -16,6 +16,15 @@ router.get('/', async (req, res) => {
     return res.render('settings', {imageId: user.picture, name:user.name, loginId:user.loginId, email:email})
 })
 
+router.post('/editLoginId', async (req, res) => {
+    let userId = req.session.userId;
+    let newId = req.body.loginId;
+    const result = await usersModel.findByIdAndUpdate(userId, {loginId:newId});
+    return res.status(200).json({
+        msg: 'ok'
+    })
+})
+
 router.post('/editName', async (req, res) => {
     let userId = req.session.userId;
     let newName = req.body.newName;
@@ -63,6 +72,12 @@ router.post('/changePwd', async (req, res) => {
     }
 })
 
+router.post('/changePic', async (req, res) => {
+    let picChoice = req.body.picture;
+    let userId = req.session.userId;
+    await usersModel.findByIdAndUpdate(userId, {picture: picChoice});
+    res.redirect('/settings');
+})
 
 
 module.exports = router
