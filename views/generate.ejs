@@ -1,0 +1,118 @@
+<%- include("template/header") %>
+  <link rel="stylesheet" href="../css/generate.css"></link>
+  <script src="https://cdn.jsdelivr.net/npm/bson@6.7.0/lib/bson.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+
+  <body>
+    <%- include("template/headerBar.ejs") %>
+    <div class="loading-state" id="loader">
+      <div class="loading"></div>
+    </div>
+
+    <div class="generate-container d-flex flex-column justify-content-center">
+      <h3 class="h3 mb-5 fw-normal text-center display-3">Generate Your Flashcards</h3>
+
+      <ul class="nav nav-tabs d-flex flex-nowrap justify-content-center" id="myTab" role="tablist">
+        <li class="nav-item flex-grow-1 text-center" role="presentation">
+          <button class="nav-link disabled w-100" id="image-tab" data-bs-toggle="tab" data-bs-target="#image-tab-pane"
+            type="button" role="tab" aria-controls="image-tab-pane" aria-selected="true">Image upload</button>
+        </li>
+        <li class="nav-item flex-grow-1 text-center" role="presentation">
+          <button class="nav-link active w-100" id="text-tab" data-bs-toggle="tab" data-bs-target="#text-tab-pane"
+            type="button" role="tab" aria-controls="text-tab-pane" aria-selected="false">Text upload</button>
+        </li>
+        <li class="nav-item flex-grow-1 text-center" role="presentation">
+          <button class="nav-link w-100" id="photo-tab" data-bs-toggle="tab" data-bs-target="#text-tab-pane"
+            type="button" role="tab" aria-controls="photo-tab-pane" aria-selected="false">Take Photo</button>
+        </li>
+      </ul>
+
+      <div class="tab-content d-flex justify-content-center mt-5" id="myTabContent">
+        <div class="tab-pane fade" id="image-tab-pane" role="tabpanel" aria-labelledby="image-tab" tabindex="0">...
+        </div>
+
+        <div class="tab-pane fade show active d-flex flex-column align-items-center" id="text-tab-pane" role="tabpanel"
+          aria-labelledby="text-tab" tabindex="0">
+          <!-- Stored in req.body.difficulty, req.body.numFlashcards, req.body.material -->
+          <form>
+            <p>Parameters for generation</p>
+            <select class="form-select mb-3" id="selectDifficulty" aria-label="Large select example"
+              name="difficulty">
+              <option value="" selected>Difficulty of the flashcards</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="difficult">Difficult</option>
+            </select>
+
+            <select class="form-select mb-3" id="selectNumber" aria-label="Large select example" name="numFlashcards">
+              <option value="" selected>Number of flashcards</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+
+            <div class="d-flex justify-content-center mt-5">
+              <button class="btn btn-primary" type="button" id="enterTextButton" data-bs-toggle="modal"
+                data-bs-target="#textModal">Upload Study Material</button>
+
+              <!-- Modal -->
+              <div class="modal fade" id="textModal" tabindex="-1" aria-labelledby="textModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">Text Upload</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <textarea id="material" class="text-material-input" name="material" rows="15" placeholder="Happy flashcards..." required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Change parameters</button>
+                      <button type="button" id="generateButton" class="btn btn-success">Generate</button> 
+                      <!-- <button type="button" class="btn btn-primary"></button> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="tab-pane fade" id="photo-tab-pane" role="tabpanel" aria-labelledby="photo-tab" tabindex="0">...
+        </div>
+      </div>
+    </div>
+<<<<<<< HEAD
+    <!--camera-->
+    <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="photoModalLabel">Take a photo</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" style="padding: 0">
+            <div class='d-flex justify-content-center'>
+              <video id="cam" autoplay muted playsinline></video>
+              <canvas id="canv" class="hidden"></canvas>
+              <img src="" alt="" id="frame" class="hidden">
+            </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-between">
+            <button id="snap"class="btn btn-success">Take Photo</button>
+            <button id="retake" class="hidden btn btn-danger">Retake</button>
+            <button type="button" id="generatePhotoButton" class="btn btn-secondary">Generate</button>
+            <!-- <button type="button" class="btn btn-primary"></button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="../scripts/generate.js"></script>
+=======
+    <script src="scripts/resetPassword.js"></script>
+>>>>>>> jimmy_kong_signup-login
+    <%- include("template/footerBar.ejs") %>
+    <%- include("template/footer") %>
+
+   

@@ -1,0 +1,201 @@
+<%- include('template/header') %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Profile</title>
+    <meta name="StudyGen" content="Settings">
+    <link rel="stylesheet" href="/css/settings.css">
+  </head>
+  <body>
+    <%- include('template/headerBar') %>
+
+    <div class="d-flex justify-content-center mt-3 fw-bold headerText space">
+      <h1 style="font-size:38px">User Profile</h1>
+    </div>
+
+    <div class="px-4 text-center">
+      <a data-toggle="modal" data-target="#profileModal">
+        <img class="d-block mx-auto mb-1 settingsIcon rounded-circle" src="/images/<%= imageId %>.png"  alt="" width="200">
+      </a>
+      <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header justify-content-center">
+              <h5 class="modal-title" id="profileModalTitle">Choose your Profile Picture</h5>
+            </div>
+            <div class="modal-body">
+              <div class="container-fluid">
+                <div class="row">
+                  <% for (let i = 1; i <= 9; i++) { %>
+                    <%	if (i % 3 == 1) {	%>
+                      <div class="col-md-4">
+                    <%      }                       %>
+                      <img id="<%= "image" + i %>" onclick="highlightIcon(this)"
+                      class="settingsIcon rounded-circle profilePicBorder img-fluid mb-1
+                      <% if (i == imageId) { %>
+                      profilePicBorderHighlight
+                      <% } %>" 
+                      src="<%= "/images/" + i + ".png"%>" alt="" width="100">
+                    <%	if (i % 3 == 0) { %>
+                      </div>
+                    <%      }};	       	%>
+                </div>
+
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button id="SaveButton" type="button" class="btn btn-primary" data-dismiss="modal">Save Changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="h1">Hello <%= name %>!</div>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editNameModal">
+        Edit Display Name
+      </button>
+      <hr>
+      <div class="d-flex justify-content-between align-items-center flex-row">
+        <div class="d-inline">Login ID</div>
+        <div class="d-inline"><%= loginId %></div>
+        <button type="button" class="btn btn-primary inline-block" data-toggle="modal" data-target="#loginIdModal">
+          Edit Login ID
+        </button>
+      </div>
+      <hr>
+      <div class="d-flex justify-content-between align-items-center flex-row">
+        <div class="d-inline">Password</div>
+        <div class="d-inline">**********</div>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changePwdModal">
+          Edit Password
+        </button>
+      </div>
+      <hr>
+      <div class="d-flex justify-content-between align-items-center flex-row">
+        <div class="d-inline">Email</div>
+        <div class="d-inline"><%= email %></div>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editEmailModal">
+          Edit Email
+        </button>
+      </div>
+      <hr>
+      <button id="logout-btn" class="btn btn-primary btn-lg px-4" type="button" onclick="confirm('Are you sure you want to log out?') ? location.href = '/logout' : event.preventDefault()">Log Out</button>
+
+      <div class="modal fade" id="loginIdModal" tabindex="-1" role="dialog" aria-labelledby="editLoginIdModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editLoginIdModalLabel">Edit Login Id</h5>
+              <button id="closeLoginId" type="button" class="close" data-dismiss="modal" aria-label="Close" hidden="true"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <input type="text" name="newLoginId" class="form-control" id="newLoginId" placeholder="New Login Id">
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="editLoginId(document.getElementById('newLoginId').value)">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="modal fade" id="changePwdModal" tabindex="-1" role="dialog" aria-labelledby="changePwdModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="changePwdModalLabel">Edit Password</h5>
+              <button id="closeChangePwd" type="button" class="close" data-dismiss="modal" aria-label="Close" hidden="true"></button>
+            </div>
+
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <p>Your security question: </p>
+                  <p class="fw-bold" id="securityQues"><%= securityQuestion %></p>
+                </div>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label">Provide your security answer: </label>
+                  <input type="text" id="securityAns" class="form-control" name="securityAns" placeholder="Type your answer" autocomplete="my-answer" required>
+                </div>
+              </form>
+
+              <form>
+                <div class="mb-3">
+                  <label for="password" class="form-label">Current password: </label>
+                  <input type="password" id="currentPwd" class="form-control" name="currentPwd" placeholder="Type your current password" autocomplete="current-password" required>
+                </div>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label">New password: </label>
+                  <input type="password" id="newPwd" class="form-control" name="newPwd" placeholder="Type your new password" autocomplete="new-password" required>
+                </div>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label">Confirm your new password: </label>
+                  <input type="password" id="confirmPwd" class="form-control" name="confirmPwd" placeholder="Repeat your new password" autocomplete="new-password" required>
+                </div>
+              </form>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="changePwd(
+                    document.getElementById('securityAns').value,
+                    document.getElementById('currentPwd').value,
+                    document.getElementById('newPwd').value,
+                    document.getElementById('confirmPwd').value
+                )">Submit
+              </button>
+            </div>            
+          </div>
+        </div>
+      </div>
+
+    <div class="modal fade" id="editNameModal" tabindex="-1" role="dialog" aria-labelledby="editNameModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editNameModalLabel">Edit Display Name</h5>
+            <button id="closeEditName" type="button" class="close" data-dismiss="modal" aria-label="Close" hidden="true"></button>
+          </div>
+
+          <div class="modal-body">
+            <form>
+              <input type="text" class="form-control" id="newName" placeholder="New display name">
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="editName(document.getElementById('newName').value)">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="editEmailModal" tabindex="-1" role="dialog" aria-labelledby="editEmailLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editEmailLabel">Edit Email</h5>
+            <button id="closeEmail" type="button" class="close" data-dismiss="modal" aria-label="Close" hidden="true"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <input type="text" name="newEmail" class="form-control" id="newEmail" placeholder="New Email">
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="editEmail(document.getElementById('newEmail').value)">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/scripts/settings.js"></script>
+    <%- include('template/footerBar') %>
+    <%- include('template/footer') %>

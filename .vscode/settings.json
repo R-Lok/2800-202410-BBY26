@@ -1,0 +1,10 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "editor.formatOnSave": false,
+  "cSpell.words": [
+    "openai",
+    "alphanum",
+  ]
+}

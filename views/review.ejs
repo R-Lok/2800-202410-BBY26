@@ -1,0 +1,65 @@
+<%- include("template/header") %>
+<link rel="stylesheet" href="../css/review.css">
+</head>
+<body>
+    <% if (queryType === "finalize") { %>
+        <script>
+            const data = <%- JSON.stringify(cards) %>
+            localStorage.setItem("cards", JSON.stringify(data))
+        </script>
+    <% } %>
+    <%- include("template/headerBar.ejs") %>
+    <div class="content-container">
+        <% if (queryType === "view") { %> 
+            <div class="alert alert-success alert-hidden" role="alert">
+                Sharecode copied to clipboard!
+            </div>
+        <% } %>
+        
+        <div id="counter-container">
+            <span id="counter"> 1 </span>
+            <span id="divide"> / </span>
+            <span id="numCards"> <%= cards.length%></span>
+        </div>
+        <div id="carouselExampleCaptions" class="carousel slide" data-bs-theme="dark">
+            <!--We might not need the indicators anymore since we have a counter - discuss with team -->
+            <div class="carousel-indicators">
+                <% for(let i=0; i < cards.length; i++) { %>
+                    <%- include('cardindicator.ejs', {i: i})%>
+                        <% } %>
+            </div>
+            <div class="carousel-inner">
+                <% for(let i=0; i < cards.length; i++) { %>
+                    <%- include('card.ejs', {card: cards[i], bg: bg, i: i}) %>
+                        <% } %>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        <div id="tap-notif">
+            <p>Tap Card to flip</p>
+        </div>
+        <% if (queryType === "view") { %>
+            <div id="sharecode-container">
+                <p>Share this set</p>
+                <p id="sharecode">
+                    <%= id %>
+                </p>
+            </div>
+        <% } else if (queryType === "finalize") { %>
+                <input type="text" id="setName" name = "setName" placeholder="Name this set..">
+                <button id="save-button">Save to collection</button>
+        <% } %>
+    </div>
+    <%- include("template/footerBar.ejs") %>
+    <script src="../scripts/review.js"></script>
+<%- include("template/footer") %>
+
+
+
