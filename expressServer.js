@@ -70,20 +70,18 @@ app.use('/home', isAuth)
 app.get('/home', async (req, res) => {
     let existingActivity
     let activityName
+    let days
     try {
         let user = await usersModel.findOne({ loginId: req.session.loginId })
-        if (!user) {
-            throw console.error(`Not logged in`)
-        }
         days = user.streak
-        const date = new Date()
-        const currActivityDate = date.getDate()
-        const lastActivity = user.lastActivity
-        if (!lastActivity || !lastActivity.timestamp || !lastActivity.shareId) {
+        let date = new Date()
+        let currActivityDate = date.getDate()
+        let lastActivity = user.lastActivity
+        if (lastActivity === null || lastActivity.timestamp === null || lastActivity.timestamp === undefined || lastActivity.shareId === null || lastActivity.shareId === undefined ) {
             existingActivity = 0
             return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
         }
-        const prevActivityDate = lastActivity.timestamp.getDate()
+        let prevActivityDate = lastActivity.timestamp.getDate()
 
         if ((currActivityDate != prevActivityDate + 1) && (currActivityDate != prevActivityDate)) {
             user = await usersModel.findOneAndUpdate(

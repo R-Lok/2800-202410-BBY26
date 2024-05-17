@@ -3,13 +3,11 @@ const usersModel = require('../../models/users')
 const incrementStreak = async(req) => {
     try {
         let shareId = req.params.setid;
+        let user = await usersModel.findOne({ loginId: req.session.loginId });
         let date = new Date();
         let currActivityDate = date.getDate();
-
-        let user = await usersModel.findOne({ loginId: req.session.loginId });
-
         let lastActivity = user.lastActivity;
-        if (!lastActivity || !lastActivity.timestamp || !lastActivity.shareId) {
+        if (lastActivity === null || lastActivity.timestamp === null || lastActivity.timestamp === undefined || lastActivity.shareId === null || lastActivity.shareId === undefined ) {
             user = await usersModel.findOneAndUpdate(
                 { loginId: req.session.loginId },
                 {$set: {
