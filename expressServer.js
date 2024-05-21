@@ -82,7 +82,7 @@ app.get('/home', async (req, res) => {
         const lastActivity = user.lastActivity
         if (lastActivity === null || lastActivity.timestamp === null || lastActivity.timestamp === undefined || lastActivity.shareId === null || lastActivity.shareId === undefined) {
             existingActivity = 0
-            return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
+            return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email, pictureID:req.session.picture })
         }
         const prevActivityDate = lastActivity.timestamp.getDate()
 
@@ -107,7 +107,7 @@ app.get('/home', async (req, res) => {
     } catch (err) {
         console.log(`Error occurred in /home`)
     }
-    return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
+    return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email, pictureID:req.session.picture })
 })
 
 app.post('/home/shareCode', (req, res) => {
@@ -128,11 +128,11 @@ app.get('/', (req, res) => {
 })
 
 app.get('/setSecurityQuestion', (req, res) => {
-    return res.render('setSecurityQuestion')
+    return res.render('setSecurityQuestion', {pictureID:req.session.picture })
 })
 
 app.get('/generate', (req, res) => {
-    return res.render('generate')
+    return res.render('generate', {pictureID:req.session.picture })
 })
 
 // route for receiving image input from user
@@ -184,31 +184,19 @@ app.post('/api/generate', async (req, res) => {
     }
 })
 
-app.get('/api/getUserImage', async (req, res) => {
-    const userId = req.session.userId
-    if (!userId) {
-        return res.status(400).json({ error: 'No userId' })
-    } else {
-        let pictureId = await usersModel.findById(userId).select('-_id picture').lean()
-        pictureId = pictureId.picture
-        const imagePath = `/images/${pictureId}.png`
-        res.json({ imagePath })
-    }
-})
-
 app.get('/review/:setid', async (req, res) => {
     incrementStreak(req)
     try {
         console.log('set' + req.params.setid)
         const cards = await flashcardsModel.find({ shareId: Number(req.params.setid) }).select('-_id question answer')
         if (cards.length === 0) {
-            return res.render('404', { error: 'Flashcard set does not exist!' })
+            return res.render('404', { error: 'Flashcard set does not exist!', pictureID:req.session.picture })
         }
-        const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: cards, id: req.params.setid, queryType: 'view' }
+        const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: cards, id: req.params.setid, queryType: 'view', pictureID: req.session.picture }
         return res.render('review', carouselData)
     } catch (err) {
         console.log(`Failed to fetch cards for set ${req.params.setid}`)
-        res.render('404', { error: 'Flashcard set does not exist!' })
+        res.render('404', { error: 'Flashcard set does not exist!', pictureID:req.session.picture })
     }
 })
 
@@ -216,7 +204,7 @@ app.get('/check', (req, res) => {
     const querydata = req.query.data
     const data = (JSON.parse(querydata)).flashcards
 
-    const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: data, queryType: 'finalize' }
+    const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: data, queryType: 'finalize', pictureID:req.session.picture }
 
     return res.render('review', carouselData)
 })

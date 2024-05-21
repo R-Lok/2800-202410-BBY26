@@ -27,11 +27,12 @@ const authorization = (req, user) => {
     req.session.email = user.email
     req.session.name = user.name
     req.session.role = user.role
+    req.session.picture = user.picture
     console.log(req.session)
 }
 
 router.get('/register', (req, res) => {
-    return res.render('register')
+    return res.render('register', {pictureID: req.session.picture})
 })
 
 router.post('/register', async (req, res, next) => {
@@ -74,7 +75,7 @@ router.post('/register', async (req, res, next) => {
 })
 
 router.get('/login', (req, res) => {
-    return res.render('login')
+    return res.render('login', {pictureID: req.session.picture})
 })
 
 router.post('/login', async (req, res, next) => {
