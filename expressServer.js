@@ -19,6 +19,7 @@ const usersModel = require('./models/users')
 const mongoose = require('mongoose')
 
 const { incrementStreak } = require('./public/scripts/incrementStreak')
+const { isConsecutiveDays } = require('./public/scripts/isConsecutiveDays')
 
 const app = express()
 const server = require('http').createServer(app)
@@ -77,6 +78,8 @@ app.get('/home', async (req, res) => {
         let date = new Date()
         let currActivityDate = date.getDate()
         let lastActivity = user.lastActivity
+        console.log(`${date}_${lastActivity.timestamp}`)
+        isConsecutiveDays(date, lastActivity.timestamp)
         if (lastActivity === null || lastActivity.timestamp === null || lastActivity.timestamp === undefined || lastActivity.shareId === null || lastActivity.shareId === undefined ) {
             existingActivity = 0
             return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
@@ -102,7 +105,7 @@ app.get('/home', async (req, res) => {
         }
         activityName = collection.setName
     } catch (err) {
-        console.log(`Error occurred in /home`)
+        console.log(`Error occurred in /home ${err}`)
     }
     return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
 })
