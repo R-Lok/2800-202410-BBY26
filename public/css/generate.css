@@ -79,8 +79,8 @@ video {
 }
 
 video, #frame {
-  height: 640px;
-  width: 350px;
+  height: 480px;
+  width: 270px;
 }
 
 .hidden {
