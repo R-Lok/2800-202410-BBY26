@@ -112,7 +112,11 @@ app.get('/home', async (req, res) => {
 
 app.post('/home/shareCode', (req, res) => {
     const shareId = req.body.shareId
-    res.redirect(`/review/${shareId}`)
+    if (shareId === "Egg"){
+        res.redirect(`/egg`)
+    } else {
+        res.redirect(`/review/${shareId}`)
+    }
 })
 
 app.get('/health', (_, res) => {
@@ -252,6 +256,10 @@ app.post('/submitcards', async (req, res) => {
 
     res.status(200)
     res.json(JSON.stringify({ shareId: shareId }))
+})
+
+app.get('/egg', (req, res) => {
+    return res.render('egg', {pictureID:req.session.picture})
 })
 
 app.get('*', (req, res) => {
