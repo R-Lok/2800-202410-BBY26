@@ -73,12 +73,11 @@ app.get('/home', async (req, res) => {
     let activityName
     let days
     try {
-        console.log(`\nhome\n`)
         let user = await usersModel.findOne({ loginId: req.session.loginId })
         days = user.streak
         let date = new Date()
         // date.setMonth(5)
-        // date.setDate(1) 
+        // date.setDate(23) 
         // console.log(`after setdate ${date.getDate()}`)
         let lastActivity = user.lastActivity
         
@@ -91,7 +90,6 @@ app.get('/home', async (req, res) => {
         // If dates are NOT consecutive (isConsecutiveDays == 1) AND NOT the same (isConsecutiveDays == 0),
         // then reset the streak. 
         if ((dayDifference != 1) && (dayDifference != 0)) {
-            console.log(`resetting streak ${isConsecutiveDays(lastActivity.timestamp, date)}`)
             user = await usersModel.findOneAndUpdate(
                 { loginId: req.session.loginId },
                 { $set: {
