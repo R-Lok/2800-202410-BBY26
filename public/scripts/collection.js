@@ -10,11 +10,9 @@ document.getElementById('sortCollection').addEventListener('change', async funct
         })
 
         let collections = await response.json();
-        console.log(collections);
 
         if (response.ok) {
             collections = collections.collections
-            console.log(collections[0].setName)
             let htmlString = ''
 
             let collectionsList = document.getElementById("collectionsList");

@@ -27,7 +27,7 @@ router.post('/search', async (req, res) => {
             collections = await collectionsModel.find({userId:userId, setName: { $regex: regexPattern }}).sort({ createdAt:-1 }).lean()
             break;
         case "viewed":
-            console.log("I am here3")
+            collections = await collectionsModel.find({userId:userId, setName: { $regex: regexPattern }}).sort({ updatedAt:-1 }).lean()
             break;
         default:
             collections = await collectionsModel.find({userId:userId, setName: { $regex: regexPattern }})
@@ -66,7 +66,7 @@ router.post('/sortCollection', async (req, res) => {
             collections = await collectionsModel.find({userId:userId, setName: { $regex: regexPattern }}).sort({ createdAt:-1 }).lean()
             break;
         case "viewed":
-            console.log("I am here3")
+            collections = await collectionsModel.find({userId:userId, setName: { $regex: regexPattern }}).sort({ updatedAt:-1 }).lean()
             break;
         default:
             collections = await collectionsModel.find({userId:userId, setName: { $regex: regexPattern }})

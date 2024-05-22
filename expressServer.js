@@ -188,6 +188,7 @@ app.get('/review/:setid', async (req, res) => {
     incrementStreak(req)
     try {
         console.log('set' + req.params.setid)
+        await collectionsModel.findOneAndUpdate({ shareId: Number(req.params.setid) }, {updatedAt: new Date() })
         const cards = await flashcardsModel.find({ shareId: Number(req.params.setid) }).select('-_id question answer')
         if (cards.length === 0) {
             return res.render('404', { error: 'Flashcard set does not exist!', pictureID:req.session.picture })
