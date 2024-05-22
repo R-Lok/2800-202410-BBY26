@@ -1,5 +1,4 @@
 async function getQuestion(email) {
-    console.log('Email: ' + email)
     axios.post('getQuestion', {
         method: 'POST',
         headers: {
@@ -25,7 +24,6 @@ async function getQuestion(email) {
 
 function startStepOne() {
     const email = document.getElementById('userEmail').value
-    console.log('Email: ' + email)
     getQuestion(email)
 }
 
@@ -89,7 +87,7 @@ async function resetPassword() {
         }
     }).catch((err) => {
         console.log(err)
-        displayerErrorLoader("")
+        displayerErrorLoader('')
     })
 }
 

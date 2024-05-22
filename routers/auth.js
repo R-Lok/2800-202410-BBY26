@@ -67,7 +67,7 @@ router.post('/register', async (req, res, next) => {
         const user = await usersModel.create(userObject)
         user.email = email
         authorization(req, user)
-        return res.redirect('/')
+        return res.redirect('/setsecurity')
     } catch (error) {
         next(error)
     }
