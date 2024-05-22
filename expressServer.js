@@ -12,7 +12,7 @@ const OpenAI = require('openai')
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 })
-const securityQuestionsRouter = require('./routers/securityQuestions')
+const {router: securityQuestionsRouter, hasSecurityQuestion} = require('./routers/securityQuestions')
 const flashcardsModel = require('./models/flashcards')
 const collectionRouter = require('./routers/collection')
 const usersModel = require('./models/users')
@@ -60,16 +60,16 @@ app.use(session({
 }))
 
 app.use('/', authRouter)
-app.use('/users', isAuth, userRouter)
-app.use('/settings', isAuth, settingRouter)
-app.use('/securityQuestions', isAuth, securityQuestionsRouter)
-app.use('/collection', isAuth, collectionRouter)
-app.use('/check', isAuth)
-app.use('/review', isAuth)
-app.use('/submitcards', isAuth)
-app.use('/generate', isAuth)
-app.use('/api/generate', isAuth)
-app.use('/home', isAuth)
+app.use('/users', isAuth, hasSecurityQuestion, userRouter)
+app.use('/settings', isAuth, hasSecurityQuestion, settingRouter)
+app.use('/securityQuestions', securityQuestionsRouter)
+app.use('/collection', isAuth, hasSecurityQuestion, collectionRouter)
+app.use('/check', isAuth, hasSecurityQuestion)
+app.use('/review', isAuth, hasSecurityQuestion)
+app.use('/submitcards', isAuth, hasSecurityQuestion)
+app.use('/generate', isAuth, hasSecurityQuestion)
+app.use('/api/generate', isAuth, hasSecurityQuestion)
+app.use('/home', isAuth, hasSecurityQuestion)
 
 app.get('/home', async (req, res) => {
     let existingActivity
@@ -137,6 +137,10 @@ app.get('/', (req, res) => {
 
 app.get('/setSecurityQuestion', (req, res) => {
     return res.render('setSecurityQuestion', {pictureID:req.session.picture })
+})
+
+app.get('/setsecurity', (req, res) => {
+    return res.render('setSecurityQuestion')
 })
 
 app.get('/generate', (req, res) => {
