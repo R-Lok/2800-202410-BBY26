@@ -136,3 +136,6 @@ package-lock.json
 
 # *.txt
 *.txt
+
+*.sh
+*s.json

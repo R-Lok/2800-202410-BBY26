@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const saltRounds = 12
 const userModel = require('../models/users')
-const { CustomError, encrypt, decrypt, hash } = require('../utilities/index')
+const { encrypt, hash } = require('../utilities/index')
 
 
 const mongoUrl = process.env.NODE_ENV === 'local' ?
@@ -28,7 +28,7 @@ const main = async () => {
         const userObjects = [
             {
                 loginId: 'admin', name: 'admin', email: await encrypt('admin@gmail.com'),
-                emailHash: await hash('admin@gmail.com'), password: await bcrypt.hash(process.env.ADMIN, saltRounds), role: 'admin',
+                emailHash: await hash('admin@gmail.com'), password: await bcrypt.hash('admin', saltRounds), role: 'admin',
                 enable: true, security: true,
             },
             {

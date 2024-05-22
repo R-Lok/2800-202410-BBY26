@@ -12,13 +12,14 @@ const OpenAI = require('openai')
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 })
-const securityQuestionsRouter = require('./routers/securityQuestions')
+const {router: securityQuestionsRouter, hasSecurityQuestion} = require('./routers/securityQuestions')
 const flashcardsModel = require('./models/flashcards')
 const collectionRouter = require('./routers/collection')
 const usersModel = require('./models/users')
 const mongoose = require('mongoose')
 
 const { incrementStreak } = require('./public/scripts/incrementStreak')
+const { isConsecutiveDays } = require('./public/scripts/isConsecutiveDays')
 
 const app = express()
 const server = require('http').createServer(app)
@@ -35,7 +36,7 @@ app.use(express.static(__dirname + '/public'))
 app.set('view engine', 'ejs')
 
 const mongoUrl = process.env.NODE_ENV === 'local' ?
-    `mongodb://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}//?authSource=admin` :
+    `mongodb://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/?authSource=admin` :
     `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}/?retryWrites=true&w=majority&appName=BBY26`
 
 const options = {
@@ -59,16 +60,16 @@ app.use(session({
 }))
 
 app.use('/', authRouter)
-app.use('/users', isAuth, userRouter)
-app.use('/settings', isAuth, settingRouter)
-app.use('/securityQuestions', isAuth, securityQuestionsRouter)
-app.use('/collection', isAuth, collectionRouter)
-app.use('/check', isAuth)
-app.use('/review', isAuth)
-app.use('/submitcards', isAuth)
-app.use('/generate', isAuth)
-app.use('/api/generate', isAuth)
-app.use('/home', isAuth)
+app.use('/users', isAuth, hasSecurityQuestion, userRouter)
+app.use('/settings', isAuth, hasSecurityQuestion, settingRouter)
+app.use('/securityQuestions', securityQuestionsRouter)
+app.use('/collection', isAuth, hasSecurityQuestion, collectionRouter)
+app.use('/check', isAuth, hasSecurityQuestion)
+app.use('/review', isAuth, hasSecurityQuestion)
+app.use('/submitcards', isAuth, hasSecurityQuestion)
+app.use('/generate', isAuth, hasSecurityQuestion)
+app.use('/api/generate', isAuth, hasSecurityQuestion)
+app.use('/home', isAuth, hasSecurityQuestion)
 
 app.get('/home', async (req, res) => {
     let existingActivity
@@ -77,16 +78,21 @@ app.get('/home', async (req, res) => {
     try {
         let user = await usersModel.findOne({ loginId: req.session.loginId })
         days = user.streak
-        const date = new Date()
-        const currActivityDate = date.getDate()
-        const lastActivity = user.lastActivity
-        if (lastActivity === null || lastActivity.timestamp === null || lastActivity.timestamp === undefined || lastActivity.shareId === null || lastActivity.shareId === undefined) {
+        let date = new Date()
+        // date.setMonth(5)
+        // date.setDate(10) 
+        // console.log(`after setdate ${date.getDate()}`)
+        let lastActivity = user.lastActivity
+        
+        if (lastActivity == null || lastActivity.timestamp == null || lastActivity.shareId == null) {
             existingActivity = 0
             return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email, pictureID:req.session.picture })
         }
-        const prevActivityDate = lastActivity.timestamp.getDate()
+        let dayDifference = isConsecutiveDays(lastActivity.timestamp, date)
 
-        if ((currActivityDate != prevActivityDate + 1) && (currActivityDate != prevActivityDate)) {
+        // If dates are NOT consecutive (isConsecutiveDays == 1) AND NOT the same (isConsecutiveDays == 0),
+        // then reset the streak. 
+        if ((dayDifference != 1) && (dayDifference != 0)) {
             user = await usersModel.findOneAndUpdate(
                 { loginId: req.session.loginId },
                 { $set: {
@@ -98,14 +104,16 @@ app.get('/home', async (req, res) => {
             )
             await user.save()
         }
-        existingActivity = `/review/${lastActivity.shareId}`
+
         const collection = await collectionsModel.findOne({ shareId: lastActivity.shareId })
         if (!collection) {
-            throw new Error('No collection found')
+            existingActivity = 0
+        } else {
+            existingActivity = `/review/${lastActivity.shareId}`
+            activityName = collection.setName
         }
-        activityName = collection.setName
     } catch (err) {
-        console.log(`Error occurred in /home`)
+        console.log(`Error occurred in /home: ${err}`)
     }
     return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email, pictureID:req.session.picture })
 })
@@ -135,13 +143,17 @@ app.get('/setSecurityQuestion', (req, res) => {
     return res.render('setSecurityQuestion', {pictureID:req.session.picture })
 })
 
+app.get('/setsecurity', (req, res) => {
+    return res.render('setSecurityQuestion')
+})
+
 app.get('/generate', (req, res) => {
     return res.render('generate', {pictureID:req.session.picture })
 })
 
 // route for receiving image input from user
 app.post('/upload-image', (req, res) => {
-    console.log(req.body)
+    //base64 string is in req.body.image
     res.send()
     // Jimmy will work on the backend for this endpoint - this is the endpoint for receiving image input
 })
@@ -192,6 +204,7 @@ app.get('/review/:setid', async (req, res) => {
     incrementStreak(req)
     try {
         console.log('set' + req.params.setid)
+        await collectionsModel.findOneAndUpdate({ shareId: Number(req.params.setid) }, {updatedAt: new Date() })
         const cards = await flashcardsModel.find({ shareId: Number(req.params.setid) }).select('-_id question answer')
         if (cards.length === 0) {
             return res.render('404', { error: 'Flashcard set does not exist!', pictureID:req.session.picture })
