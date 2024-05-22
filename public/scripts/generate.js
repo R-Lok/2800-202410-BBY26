@@ -114,8 +114,8 @@ async function getCamera() {
         mediaStream = await navigator.mediaDevices.getUserMedia({
             audio: false,
             video: {
-                width: { ideal: 350 },
-                height: { ideal: 640 },
+                width: { ideal: 1920 },
+                height: { ideal: 1080 },
                 facingMode: "environment"
             }
         })
@@ -148,7 +148,7 @@ function takePhoto() {
 
     const photoHeight = video.videoHeight
     const photoWidth = video.videoWidth
-    context.drawImage(video, 0, 0, 350, 640)
+    context.drawImage(video, 0, 0, 1080, 1920)
     const image = canvas.toDataURL('image/png')
     sessionStorage.setItem('imageURL', JSON.stringify(image))
     photoFrame.setAttribute('src', image)

@@ -149,7 +149,7 @@ app.get('/generate', (req, res) => {
 
 // route for receiving image input from user
 app.post('/upload-image', (req, res) => {
-    console.log(req.body)
+    //base64 string is in req.body.image
     res.send()
     // Jimmy will work on the backend for this endpoint - this is the endpoint for receiving image input
 })
