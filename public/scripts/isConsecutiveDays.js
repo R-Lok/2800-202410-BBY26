@@ -1,7 +1,8 @@
 // console.log(`isConsecutive.js loaded`)
 
 function isConsecutiveDays(lastDate, currDate) {
-    
+    console.log(`\nisConsecutiveDays\n`)
+
     let d = new Date(lastDate.getFullYear(), lastDate.getMonth(), lastDate.getDate())
     let d2 = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate())
     console.log(`lastDate: ${d}`)

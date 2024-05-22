@@ -73,21 +73,25 @@ app.get('/home', async (req, res) => {
     let activityName
     let days
     try {
+        console.log(`\nhome\n`)
         let user = await usersModel.findOne({ loginId: req.session.loginId })
         days = user.streak
         let date = new Date()
+        // date.setMonth(5)
+        // date.setDate(1) 
+        // console.log(`after setdate ${date.getDate()}`)
         let lastActivity = user.lastActivity
         
         if (lastActivity == null || lastActivity.timestamp == null || lastActivity.shareId == null) {
             existingActivity = 0
             return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
         }
-        // let prevActivityDate = lastActivity.timestamp.getDate()
-        isConsecutiveDays(date, lastActivity.timestamp)
+        let dayDifference = isConsecutiveDays(lastActivity.timestamp, date)
 
         // If dates are NOT consecutive (isConsecutiveDays == 1) AND NOT the same (isConsecutiveDays == 0),
         // then reset the streak. 
-        if ((isConsecutiveDays != 1) && (isConsecutiveDays != 0)) {
+        if ((dayDifference != 1) && (dayDifference != 0)) {
+            console.log(`resetting streak ${isConsecutiveDays(lastActivity.timestamp, date)}`)
             user = await usersModel.findOneAndUpdate(
                 { loginId: req.session.loginId },
                 { $set: {
@@ -100,7 +104,6 @@ app.get('/home', async (req, res) => {
             await user.save()
         }
 
-        
         const collection = await collectionsModel.findOne({ shareId: lastActivity.shareId })
         if (!collection) {
             existingActivity = 0
@@ -108,9 +111,8 @@ app.get('/home', async (req, res) => {
             existingActivity = `/review/${lastActivity.shareId}`
             activityName = collection.setName
         }
-
     } catch (err) {
-        console.log(`Error occurred in /home ${err}`)
+        console.log(`Error occurred in /home: ${err}`)
     }
     return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
 })
