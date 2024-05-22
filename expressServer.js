@@ -19,6 +19,7 @@ const usersModel = require('./models/users')
 const mongoose = require('mongoose')
 
 const { incrementStreak } = require('./public/scripts/incrementStreak')
+const { isConsecutiveDays } = require('./public/scripts/isConsecutiveDays')
 
 const app = express()
 const server = require('http').createServer(app)
@@ -77,16 +78,21 @@ app.get('/home', async (req, res) => {
     try {
         let user = await usersModel.findOne({ loginId: req.session.loginId })
         days = user.streak
-        const date = new Date()
-        const currActivityDate = date.getDate()
-        const lastActivity = user.lastActivity
-        if (lastActivity === null || lastActivity.timestamp === null || lastActivity.timestamp === undefined || lastActivity.shareId === null || lastActivity.shareId === undefined) {
+        let date = new Date()
+        // date.setMonth(5)
+        // date.setDate(10) 
+        // console.log(`after setdate ${date.getDate()}`)
+        let lastActivity = user.lastActivity
+        
+        if (lastActivity == null || lastActivity.timestamp == null || lastActivity.shareId == null) {
             existingActivity = 0
             return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email, pictureID:req.session.picture })
         }
-        const prevActivityDate = lastActivity.timestamp.getDate()
+        let dayDifference = isConsecutiveDays(lastActivity.timestamp, date)
 
-        if ((currActivityDate != prevActivityDate + 1) && (currActivityDate != prevActivityDate)) {
+        // If dates are NOT consecutive (isConsecutiveDays == 1) AND NOT the same (isConsecutiveDays == 0),
+        // then reset the streak. 
+        if ((dayDifference != 1) && (dayDifference != 0)) {
             user = await usersModel.findOneAndUpdate(
                 { loginId: req.session.loginId },
                 { $set: {
@@ -98,14 +104,16 @@ app.get('/home', async (req, res) => {
             )
             await user.save()
         }
-        existingActivity = `/review/${lastActivity.shareId}`
+
         const collection = await collectionsModel.findOne({ shareId: lastActivity.shareId })
         if (!collection) {
-            throw new Error('No collection found')
+            existingActivity = 0
+        } else {
+            existingActivity = `/review/${lastActivity.shareId}`
+            activityName = collection.setName
         }
-        activityName = collection.setName
     } catch (err) {
-        console.log(`Error occurred in /home`)
+        console.log(`Error occurred in /home: ${err}`)
     }
     return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email, pictureID:req.session.picture })
 })
