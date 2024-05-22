@@ -1,9 +1,7 @@
 require('dotenv').config({ path: `${process.cwd()}/.env.${process.env.NODE_ENV}` })
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
-const saltRounds = 12
 const usersModel = require('../models/users')
-const { CustomError, encrypt, decrypt, hash } = require('../utilities/index')
+const { CustomError, encrypt, hash } = require('../utilities/index')
 const crypto = require('node:crypto')
 const keyV1 = Buffer.from(process.env.ENCRYPTION_KEY_V1, 'hex')
 
@@ -52,7 +50,7 @@ const decryptV1 = (encrypted) => {
     })
 }
 
-const updateUsers = async (userUpdates) => {
+const updateUsers = (userUpdates) => {
     const bulkOps = userUpdates.map(({ id, email, emailHash }) => ({
         updateOne: {
             filter: { _id: id },
@@ -60,12 +58,7 @@ const updateUsers = async (userUpdates) => {
         },
     }))
 
-    try {
-        const result = await usersModel.bulkWrite(bulkOps)
-        console.log('Bulk update successful:', result)
-    } catch (error) {
-        console.error('Bulk update error:', error)
-    }
+    return usersModel.bulkWrite(bulkOps)
 }
 
 const main = async () => {
@@ -76,20 +69,18 @@ const main = async () => {
         const users = await usersModel.find({}, { _id: 1, name: 1, email: 1, emailHash: 1 }).lean()
         console.log(users)
 
-
         const userObjects = await Promise.all(users.map(async (user) => {
             const email = await decryptV1(user.email)
+            const [newEmail, newEmailHash] = await Promise.all([encrypt(email), hash(email)])
             return {
                 id: user._id,
-                email: await encrypt(email),
-                emailHash: await hash(email),
+                email: newEmail,
+                emailHash: newEmailHash,
             }
         }))
-
         console.log(userObjects)
 
         await updateUsers(userObjects)
-
         const results = await usersModel.find({})
         console.log(results)
     } catch (error) {
