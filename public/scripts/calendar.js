@@ -18,10 +18,13 @@ const totalWeekDays = 7;
 let date = new Date();
 let year = date.getFullYear();
 let month = date.getMonth();
-let monthName = months[month];
 let dayOfMonth = date.getDate();
 
 let currMonthLastDate = new Date(year, month + 1, 0);
+
+function getMonthName() {
+    return months[month]
+}
 
 //generates days of current month
 function generateDaysOfCurrMonth() {
@@ -34,9 +37,9 @@ function generateDaysOfCurrMonth() {
             html += `<li>${i}</li>`;
         }
     }
-    console.log(`prev month days: ${generateDaysOfPrevMonth()}`);
-    console.log(`curr month days: ${html}`);
-    console.log(`next month days: ${generateDaysOfNextMonth()}`);
+    // console.log(`prev month days: ${generateDaysOfPrevMonth()}`);
+    // console.log(`curr month days: ${html}`);
+    // console.log(`next month days: ${generateDaysOfNextMonth()}`);
     return html;
 }
 
@@ -76,18 +79,4 @@ function generateDaysOfNextMonth() {
     return html;
 }
 
-function getLastDateOfMonth() {
-    let d = 
-    console.log(`${d}`);
-    return d;
-}
-
-function x() {
-    console.log(`cool!! ${month}`);
-}
-
-function y() {
-    console.log('not cool!');
-}
-
-module.exports = {x, y, generateDaysOfCurrMonth};
+module.exports = { generateDaysOfPrevMonth, generateDaysOfCurrMonth, generateDaysOfNextMonth, getMonthName };

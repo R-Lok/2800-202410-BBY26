@@ -16,9 +16,11 @@ const {router: securityQuestionsRouter, hasSecurityQuestion} = require('./router
 const flashcardsModel = require('./models/flashcards')
 const collectionRouter = require('./routers/collection')
 const usersModel = require('./models/users')
+const auditlogModel = require('./models/auditLog')
 const mongoose = require('mongoose')
 
 const { incrementStreak, isConsecutiveDays } = require('./public/scripts/streak')
+const { generateDaysOfPrevMonth, generateDaysOfCurrMonth, generateDaysOfNextMonth, getMonthName } = require('./public/scripts/calendar');
 
 const app = express()
 const server = require('http').createServer(app)
@@ -74,10 +76,17 @@ app.get('/home', async (req, res) => {
     let existingActivity
     let activityName
     let days
+
+    let date = new Date()
+    let prevMonthDays = generateDaysOfPrevMonth()
+    let currMonthDays = generateDaysOfCurrMonth()
+    let nextMonthDays = generateDaysOfNextMonth()
+    let monthName = getMonthName()
+    let year = date.getFullYear()
+
     try {
         let user = await usersModel.findOne({ loginId: req.session.loginId })
         days = user.streak
-        let date = new Date()
         // date.setMonth(5)
         // date.setDate(25) 
         // console.log(`after setdate ${date.getDate()}`)
@@ -85,7 +94,11 @@ app.get('/home', async (req, res) => {
         
         if (lastActivity == null || lastActivity.timestamp == null || lastActivity.shareId == null) {
             existingActivity = 0
-            return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email, pictureID:req.session.picture })
+            return res.render('home', {
+                prevMonthDays: prevMonthDays, currMonthDays: currMonthDays, nextMonthDays: nextMonthDays, monthName: monthName, year: year, 
+                activityName: activityName, existingActivity: existingActivity, days: days, 
+                name: req.session.name, email: req.session.email, pictureID:req.session.picture
+            })
         }
         let dayDifference = isConsecutiveDays(lastActivity.timestamp, date)
 
@@ -111,7 +124,11 @@ app.get('/home', async (req, res) => {
     } catch (err) {
         console.log(`Error occurred in /home: ${err}`)
     }
-    return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email, pictureID:req.session.picture })
+    return res.render('home', {
+        prevMonthDays: prevMonthDays, currMonthDays: currMonthDays, nextMonthDays: nextMonthDays, monthName: monthName, year: year,
+        activityName: activityName, existingActivity: existingActivity, days: days,
+        name: req.session.name, email: req.session.email, pictureID:req.session.picture
+    })
 })
 
 app.post('/home/shareCode', (req, res) => {
@@ -195,6 +212,8 @@ app.post('/api/generate', async (req, res) => {
 app.get('/review/:setid', async (req, res) => {
     try {
         incrementStreak(req)
+        await auditlogModel.create({ loginId: req.session.loginId, type: 'flashcard', shareId: req.params.setid })
+
         console.log('set' + req.params.setid)
         await collectionsModel.findOneAndUpdate({ shareId: Number(req.params.setid) }, {updatedAt: new Date() })
         const cards = await flashcardsModel.find({ shareId: Number(req.params.setid) }).select('-_id question answer')

@@ -4,8 +4,7 @@ const { Schema } = mongoose
 const AuditLogsSchema = new Schema({
     loginId: {type: String, required: true, unique: true, ref: 'users'},
     type: {type: String, default: null, enum: ['flashcard']},
-    shareId: {type: Number, required: true, unique: true, ref: 'collections',},
-    timestamp: {type: Date, default: null},
+    shareId: {type: Number, required: true, unique: true, ref: 'collections'},
 }, {
     timestamps: true,
 })

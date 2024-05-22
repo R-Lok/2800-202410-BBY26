@@ -62,7 +62,7 @@ const incrementStreak = async(req) => {
         }
         await user.save();
     } catch (err) {
-        console.log(`Error found in incrementStreak.js: ${err}`);
+        console.log(`Error found: ${err}`);
         return;
     }
     return;
