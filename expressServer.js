@@ -253,7 +253,6 @@ app.get('/review/:setid', async (req, res) => {
 
 app.get('/check', (req, res) => {
     const querydata = req.query.data
-    console.log("in check, data:" + querydata)
     const data = (JSON.parse(querydata)).flashcards
 
     const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: data, queryType: 'finalize', pictureID:req.session.picture }
