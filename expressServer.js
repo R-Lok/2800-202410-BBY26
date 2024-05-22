@@ -149,9 +149,24 @@ app.get('/generate', (req, res) => {
 
 // route for receiving image input from user
 app.post('/upload-image', async (req, res) => {
+    const image = req.body.image
+    const difficulty = req.body.difficulty
+    const numQuestions = req.body.numQuestions
     //base64 string is in req.body.image
     try {
-        const res = await openai.chat.completions.create({
+        const result = await generateImage(difficulty, numQuestions, image)
+        res.status(200)
+        return res.json(result)
+    } catch (err) {
+        console.log(err)
+        res.status(500)
+        res.json(err)
+    }
+})
+
+async function generateImage(difficulty, numQuestions, image) {
+    try {
+        const response = await openai.chat.completions.create({
             model: "gpt-4o",
             response_format: { type: 'json_object' },
             temperature: 1,
@@ -166,20 +181,16 @@ app.post('/upload-image', async (req, res) => {
                 {
                     role: 'user',
                     content: [{
-                        type: 'text', text: `Given the provided image, Generate an array in json format that contains ${req.body.numQuestions} flashcards object elments with ${req.body.difficulty} difficulty.
-                Question and answer of flashcards should be the keys of each flashcard object element`}, { type: "image_url", "image_url": {"url": image}}]
+                        type: 'text', text: `Given the provided image, Generate an array in json format that contains ${numQuestions} flashcards object elments with ${difficulty} difficulty.
+                Question and answer of flashcards should be the keys of each flashcard object element`}, { type: "image_url", "image_url": { "url": image } }]
                 }
             ],
         })
-        console.log(res.choices[0].message.content)
-        const result = res.choices[0].message.content
-        return res.redirect(`/check/?data=${result}`)
+        return response.choices[0].message.content
     } catch (err) {
         console.log(err)
-        res.status(500)
-        res.json(err)
     }
-})
+}
 
 async function generate(difficulty, number, material) {
     let completion
@@ -242,6 +253,7 @@ app.get('/review/:setid', async (req, res) => {
 
 app.get('/check', (req, res) => {
     const querydata = req.query.data
+    console.log("in check, data:" + querydata)
     const data = (JSON.parse(querydata)).flashcards
 
     const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: data, queryType: 'finalize', pictureID:req.session.picture }

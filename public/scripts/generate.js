@@ -176,8 +176,12 @@ document.querySelector("#generatePhotoButton").addEventListener('click', async (
                 numQuestions: document.getElementById("selectNumber").value
             })
         })
+        if (response.ok) {
+            const data = await response.json()
+            window.location.href = `/check?data=${data}`
+        }
     } catch (err) {
-
+        console.log(err) //implement some sort of alert that warns the user that it failed
     }
 })
 
