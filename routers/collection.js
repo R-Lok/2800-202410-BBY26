@@ -4,17 +4,36 @@ const collectionsModel = require('../models/collections')
 const flashcardsModel = require('../models/flashcards')
 
 router.get('/', async (req, res) => {
+    req.session.sort = "";
+    req.session.search = "";
     const userId = req.session.userId
     const collections = await collectionsModel.find({ userId: userId })
-    return res.render('collection', { collections: collections, pictureID:req.session.picture })
+    return res.render('collection', { collections: collections, pictureID:req.session.picture, selectedOption:req.session.sort, search:req.session.search })
 })
 
 router.post('/search', async (req, res) => {
     const userId = req.session.userId
     const search = req.body.search
+    const sort = req.session.sort
+    req.session.search = search
     const regexPattern = new RegExp('^' + search, 'i')
-    const collections = await collectionsModel.find({ userId: userId, setName: { $regex: regexPattern } })
-    return res.render('collection', { collections: collections, pictureID:req.session.picture })
+    let collections;
+
+    switch(sort) {
+        case "alpha":
+            collections = await collectionsModel.find({userId:userId, setName: { $regex: regexPattern }}).sort({ setName:1 }).lean()
+            break;
+        case "new":
+            collections = await collectionsModel.find({userId:userId, setName: { $regex: regexPattern }}).sort({ createdAt:-1 }).lean()
+            break;
+        case "viewed":
+            console.log("I am here3")
+            break;
+        default:
+            collections = await collectionsModel.find({userId:userId, setName: { $regex: regexPattern }})
+
+    }
+    return res.render('collection', { collections: collections, pictureID:req.session.picture, selectedOption:sort, search:search })
 })
 
 router.get('/delete/:shareid', async (req, res) => {
@@ -28,6 +47,37 @@ router.get('/delete/:shareid', async (req, res) => {
         await deleteSet(shareID)
         res.redirect('/collection')
     }
+})
+
+router.post('/sortCollection', async (req, res) => {
+    try{
+    let selectedOption = req.body.selectedOption
+    let search = req.session.search
+    const regexPattern = new RegExp('^' + search, 'i')
+    let userId = req.session.userId
+    req.session.sort = selectedOption
+    let collections;
+
+    switch(selectedOption) {
+        case "alpha":
+            collections = await collectionsModel.find({userId:userId, setName: { $regex: regexPattern }}).sort({ setName:1 }).lean()
+            break;
+        case "new":
+            collections = await collectionsModel.find({userId:userId, setName: { $regex: regexPattern }}).sort({ createdAt:-1 }).lean()
+            break;
+        case "viewed":
+            console.log("I am here3")
+            break;
+        default:
+            collections = await collectionsModel.find({userId:userId, setName: { $regex: regexPattern }})
+
+    }
+    res.json({ collections });
+
+    } catch(error) {
+        console.log(error);
+    }
+
 })
 
 async function deleteSet(shareID) {
