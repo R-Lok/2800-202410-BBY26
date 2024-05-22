@@ -18,8 +18,7 @@ const collectionRouter = require('./routers/collection')
 const usersModel = require('./models/users')
 const mongoose = require('mongoose')
 
-const { incrementStreak } = require('./public/scripts/incrementStreak')
-const { isConsecutiveDays } = require('./public/scripts/isConsecutiveDays')
+const { incrementStreak, isConsecutiveDays } = require('./public/scripts/incrementStreak')
 
 const app = express()
 const server = require('http').createServer(app)
@@ -93,19 +92,16 @@ app.get('/home', async (req, res) => {
         // If dates are NOT consecutive (isConsecutiveDays == 1) AND NOT the same (isConsecutiveDays == 0),
         // then reset the streak. 
         if ((dayDifference != 1) && (dayDifference != 0)) {
-            user = await usersModel.findOneAndUpdate(
-                { loginId: req.session.loginId },
+            user = await usersModel.findOneAndUpdate( { loginId: req.session.loginId },
                 { $set: {
                     'lastActivity.timestamp': user.lastActivity.timestamp,
                     'lastActivity.shareId': user.lastActivity.shareId,
                     'streak': 0,
-                } },
-                { returnOriginal: false },
-            )
+                } }, { returnOriginal: false }, )
             await user.save()
         }
 
-        const collection = await collectionsModel.findOne({ shareId: lastActivity.shareId })
+        const collection = await collectionsModel.findOne( { shareId: lastActivity.shareId } )
         if (!collection) {
             existingActivity = 0
         } else {
@@ -197,8 +193,8 @@ app.post('/api/generate', async (req, res) => {
 })
 
 app.get('/review/:setid', async (req, res) => {
-    incrementStreak(req)
     try {
+        incrementStreak(req)
         console.log('set' + req.params.setid)
         await collectionsModel.findOneAndUpdate({ shareId: Number(req.params.setid) }, {updatedAt: new Date() })
         const cards = await flashcardsModel.find({ shareId: Number(req.params.setid) }).select('-_id question answer')
