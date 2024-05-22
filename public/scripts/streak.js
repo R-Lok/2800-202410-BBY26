@@ -25,7 +25,7 @@ const incrementStreak = async(req) => {
         let user = await usersModel.findOne({ loginId: req.session.loginId })
         let date = new Date()
         // date.setMonth(5)
-        // date.setDate(10) 
+        // date.setDate(25) 
         // console.log(`after setdate ${date.getDate()}`)
         
         let lastActivity = user.lastActivity;

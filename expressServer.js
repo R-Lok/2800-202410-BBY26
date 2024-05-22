@@ -18,7 +18,7 @@ const collectionRouter = require('./routers/collection')
 const usersModel = require('./models/users')
 const mongoose = require('mongoose')
 
-const { incrementStreak, isConsecutiveDays } = require('./public/scripts/incrementStreak')
+const { incrementStreak, isConsecutiveDays } = require('./public/scripts/streak')
 
 const app = express()
 const server = require('http').createServer(app)
@@ -79,7 +79,7 @@ app.get('/home', async (req, res) => {
         days = user.streak
         let date = new Date()
         // date.setMonth(5)
-        // date.setDate(10) 
+        // date.setDate(25) 
         // console.log(`after setdate ${date.getDate()}`)
         let lastActivity = user.lastActivity
         
