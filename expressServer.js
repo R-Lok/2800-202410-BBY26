@@ -78,12 +78,12 @@ app.get('/home', async (req, res) => {
     let days
 
     let date = new Date()
-    let prevMonthDays = generateDaysOfPrevMonth()
-    let currMonthDays = generateDaysOfCurrMonth()
-    let nextMonthDays = generateDaysOfNextMonth()
-    let monthName = getMonthName()
+    let prevMonthDays = generateDaysOfPrevMonth(date)
+    let currMonthDays = generateDaysOfCurrMonth(date)
+    let nextMonthDays = generateDaysOfNextMonth(date)
+    let monthName = getMonthName(date)
     let year = date.getFullYear()
-
+    
     try {
         let user = await usersModel.findOne({ loginId: req.session.loginId })
         days = user.streak
