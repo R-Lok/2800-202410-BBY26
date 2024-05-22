@@ -36,7 +36,7 @@ app.use(express.static(__dirname + '/public'))
 app.set('view engine', 'ejs')
 
 const mongoUrl = process.env.NODE_ENV === 'local' ?
-    `mongodb://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}//?authSource=admin` :
+    `mongodb://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/?authSource=admin` :
     `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}/?retryWrites=true&w=majority&appName=BBY26`
 
 const options = {
