@@ -15,12 +15,11 @@ const openai = new OpenAI({
 const {router: securityQuestionsRouter, hasSecurityQuestion} = require('./routers/securityQuestions')
 const flashcardsModel = require('./models/flashcards')
 const collectionRouter = require('./routers/collection')
-const usersModel = require('./models/users')
+const homeRouter = require('./routers/home')
 const auditlogModel = require('./models/auditLog')
 const mongoose = require('mongoose')
 
 const { incrementStreak, isConsecutiveDays } = require('./public/scripts/streak')
-const { generateDaysOfPrevMonth, generateDaysOfCurrMonth, generateDaysOfNextMonth, getMonthName } = require('./public/scripts/calendar');
 
 const app = express()
 const server = require('http').createServer(app)
@@ -70,71 +69,7 @@ app.use('/review', isAuth, hasSecurityQuestion)
 app.use('/submitcards', isAuth, hasSecurityQuestion)
 app.use('/generate', isAuth, hasSecurityQuestion)
 app.use('/api/generate', isAuth, hasSecurityQuestion)
-app.use('/home', isAuth, hasSecurityQuestion)
-
-app.get('/home', async (req, res) => {
-    let existingActivity
-    let activityName
-    let days
-
-    let date = new Date()
-    let prevMonthDays = generateDaysOfPrevMonth(date)
-    let currMonthDays = generateDaysOfCurrMonth(date)
-    let nextMonthDays = generateDaysOfNextMonth(date)
-    let monthName = getMonthName(date)
-    let year = date.getFullYear()
-    
-    try {
-        let user = await usersModel.findOne({ loginId: req.session.loginId })
-        days = user.streak
-        // date.setMonth(5)
-        // date.setDate(25) 
-        // console.log(`after setdate ${date.getDate()}`)
-        let lastActivity = user.lastActivity
-        
-        if (lastActivity == null || lastActivity.timestamp == null || lastActivity.shareId == null) {
-            existingActivity = 0
-            return res.render('home', {
-                prevMonthDays: prevMonthDays, currMonthDays: currMonthDays, nextMonthDays: nextMonthDays, monthName: monthName, year: year, 
-                activityName: activityName, existingActivity: existingActivity, days: days, 
-                name: req.session.name, email: req.session.email, pictureID:req.session.picture
-            })
-        }
-        let dayDifference = isConsecutiveDays(lastActivity.timestamp, date)
-
-        // If dates are NOT consecutive (isConsecutiveDays == 1) AND NOT the same (isConsecutiveDays == 0),
-        // then reset the streak. 
-        if ((dayDifference != 1) && (dayDifference != 0)) {
-            user = await usersModel.findOneAndUpdate( { loginId: req.session.loginId },
-                { $set: {
-                    'lastActivity.timestamp': user.lastActivity.timestamp,
-                    'lastActivity.shareId': user.lastActivity.shareId,
-                    'streak': 0,
-                } }, { returnOriginal: false }, )
-            await user.save()
-        }
-
-        const collection = await collectionsModel.findOne( { shareId: lastActivity.shareId } )
-        if (!collection) {
-            existingActivity = 0
-        } else {
-            existingActivity = `/review/${lastActivity.shareId}`
-            activityName = collection.setName
-        }
-    } catch (err) {
-        console.log(`Error occurred in /home: ${err}`)
-    }
-    return res.render('home', {
-        prevMonthDays: prevMonthDays, currMonthDays: currMonthDays, nextMonthDays: nextMonthDays, monthName: monthName, year: year,
-        activityName: activityName, existingActivity: existingActivity, days: days,
-        name: req.session.name, email: req.session.email, pictureID:req.session.picture
-    })
-})
-
-app.post('/home/shareCode', (req, res) => {
-    const shareId = req.body.shareId
-    res.redirect(`/review/${shareId}`)
-})
+app.use('/home', isAuth, hasSecurityQuestion, homeRouter)
 
 app.get('/health', (_, res) => {
     return res.status(200).send('ok')
