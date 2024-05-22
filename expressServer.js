@@ -148,8 +148,33 @@ app.get('/generate', (req, res) => {
 })
 
 // route for receiving image input from user
-app.post('/upload-image', (req, res) => {
+app.post('/upload-image', async (req, res) => {
     //base64 string is in req.body.image
+    try {
+        const res = await openai.chat.completions.create({
+            model: "gpt-4o",
+            response_format: { type: 'json_object' },
+            temperature: 1,
+            max_tokens: 4096,
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0,
+            messages: [
+                {
+                    role: 'system', content: 'You are a assistant that generate flashcards for students studying quizzes and exams'
+                },
+                {
+                    role: 'user',
+                    content: [{
+                        type: 'text', text: `Given the provided image, Generate an array in json format that contains ${req.body.numQuestions} flashcards object elments with ${req.body.difficulty} difficulty.
+                Question and answer of flashcards should be the keys of each flashcard object element`}, { type: "image_url", "image_url": {"url": image}}]
+                }
+            ],
+        })
+        console.log(res.choices[0])
+    } catch (err) {
+        console.log(err)
+    }
     res.send()
     // Jimmy will work on the backend for this endpoint - this is the endpoint for receiving image input
 })

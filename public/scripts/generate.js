@@ -162,7 +162,7 @@ function takePhoto() {
 
 //Attach eventListener for 'generate' button of photoModal
 document.querySelector("#generatePhotoButton").addEventListener('click', async (e) => {
-    const photo = sessionStorage.getItem('imageURL')
+    const photo = JSON.parse(sessionStorage.getItem('imageURL'))
     console.log(photo)
     try {
         const response = await fetch('/upload-image', {
