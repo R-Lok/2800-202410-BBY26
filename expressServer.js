@@ -171,12 +171,14 @@ app.post('/upload-image', async (req, res) => {
                 }
             ],
         })
-        console.log(res.choices[0])
+        console.log(res.choices[0].message.content)
+        const result = res.choices[0].message.content
+        return res.redirect(`/check/?data=${result}`)
     } catch (err) {
         console.log(err)
+        res.status(500)
+        res.json(err)
     }
-    res.send()
-    // Jimmy will work on the backend for this endpoint - this is the endpoint for receiving image input
 })
 
 async function generate(difficulty, number, material) {
