@@ -19,10 +19,22 @@
 		"url": "https://github.com/R-Lok/"
 	},
 	"contributors": [
-		{ "name": "Kong, Jimmy", "email": "jimmyatwork368@gmail.com" },
-		{ "name": "Li, Louise", "email": "louiseyli.educ@gmail.com" },
-		{ "name": "Liao, Wei-Yu", "email": "wyliao76@gmail.com" },
-		{ "name": "Lin, Joe", "email": "jyyunlin@gmail.com" }
+		{
+			"name": "Kong, Jimmy",
+			"email": "jimmyatwork368@gmail.com"
+		},
+		{
+			"name": "Li, Louise",
+			"email": "louiseyli.educ@gmail.com"
+		},
+		{
+			"name": "Liao, Wei-Yu",
+			"email": "wyliao76@gmail.com"
+		},
+		{
+			"name": "Lin, Joe",
+			"email": "jyyunlin@gmail.com"
+		}
 	],
 	"license": "ISC",
 	"dependencies": {
@@ -38,7 +50,8 @@
 		"joi": "^17.13.1",
 		"mongoose": "^8.3.4",
 		"nodemon": "^3.1.0",
-		"openai": "^4.47.1"
+		"openai": "^4.47.1",
+		"sharp": "^0.33.4"
 	},
 	"devDependencies": {
 		"cross-env": "^7.0.3",

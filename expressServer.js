@@ -4,6 +4,7 @@ const MongoStore = require('connect-mongo')
 // const cors = require('cors')
 // const helmet = require('helmet')
 const compression = require('compression')
+const sharp = require("sharp");
 const userRouter = require('./routers/users')
 const { router: authRouter, isAuth } = require('./routers/auth')
 const settingRouter = require('./routers/settings')
@@ -12,7 +13,7 @@ const OpenAI = require('openai')
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 })
-const {router: securityQuestionsRouter, hasSecurityQuestion} = require('./routers/securityQuestions')
+const { router: securityQuestionsRouter, hasSecurityQuestion } = require('./routers/securityQuestions')
 const flashcardsModel = require('./models/flashcards')
 const collectionRouter = require('./routers/collection')
 const homeRouter = require('./routers/home')
@@ -84,15 +85,15 @@ app.get('/', (req, res) => {
 })
 
 app.get('/setSecurityQuestion', (req, res) => {
-    return res.render('setSecurityQuestion', {pictureID:req.session.picture })
+    return res.render('setSecurityQuestion', { pictureID: req.session.picture })
 })
 
 app.get('/setsecurity', (req, res) => {
-    return res.render('setSecurityQuestion', {pictureID:req.session.picture })
+    return res.render('setSecurityQuestion', { pictureID: req.session.picture })
 })
 
 app.get('/generate', (req, res) => {
-    return res.render('generate', {pictureID:req.session.picture })
+    return res.render('generate', { pictureID: req.session.picture })
 })
 
 // route for receiving image input from user
@@ -148,7 +149,7 @@ async function generate(difficulty, number, material) {
                 {
                     role: 'system',
                     content:
-            'You are a assistant that generates flashcards for students studying quizzes and exam.',
+                        'You are a assistant that generates flashcards for students studying quizzes and exam.',
                 },
                 {
                     role: 'user',
@@ -182,22 +183,97 @@ app.post('/api/generate', async (req, res) => {
     }
 })
 
+async function convertImageToBase64Jpg(base64Input) {
+    try {
+        // Decode the base64 input image to a buffer
+        const inputBuffer = Buffer.from(base64Input, "base64");
+
+        // Use sharp to convert the input buffer to JPG format and get the base64 string
+        const base64Output = await sharp(inputBuffer)
+            .jpeg()
+            .toBuffer()
+            .then((data) => data.toString("base64"));
+
+        return base64Output;
+    } catch (error) {
+        console.error("Error converting image to base64 JPG:", error);
+        throw error;
+    }
+}
+
+async function generateWithImage(base64Jpg, difficulty, numQuestions) {
+    const imageUrl = `data:image/jpeg;base64,${base64Jpg}`;
+
+    let completion;
+    try {
+        completion = await openai.chat.completions.create({
+            messages: [
+                {
+                    role: "system",
+                    content:
+                        "You are a assistant that generates flashcards for students studying quizzes and exam.",
+                },
+                {
+                    role: "user",
+                    content: [
+                        {
+                            type: "text",
+                            text: `Given the following studying material shown in the image.
+                  Generate an array in json format that contains ${numQuestions} flashcards object elments with ${difficulty} difficulty.
+                  Question and answer of flashcards should be the keys of each flashcard object element`,
+                        },
+                        {
+                            type: "image_url",
+                            image_url: {
+                                url: imageUrl,
+                            },
+                        },
+                    ],
+                },
+            ],
+            model: "gpt-4o",
+            response_format: { type: "json_object" },
+            temperature: 1,
+            max_tokens: 4096,
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0,
+        });
+    } catch (err) {
+        console.log(`API Call fails: ${err}`);
+    }
+    const jsonResult = completion.choices[0].message.content;
+
+    return jsonResult;
+}
+
+app.post("/api/generatebyimage", async (req, res) => {
+    try {
+      const {base64Input, difficulty, numQuestions} = req.body;
+      const base64Jpg = await convertImageToBase64Jpg(base64Input);
+      const result = await generateWithImage(base64Jpg, difficulty, numQuestions);
+      return res.send(`/check/?data=${result}`)
+    } catch {
+      res.status(400).send("Fail to generate flashcards.");
+    }
+});
+
 app.get('/review/:setid', async (req, res) => {
     try {
         incrementStreak(req)
         await auditlogModel.create({ loginId: req.session.loginId, type: 'flashcard', shareId: req.params.setid })
 
         console.log('set' + req.params.setid)
-        await collectionsModel.findOneAndUpdate({ shareId: Number(req.params.setid) }, {updatedAt: new Date() })
+        await collectionsModel.findOneAndUpdate({ shareId: Number(req.params.setid) }, { updatedAt: new Date() })
         const cards = await flashcardsModel.find({ shareId: Number(req.params.setid) }).select('-_id question answer')
         if (cards.length === 0) {
-            return res.render('404', { error: 'Flashcard set does not exist!', pictureID:req.session.picture })
+            return res.render('404', { error: 'Flashcard set does not exist!', pictureID: req.session.picture })
         }
         const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: cards, id: req.params.setid, queryType: 'view', pictureID: req.session.picture }
         return res.render('review', carouselData)
     } catch (err) {
         console.log(`Failed to fetch cards for set ${req.params.setid}`)
-        res.render('404', { error: 'Flashcard set does not exist!', pictureID:req.session.picture })
+        res.render('404', { error: 'Flashcard set does not exist!', pictureID: req.session.picture })
     }
 })
 
@@ -205,7 +281,7 @@ app.get('/check', (req, res) => {
     const querydata = req.query.data
     const data = (JSON.parse(querydata)).flashcards
 
-    const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: data, queryType: 'finalize', pictureID:req.session.picture }
+    const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: data, queryType: 'finalize', pictureID: req.session.picture }
 
     return res.render('review', carouselData)
 })

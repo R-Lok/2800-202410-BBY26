@@ -178,8 +178,9 @@ function takePhoto() {
 //Attach eventListener for 'generate' button of photoModal
 document.querySelector("#generatePhotoButton").addEventListener('click', async (e) => {
     const photo = JSON.parse(sessionStorage.getItem('imageURL'))
-    console.log(photo)
     try {
+        const loader = document.querySelector('.loading-state')
+        loader.style.visibility = 'visible'
         const response = await fetch('/upload-image', {
             method: 'POST',
             headers: {
@@ -295,7 +296,6 @@ button.onclick = () => {
 // when browse
 input.addEventListener('change', function () {
     file = this.files[0];
-    console.log(file);
     dropArea.classList.add('active');
     displayFile();
 });
@@ -350,26 +350,33 @@ function sendImageApiRequest() {
     const generateBtn = document.getElementById('image-generate-button');
 
     generateBtn.addEventListener('click', async () => {
-        const base64Output = await convertFileToBase64(input.files[0]);
-        console.log(base64Output);
-    })
+        const base64Output = await convertFileToBase64(file);
 
-    axios
-        .post(
-            "/api/generatebyimage",
-            { base64Input: base64Output },
-            {
-                headers: {
-                    "Content-Type": "application/json",
+        const loader = document.querySelector('.loading-state')
+        loader.style.visibility = 'visible'
+        console.log('Start calling API')
+        axios
+            .post(
+                "/api/generatebyimage",
+                {
+                    base64Input: base64Output,
+                    difficulty: document.getElementById('selectDifficulty').value,
+                    numQuestions: document.getElementById('selectNumber').value,
                 },
-            }
-        )
-        .then((response) => {
-            console.log(response);
-        })
-        .catch((error) => {
-            console.error("There was an error!", error);
-        });
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            )
+            .then((response) => {
+                window.location.href = response.data
+                console.log('Finish calling API. ')
+            })
+            .catch((error) => {
+                console.error("There was an error!", error);
+            });
+    })
 }
 sendImageApiRequest();
 
