@@ -5,7 +5,15 @@ const usersModel = require('../models/users')
 const auditLogsModel = require('../models/auditLog')
 
 const { isConsecutiveDays } = require('../public/scripts/streak')
-const { getPrevMonthLastDate, generateDaysOfPrevMonth, generateDaysOfCurrMonth, generateDaysOfNextMonth, getMonthName } = require('../public/scripts/calendar');
+const {
+    getPrevMonthLastDate,
+    generateDaysOfPrevMonth,
+    generateDaysOfCurrMonth,
+    generateDaysOfNextMonth, 
+    getMonthName,
+    getStudiedDays,
+    getStreakDays
+} = require('../public/scripts/calendar');
 
 router.get('/', async (req, res) => {
     let existingActivity
@@ -25,19 +33,12 @@ router.get('/', async (req, res) => {
         let calendarStartDate = prevMonthLastDate.getDate() - prevMonthLastDate.getDay()
         prevMonthLastDate.setDate(calendarStartDate)
     
-        let result = await auditLogsModel.find({ loginId: req.session.loginId, createdAt: { "$gte": prevMonthLastDate } })
+        let auditLogResult = await auditLogsModel.find({ loginId: req.session.loginId, createdAt: { "$gte": prevMonthLastDate } })
+        studiedDays = getStudiedDays(auditLogResult)
         
-        // makes and uses a set to store unique dates
-        let studiedDaysSet = new Set(result.map(log => {
-            let date = new Date(log.createdAt)
-            return `${date.getMonth()}${date.getDate()}`
-        }));
-
-        // gets array back from the set
-        studiedDays = Array.from(studiedDaysSet)
-
         let user = await usersModel.findOne({ loginId: req.session.loginId })
         days = user.streak
+        getStreakDays(date, days)
 
         let lastActivity = user.lastActivity
         

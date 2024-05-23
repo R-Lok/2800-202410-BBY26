@@ -15,6 +15,26 @@ const months = [
 
 const totalWeekDays = 7;
 
+function getStudiedDays(auditLogResult) {
+    // makes and uses a set to store unique dates
+    let studiedDaysSet = new Set(auditLogResult.map(log => {
+        let date = new Date(log.createdAt)
+        return `${date.getMonth()}${date.getDate()}`
+    }));
+    // returns array back from the set
+    return Array.from(studiedDaysSet)
+}
+
+async function getStreakDays(date, streak) {
+    let streakDays = []
+    console.log(`original date: ${date}`)
+    for (let i = 0; i < streak; i++) {
+        date.setDate(date.getDate() - i)
+        streakDays[i] = `${date.getMonth()}${date.getDate()}`
+    }
+    return streakDays
+}
+
 function getMonthName(date) {
     return months[date.getMonth()]
 }
@@ -78,4 +98,12 @@ function generateDaysOfNextMonth(date) {
     return html;
 }
 
-module.exports = { getPrevMonthLastDate, generateDaysOfPrevMonth, generateDaysOfCurrMonth, generateDaysOfNextMonth, getMonthName };
+module.exports = {
+    getPrevMonthLastDate, 
+    generateDaysOfPrevMonth, 
+    generateDaysOfCurrMonth, 
+    generateDaysOfNextMonth, 
+    getMonthName, 
+    getStudiedDays, 
+    getStreakDays 
+};
