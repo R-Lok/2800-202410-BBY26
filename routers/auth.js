@@ -17,7 +17,7 @@ const hasSecurityQuestion = async (req, res, next) => {
     if (user.security === true) {
         return next()
     } else {
-        return res.redirect('/setSecurityQuestion')
+        return res.redirect('/securityQuestions/setup')
     }
 }
 
@@ -86,7 +86,7 @@ router.post('/register', async (req, res, next) => {
         const user = await usersModel.create(userObject)
         user.email = email
         authorization(req, user)
-        return res.redirect('/setSecurityQuestion')
+        return res.redirect('/securityQuestions/setup')
     } catch (error) {
         next(error)
     }

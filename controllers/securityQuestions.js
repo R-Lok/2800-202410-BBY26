@@ -3,6 +3,10 @@ const { sqService } = require('../services/index')
 const { CustomError, tools } = require('../utilities')
 
 
+const sqGETSetup = (req, res) => {
+    return res.render('setSecurityQuestion', { pictureID: req.session.picture || '' })
+}
+
 const sqGET = async (req, res, next) => {
     try {
         const result = await sqService.sqGET(req.query)
@@ -117,6 +121,7 @@ const sqPOSTCheck = async (req, res, next) => {
 }
 
 module.exports = {
+    sqGETSetup,
     sqGET,
     sqPOST,
     sqPUT,
