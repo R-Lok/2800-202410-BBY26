@@ -15,6 +15,40 @@ const months = [
 
 const totalWeekDays = 7;
 
+function isToday(timestamp) {
+    timestampDate = new Date(timestamp.getFullYear(), timestamp.getMonth(), timestamp.getDate())
+    today = new Date()
+    today.setHours(0, 0, 0, 0)
+    return today.getTime() === timestampDate.getTime()
+}
+
+function getStudiedDays(auditLogResult) {
+    // makes and uses a set to store unique dates
+    let studiedDaysSet = new Set(auditLogResult.map(log => {
+        let date = new Date(log.createdAt)
+        return `${date.getMonth()}${date.getDate()}`
+    }));
+    // returns array back from the set
+    return Array.from(studiedDaysSet)
+}
+
+function getStreakDays(timestamp, date, streak) {
+    if (streak == 0) return;
+    if (timestamp == null) return;
+    let streakDays = []
+    let i = isToday(timestamp) ? 0 : 1
+    if (i == 1 && streak == 1) {
+        streak++
+    }
+    let d = new Date(date)
+    for (i; i < streak; i++) {
+        d.setDate(date.getDate() - i)
+        streakDays[i] = `${d.getMonth()}${d.getDate()}`
+    }
+
+    return streakDays
+}
+
 function getMonthName(date) {
     return months[date.getMonth()]
 }
@@ -78,4 +112,12 @@ function generateDaysOfNextMonth(date) {
     return html;
 }
 
-module.exports = { getPrevMonthLastDate, generateDaysOfPrevMonth, generateDaysOfCurrMonth, generateDaysOfNextMonth, getMonthName };
+module.exports = {
+    getPrevMonthLastDate, 
+    generateDaysOfPrevMonth, 
+    generateDaysOfCurrMonth, 
+    generateDaysOfNextMonth, 
+    getMonthName, 
+    getStudiedDays, 
+    getStreakDays 
+};
