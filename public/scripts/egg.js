@@ -1,18 +1,27 @@
 const eggPic = document.getElementById('eggPic')
 const studyGen = document.getElementById('studyGen')
 const spans = document.getElementsByTagName('span')
-const audio = document.getElementById('pickaxeAudio')
 
 eggPic.addEventListener('click', () => {
     if (eggPic.src.includes('/images/depresso2.gif')) {
-        location.reload()
+        eggPic.src = '/images/depresso1.gif'
+        studyGen.classList.add('eggText')
+        studyGen.classList.remove('eggText2')
+        for (let i = 1; i < spans.length; i++) {
+            if ((i % 2) === 0) {
+                spans[i].classList.remove('nameCard3')
+            } else {
+                spans[i].classList.remove('nameCard2')
+            }
+            spans[i].classList.add('nameCard')
+            spans[i].classList.add('name' + i)
+        }
     } else {
         eggPic.src = '/images/depresso2.gif'
         studyGen.classList.remove('eggText')
         studyGen.classList.add('eggText2')
-        audio.muted = true
 
-        for (let i = 0; i < spans.length; i++) {
+        for (let i = 1; i < spans.length; i++) {
             if ((i % 2) === 0) {
                 spans[i].classList.add('nameCard3')
             } else {
@@ -24,19 +33,3 @@ eggPic.addEventListener('click', () => {
     }
 })
 
-function initialPlayAudio() {
-    const delay = 1450
-    const delay2 = 1900
-
-    setTimeout(() => {
-        audio.play()
-    }, delay)
-
-    audio.addEventListener('ended', () => {
-        setTimeout(() => {
-            audio.play()
-        }, delay2)
-    })
-}
-
-window.onload = initialPlayAudio
