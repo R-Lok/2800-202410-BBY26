@@ -5,14 +5,14 @@ const MongoStore = require('connect-mongo')
 // const helmet = require('helmet')
 const compression = require('compression')
 const userRouter = require('./routers/users')
-const { router: authRouter, isAuth } = require('./routers/auth')
+const { router: authRouter, isAuth, hasSecurityQuestion } = require('./routers/auth')
 const settingRouter = require('./routers/settings')
 const collectionsModel = require('./models/collections')
 const OpenAI = require('openai')
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 })
-const {router: securityQuestionsRouter, hasSecurityQuestion} = require('./routers/securityQuestions')
+const securityQuestionsRouter = require('./routers/securityQuestions')
 const flashcardsModel = require('./models/flashcards')
 const collectionRouter = require('./routers/collection')
 const homeRouter = require('./routers/home')
@@ -84,15 +84,11 @@ app.get('/', (req, res) => {
 })
 
 app.get('/setSecurityQuestion', (req, res) => {
-    return res.render('setSecurityQuestion', {pictureID:req.session.picture })
-})
-
-app.get('/setsecurity', (req, res) => {
-    return res.render('setSecurityQuestion', {pictureID:req.session.picture })
+    return res.render('setSecurityQuestion', { pictureID: req.session.picture })
 })
 
 app.get('/generate', (req, res) => {
-    return res.render('generate', {pictureID:req.session.picture })
+    return res.render('generate', { pictureID: req.session.picture })
 })
 
 // route for receiving image input from user
@@ -100,7 +96,7 @@ app.post('/upload-image', async (req, res) => {
     const image = req.body.image
     const difficulty = req.body.difficulty
     const numQuestions = req.body.numQuestions
-    //base64 string is in req.body.image
+    // base64 string is in req.body.image
     try {
         const result = await generateImage(difficulty, numQuestions, image)
         res.status(200)
@@ -115,7 +111,7 @@ app.post('/upload-image', async (req, res) => {
 async function generateImage(difficulty, numQuestions, image) {
     try {
         const response = await openai.chat.completions.create({
-            model: "gpt-4o",
+            model: 'gpt-4o',
             response_format: { type: 'json_object' },
             temperature: 1,
             max_tokens: 4096,
@@ -124,14 +120,14 @@ async function generateImage(difficulty, numQuestions, image) {
             presence_penalty: 0,
             messages: [
                 {
-                    role: 'system', content: 'You are a assistant that generate flashcards for students studying quizzes and exams'
+                    role: 'system', content: 'You are a assistant that generate flashcards for students studying quizzes and exams',
                 },
                 {
                     role: 'user',
                     content: [{
                         type: 'text', text: `Given the provided image, Generate an array in json format that contains ${numQuestions} flashcards object elments with ${difficulty} difficulty.
-                Question and answer of flashcards should be the keys of each flashcard object element`}, { type: "image_url", "image_url": { "url": image } }]
-                }
+                Question and answer of flashcards should be the keys of each flashcard object element` }, { 'type': 'image_url', 'image_url': { 'url': image } }],
+                },
             ],
         })
         return response.choices[0].message.content
@@ -188,16 +184,16 @@ app.get('/review/:setid', async (req, res) => {
         await auditlogModel.create({ loginId: req.session.loginId, type: 'flashcard', shareId: req.params.setid })
 
         console.log('set' + req.params.setid)
-        await collectionsModel.findOneAndUpdate({ shareId: Number(req.params.setid) }, {updatedAt: new Date() })
+        await collectionsModel.findOneAndUpdate({ shareId: Number(req.params.setid) }, { updatedAt: new Date() })
         const cards = await flashcardsModel.find({ shareId: Number(req.params.setid) }).select('-_id question answer')
         if (cards.length === 0) {
-            return res.render('404', { error: 'Flashcard set does not exist!', pictureID:req.session.picture })
+            return res.render('404', { error: 'Flashcard set does not exist!', pictureID: req.session.picture })
         }
         const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: cards, id: req.params.setid, queryType: 'view', pictureID: req.session.picture }
         return res.render('review', carouselData)
     } catch (err) {
         console.log(`Failed to fetch cards for set ${req.params.setid}`)
-        res.render('404', { error: 'Flashcard set does not exist!', pictureID:req.session.picture })
+        res.render('404', { error: 'Flashcard set does not exist!', pictureID: req.session.picture })
     }
 })
 
@@ -205,7 +201,7 @@ app.get('/check', (req, res) => {
     const querydata = req.query.data
     const data = (JSON.parse(querydata)).flashcards
 
-    const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: data, queryType: 'finalize', pictureID:req.session.picture }
+    const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: data, queryType: 'finalize', pictureID: req.session.picture }
 
     return res.render('review', carouselData)
 })
@@ -256,7 +252,7 @@ app.post('/submitcards', async (req, res) => {
 })
 
 app.get('/egg', (req, res) => {
-    return res.render('egg', {pictureID:req.session.picture})
+    return res.render('egg', { pictureID: req.session.picture })
 })
 
 app.get('*', (req, res) => {
