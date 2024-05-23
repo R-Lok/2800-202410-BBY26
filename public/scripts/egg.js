@@ -25,8 +25,8 @@ eggPic.addEventListener('click', () => {
 })
 
 function initialPlayAudio() {
-    const delay = 1650
-    const delay2 = 1950
+    const delay = 1450
+    const delay2 = 1900
 
     setTimeout(() => {
         audio.play()
