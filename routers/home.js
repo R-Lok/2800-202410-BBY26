@@ -99,7 +99,11 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/shareCode', (req, res) => {
-    res.redirect(`/review/${req.body.shareId}`)
+    if(req.body.shareId.toLowerCase() == 'egg'){
+        res.redirect('/egg')
+    } else {
+        res.redirect(`/review/${req.body.shareId}`)
+    }
 })
 
 module.exports = router
