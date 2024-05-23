@@ -7,39 +7,47 @@
     --main-color6:#8714c9;
 }
 
-img:hover{
-    content:url('/images/depresso2.gif');
-}
-
 body {
     background-color: #000;
-  }
+}
+
+#eggPic{
+    width:220px;
+    height:300px;
+}
   
-  #studyGen {
+  
+.eggText {
     font-size:4rem;
     font-family: 'Bad Script', cursive;
     color: #111;
     animation: glowing 3.10s linear infinite;
     animation-delay: 1.65s;
-  }
+}
   
   @keyframes glowing {
     0%, 100% {
       color: #fff;
-      filter: blur(2px);
-      text-shadow: 0 0 10px #00b3ff,
-                   0 0 20px #00b3ff,
-                   0 0 40px #00b3ff,
-                   0 0 80px #00b3ff,
-                   0 0 120px #00b3ff,
-                   0 0 200px #00b3ff,
-                   0 0 300px #00b3ff,
-                   0 0 400px #00b3ff;
-    } 5%, 95% {
+      filter: blur(1px);
+      text-shadow: 0 0 5px #9984D4,
+                   0 0 10px #9984D4,
+                   0 0 20px #9984D4;
+    }
+    5%, 95% {
       color: #111;
       text-shadow: none;
-      filter: blur(0px);
+      filter: none;
     }
+  }
+
+  .eggText2 {
+    font-size:4rem;
+    font-family: 'Bad Script', cursive;
+    color: #fff;
+      filter: blur(1px);
+      text-shadow: 0 0 5px #9984D4,
+                   0 0 10px #9984D4,
+                   0 0 20px #9984D4;
   }
 
   #nameContainer{
@@ -50,34 +58,64 @@ body {
     position:absolute;
   }
 
-  #name1 {
-    transform: translate(-80px, 0px) rotate(35deg);
-    animation: move1 15.75s linear 1.65s infinite;
+  .name1 {
+    transform: translate(-100px, 0px) rotate(35deg);
+    animation: move1 15.5s linear 1.65s infinite;
     visibility:hidden;
   }
 
-  #name2 {
-    transform: translate(-40px, 0px) rotate(15deg);
-    animation: move2 15.75s linear 4.8s infinite;
+  .name2 {
+    transform: translate(-50px, 0px) rotate(15deg);
+    animation: move2 15.5s linear 4.75s infinite;
     visibility:hidden;
   }
 
-  #name3 {
-    animation: move3 15.75s linear 7.95s infinite;
+  .name3 {
+    animation: move3 15.5s linear 7.85s infinite;
+    transform: translate(-10px, 0px) rotate(0deg);
     visibility:hidden;
   }
 
-  #name4 {
-    transform: translate(40px, 0px) rotate(-15deg);
-    animation: move4 15.75s linear 11.1s infinite;
+  .name4 {
+    transform: translate(30px, 0px) rotate(-15deg);
+    animation: move4 15.5s linear 10.95s infinite;
     visibility:hidden;
   }
 
-  #name5{
+  .name5{
     transform: translate(80px, 0px) rotate(-35deg);
-    animation: move5 15.75s linear 14.25s infinite;
+    animation: move5 15.5s linear 14.05s infinite;
     visibility:hidden;
   }
+
+  .nameCard2 {
+    animation: nextMove 2s linear infinite;
+  }
+
+  .nameCard3 {
+    animation: nextMove 2s linear -1s infinite;
+  }
+
+  .color1 {
+    color:#676ed1;
+  }
+
+  .color2 {
+    color:#dbbf71;
+  }
+
+  .color3 {
+    color:#b1ca56;
+  }
+
+  .color4 {
+    color:#d6528b;
+  }
+
+  .color5 {
+    color:#a075de;
+  }
+
 
   @keyframes move1 {
     0% {
@@ -86,12 +124,11 @@ body {
 
     10% {
         visibility:visible;
-        color:white;
         transform: translate(-130px, 50px) rotate(35deg);
     }
 
     20%{
-        transform: translate(-180px, 100px) rotate(35deg);
+        transform: translate(-160px, 100px) rotate(35deg);
         color:black;
         visibility: hidden;
     }
@@ -104,12 +141,11 @@ body {
 
     10% {
         visibility:visible;
-        color:white;
-        transform: translate(-80px, 40px) rotate(15deg);
+        transform: translate(-70px, 50px) rotate(15deg);
     }
 
-    20%{
-        transform: translate(-120px, 80px) rotate(15deg);
+    18%{
+        transform: translate(-90px, 100px) rotate(15deg);
         color:black;
         visibility: hidden;
     }
@@ -122,12 +158,11 @@ body {
 
     10% {
         visibility:visible;
-        color:white;
-        transform: translate(0px, 40px);
+        transform: translate(-10px, 50px);
     }
 
-    20%{
-        transform: translate(0px, 80px);
+    18%{
+        transform: translate(-10px, 100px);
         color:black;
         visibility: hidden;
     }
@@ -140,12 +175,11 @@ body {
 
     10% {
         visibility:visible;
-        color:white;
-        transform: translate(80px, 40px) rotate(-15deg);
+        transform: translate(50px, 50px) rotate(-15deg);
     }
 
-    20%{
-        transform: translate(120px, 80px) rotate(-15deg);
+    18%{
+        transform: translate(70px, 100px) rotate(-15deg);
         color:black;
         visibility: hidden;
     }
@@ -158,13 +192,26 @@ body {
 
     10% {
         visibility:visible;
-        color:white;
-        transform: translate(130px, 40px) rotate(-35deg);
+        transform: translate(110px, 50px) rotate(-35deg);
     }
 
-    20%{
-        transform: translate(180px, 80px) rotate(-35deg);
+    18%{
+        transform: translate(140px, 100px) rotate(-35deg);
         color:black;
         visibility: hidden;
+    }
+  }
+
+  @keyframes nextMove {
+    0% {
+        transform:translateY(40px);
+    }
+
+    50% {
+        transform:translateY(80px);
+    }
+
+    100% {
+        transform:translateY(40px);
     }
   }
