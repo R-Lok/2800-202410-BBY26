@@ -3,9 +3,8 @@
         <ul>
         <!-- <li class="prev">&#10094;</li> -->
         <!-- <li class="next">&#10095;</li> -->
-        <!-- <li>May <span style="font-size:18px">2024</span></li> -->
-        <%- include ('generateMonthYear') %>
-        </ul>
+        <li><%- monthName %> <span style="font-size:18px"><%- year %></span></li>
+    </ul>
     </div>
     
     <ul class="weekdays">
@@ -19,6 +18,8 @@
     </ul>
     
     <ul class="days">
-        <%- include ('generateDays') %>
+        <%- prevMonthDays %>
+        <%- currMonthDays %>
+        <%- nextMonthDays %>
     </ul>
 </div>

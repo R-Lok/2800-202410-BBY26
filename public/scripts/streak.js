@@ -1,6 +1,22 @@
 // require('dotenv').config({ path: `${process.cwd()}/.env.${process.env.NODE_ENV}` })
 const usersModel = require('../../models/users')
-const { isConsecutiveDays } = require('./isConsecutiveDays')
+
+function isConsecutiveDays(lastDate, currDate) {
+    // console.log(`\nisConsecutiveDays\n`)
+
+    let d = new Date(lastDate.getFullYear(), lastDate.getMonth(), lastDate.getDate())
+    let d2 = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate())
+    // console.log(`lastDate: ${d}`)
+    // console.log(`currDate: ${d2}`)
+
+    // console.log(`${d.getTime()} ${d2.getTime()}`)
+
+    let msDifferenceBetweenDays = Math.abs(d.getTime() - d2.getTime())
+    let dayDifference = msDifferenceBetweenDays / (1000 * 60 * 60 * 24) // converting millisecond difference between dates to days
+
+    // console.log(`${dayDifference}`)
+    return dayDifference
+}
 
 const incrementStreak = async(req) => {
     try {
@@ -9,7 +25,7 @@ const incrementStreak = async(req) => {
         let user = await usersModel.findOne({ loginId: req.session.loginId })
         let date = new Date()
         // date.setMonth(5)
-        // date.setDate(10) 
+        // date.setDate(25) 
         // console.log(`after setdate ${date.getDate()}`)
         
         let lastActivity = user.lastActivity;
@@ -46,10 +62,10 @@ const incrementStreak = async(req) => {
         }
         await user.save();
     } catch (err) {
-        console.log(`Error found in incrementStreak.js: ${err}`);
+        console.log(`Error found: ${err}`);
         return;
     }
     return;
 }
 
-module.exports = { incrementStreak }
+module.exports = { incrementStreak, isConsecutiveDays }
