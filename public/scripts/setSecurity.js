@@ -1,7 +1,7 @@
 function loadSecurityQuestions() {
     document.addEventListener('DOMContentLoaded', async () => {
         await axios
-            .get('securityQuestions', {
+            .get('/securityQuestions', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ async function submitAnswers() {
         const answer = document.getElementById('securityAns')
 
         await axios
-            .post('securityQuestions', {
+            .post('/securityQuestions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

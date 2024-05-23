@@ -83,10 +83,6 @@ app.get('/', (req, res) => {
     return req.session.email ? res.redirect('/home') : res.render('landing')
 })
 
-app.get('/setSecurityQuestion', (req, res) => {
-    return res.render('setSecurityQuestion', { pictureID: req.session.picture })
-})
-
 app.get('/generate', (req, res) => {
     return res.render('generate', { pictureID: req.session.picture })
 })
