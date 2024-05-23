@@ -90,11 +90,11 @@ body {
   }
 
   .nameCard2 {
-    animation: nextMove 2s linear infinite;
+    animation: nextMove 2s ease-in-out infinite;
   }
 
   .nameCard3 {
-    animation: nextMove 2s linear -1s infinite;
+    animation: nextMove 2s ease-in-out -1s infinite;
   }
 
   .color1 {
