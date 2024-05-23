@@ -1,5 +1,5 @@
 /* Upload Study Material Animation */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const selectDifficulty = document.getElementById('selectDifficulty')
     const selectNumber = document.getElementById('selectNumber')
     const enterTextButton = document.getElementById('enterTextButton')
@@ -54,6 +54,12 @@ function sendApiRequest() {
 }
 sendApiRequest()
 
+const imageTab = document.querySelector("#image-tab")
+imageTab.addEventListener('click', (e) => {
+    const submitMaterialsBtn = document.querySelector("#enterTextButton")
+    submitMaterialsBtn.setAttribute("data-bs-target", '#imageModal')
+})
+
 const photoTab = document.querySelector("#photo-tab")
 photoTab.addEventListener('click', (e) => {
     const submitMaterialsBtn = document.querySelector("#enterTextButton")
@@ -67,7 +73,7 @@ const textTab = document.querySelector("#text-tab").addEventListener('click', (e
 
 document.querySelector('#enterTextButton').addEventListener('click', (e) => {
     const uploadMaterialButton = document.querySelector('#enterTextButton')
-    
+
     if (uploadMaterialButton.getAttribute('data-bs-target') === '#photoModal') {
         getCamera()
     }
@@ -108,7 +114,7 @@ async function getCamera() {
         snapBtn.classList.toggle('hidden')
     }
 
-    if(isLandscape()) {
+    if (isLandscape()) {
         video.style.height = '540px'
         video.style.width = '960px'
         frame.style.height = '540px'
@@ -130,14 +136,14 @@ async function getCamera() {
         })
         let video = document.getElementById('cam')
         video.srcObject = mediaStream
-        video.onloadedmetadata = (event) => {video.play()}
+        video.onloadedmetadata = (event) => { video.play() }
     } catch (err) {
         console.log(err)
     }
 }
 
 async function turnOffCamera() {
-    if(mediaStream) {
+    if (mediaStream) {
         let tracks = mediaStream.getTracks()
         tracks.forEach(track => track.stop())
 
@@ -212,3 +218,159 @@ observer.observe(targetNode, config)
 function isLandscape() {
     return screen.width > screen.height
 }
+
+/* ---------
+
+Image File upload 
+
+-------- */
+const dropArea = document.querySelector('.drag-area');
+const dragText = document.querySelector('.header');
+let button = dropArea.querySelector('.button');
+let input = dropArea.querySelector('input');
+let file;
+
+// when file is inside drag area
+dropArea.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    dropArea.classList.add('active');
+    dragText.textContent = 'Release to Upload';
+    // console.log('File is inside the drag area');
+});
+
+// when file leave the drag area
+dropArea.addEventListener('dragleave', () => {
+    dropArea.classList.remove('active');
+    // console.log('File left the drag area');
+    dragText.textContent = 'Drag & Drop';
+});
+
+// when file is dropped
+dropArea.addEventListener('drop', (event) => {
+    event.preventDefault();
+
+    file = event.dataTransfer.files[0]; // grab single file even of user selects multiple files
+    displayFile();
+});
+
+function displayFile() {
+    let fileType = file.type;
+
+    let validExtensions = ['image/jpeg', 'image/jpg', 'image/png', 'image/heic', 'image/heif'];
+
+    if (validExtensions.includes(fileType)) {
+        // console.log('This is an image file');
+        let fileReader = new FileReader();
+
+        fileReader.onload = async () => {
+            let fileURL = fileReader.result;
+
+            if (fileType === 'image/heic' || fileType === 'image/heif') {
+                try {
+                    let blob = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.5 });
+                    fileURL = URL.createObjectURL(blob);
+                } catch (error) {
+                    console.error('Error converting HEIC to JPEG:', error);
+                    alert('Error converting HEIC to JPEG');
+                    dropArea.classList.remove('active');
+                    return;
+                }
+            }
+            let imgTag = `<img src="${fileURL}" alt="">`;
+            dropArea.innerHTML = imgTag;
+            document.getElementById('preview-message').style.visibility = "visible";
+            document.getElementById('image-modal-footer').style.visibility = "visible";
+        };
+        fileReader.readAsDataURL(file);
+    } else {
+        alert('This is not an Image File');
+        dropArea.classList.remove('active');
+    }
+}
+
+button.onclick = () => {
+    input.click();
+};
+
+// when browse
+input.addEventListener('change', function () {
+    file = this.files[0];
+    console.log(file);
+    dropArea.classList.add('active');
+    displayFile();
+});
+
+document.getElementById('reset-image').addEventListener('click', () => {
+    dropArea.classList.remove('active');
+    dropArea.innerHTML = `
+    <div class="icon">
+        <i class="fas fa-images"></i>
+    </div>
+    <span class="header">Drag & Drop</span>
+    <span class="header">or <span class="button">browse</span></span>
+    <input type="file" hidden />
+    <span class="support">Supports: JPEG, JPG, PNG, HEIC, HEIF</span>
+    `
+
+    // Reattach event listeners after resetting the drop area content
+    button = dropArea.querySelector('.button');
+    input = dropArea.querySelector('input');
+
+    button.onclick = () => {
+        input.click();
+    };
+
+    input.addEventListener('change', function () {
+        file = this.files[0];
+        dropArea.classList.add('active');
+        displayFile();
+    });
+})
+
+async function convertFileToBase64(file) {
+    if (!file) {
+        console.log("Please select an image of study material first.");
+    }
+
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const base64Output = e.target.result.split(",")[1];
+            resolve(base64Output);
+        };
+        reader.onerror = (e) => {
+            console.log("Error reading the image file");
+            reject(e);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function sendImageApiRequest() {
+    const generateBtn = document.getElementById('image-generate-button');
+
+    generateBtn.addEventListener('click', async () => {
+        const base64Output = await convertFileToBase64(input.files[0]);
+        console.log(base64Output);
+    })
+
+    axios
+        .post(
+            "/api/generatebyimage",
+            { base64Input: base64Output },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        )
+        .then((response) => {
+            console.log(response);
+        })
+        .catch((error) => {
+            console.error("There was an error!", error);
+        });
+}
+sendImageApiRequest();
+
+
