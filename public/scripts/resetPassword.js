@@ -77,7 +77,7 @@ async function resetPassword() {
         password: document.getElementById('newPassword').value,
         confirmPassword: document.getElementById('confirmPassword').value,
     }).then((res) => {
-        if (res.data.result.localeCompare('ok') === 0) {
+        if (res.status === 200) {
             displayLoader()
             setTimeout(() => {
                 switchStep(4)
