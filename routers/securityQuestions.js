@@ -4,6 +4,8 @@ const { isAuth, isAdmin, noSecurityQuestion } = require('../routers/auth')
 const { sqController } = require('../controllers/index')
 
 
+router.get('/setup', sqController.sqGETSetup)
+
 router.get('/', isAuth, sqController.sqGET)
 
 router.post('/', isAuth, noSecurityQuestion, sqController.sqPOST)

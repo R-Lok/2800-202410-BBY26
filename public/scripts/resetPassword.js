@@ -1,5 +1,5 @@
 async function getQuestion(email) {
-    axios.get(`securityQuestions/${email}`)
+    axios.get(`/securityQuestions/${email}`)
         .then((res) => {
             console.log(res)
 
@@ -39,7 +39,7 @@ function setStepTwoQuestion(result) {
 }
 
 async function checkAnswer() {
-    await axios.post('securityQuestions/checkAnswer', {
+    await axios.post('/securityQuestions/checkAnswer', {
         headers: {
             'Content-Type': 'application/json',
         },
