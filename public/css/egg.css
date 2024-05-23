@@ -60,7 +60,7 @@ body {
   }
 
   .name1 {
-    transform: translate(-100px, 0px) rotate(35deg);
+    transform: translate(-80px, 0px) rotate(35deg);
     animation: move1 15.5s linear 1.65s infinite;
     visibility:hidden;
   }
@@ -84,7 +84,7 @@ body {
   }
 
   .name5{
-    transform: translate(80px, 0px) rotate(-35deg);
+    transform: translate(60px, 0px) rotate(-35deg);
     animation: move5 15.5s linear 14.05s infinite;
     visibility:hidden;
   }
@@ -120,18 +120,19 @@ body {
 
   @keyframes move1 {
     0% {
-        visibility: hidden;
+        visibility:visible;
     }
 
     10% {
         visibility:visible;
-        transform: translate(-130px, 50px) rotate(35deg);
+        transform: translate(-110px, 50px) rotate(35deg);
     }
 
     20%{
-        transform: translate(-160px, 100px) rotate(35deg);
+        transform: translate(-140px, 100px) rotate(35deg);
         color:black;
-        visibility: hidden;
+        opacity: 0;
+        visibility:hidden;
     }
   }
 
@@ -149,6 +150,7 @@ body {
         transform: translate(-90px, 100px) rotate(15deg);
         color:black;
         visibility: hidden;
+        opacity: 0;
     }
   }
 
@@ -166,6 +168,7 @@ body {
         transform: translate(-10px, 100px);
         color:black;
         visibility: hidden;
+        opacity: 0;
     }
   }
 
@@ -183,6 +186,7 @@ body {
         transform: translate(70px, 100px) rotate(-15deg);
         color:black;
         visibility: hidden;
+        opacity: 0;
     }
   }
 
@@ -193,13 +197,14 @@ body {
 
     10% {
         visibility:visible;
-        transform: translate(110px, 50px) rotate(-35deg);
+        transform: translate(90px, 50px) rotate(-35deg);
     }
 
     18%{
-        transform: translate(140px, 100px) rotate(-35deg);
+        transform: translate(120px, 100px) rotate(-35deg);
         color:black;
         visibility: hidden;
+        opacity: 0;
     }
   }
 
@@ -215,4 +220,18 @@ body {
     100% {
         transform:translateY(40px);
     }
+  }
+
+  canvas {
+    overflow-y: hidden;
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    position:absolute;
+    z-index: -1;
+  }
+
+  img.headshot {
+    width:50px;
+    height:50px;
   }
