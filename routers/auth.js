@@ -5,12 +5,30 @@ const saltRounds = 12
 const router = new express.Router()
 const { CustomError, encrypt, decrypt, hash } = require('../utilities/index')
 const Joi = require('joi')
-const SecurityQuestionsModel = require('../models/securityQuestions')
-const userAnswersModel = require('../models/userAnswers')
 
 
 const isAuth = (req, res, next) => {
     return req.session.email ? next() : res.redirect('/login')
+}
+
+const hasSecurityQuestion = async (req, res, next) => {
+    const { userId } = req.session
+    const user = await usersModel.findById(userId, { security: 1 }).lean()
+    if (user.security === true) {
+        return next()
+    } else {
+        return res.redirect('/setSecurityQuestion')
+    }
+}
+
+const noSecurityQuestion = async (req, res, next) => {
+    const { userId } = req.session
+    const user = await usersModel.findById(userId, { security: 1 }).lean()
+    if (user.security === false) {
+        return next()
+    } else {
+        return next(new CustomError('400', 'Already have security question.'))
+    }
 }
 
 const isAdmin = (req, res, next) => {
@@ -32,7 +50,7 @@ const authorization = (req, user) => {
 }
 
 router.get('/register', (req, res) => {
-    return res.render('register', {pictureID: req.session.picture})
+    return res.render('register', { pictureID: req.session.picture })
 })
 
 router.post('/register', async (req, res, next) => {
@@ -68,14 +86,14 @@ router.post('/register', async (req, res, next) => {
         const user = await usersModel.create(userObject)
         user.email = email
         authorization(req, user)
-        return res.redirect('/setsecurity')
+        return res.redirect('/setSecurityQuestion')
     } catch (error) {
         next(error)
     }
 })
 
 router.get('/login', (req, res) => {
-    return res.render('login', {pictureID: req.session.picture})
+    return res.render('login', { pictureID: req.session.picture })
 })
 
 router.post('/login', async (req, res, next) => {
@@ -113,59 +131,6 @@ router.get('/logout', (req, res) => {
     return res.redirect('/')
 })
 
-router.post('/getQuestion', async (req, res, next) => {
-    try {
-        const { email } = req.body
-        console.log(email)
-        const emailHash = await hash(email)
-        const user = await usersModel
-            .findOne({ emailHash: emailHash }, { _id: 1 })
-            .lean()
-        if (!user) {
-            throw new CustomError('404', 'User not found.')
-        }
-        const result = await userAnswersModel
-            .findOne({ userId: user._id }, { _id: 0, questionId: 1, userId: 1 })
-            .lean()
-        if (!result) {
-            throw new CustomError('422', 'You don\'t have a security question yet!')
-        }
-        const question = await SecurityQuestionsModel
-            .findById(result.questionId)
-            .lean()
-        result.question = question.question
-
-        return res.status(200).json({ result: result })
-    } catch (error) {
-        next(error)
-    }
-})
-
-router.post('/checkAnswer', async (req, res, next) => {
-    try {
-        // const { userId, questionId, answer } = req.body
-        const { email, questionId, answer } = req.body
-        const result = await userAnswersModel
-            .findOne({
-                email: email,
-                questionId: questionId,
-            }, { _id: 0, answer: 1 })
-            .lean()
-
-        if (!result) {
-            throw new CustomError('422', 'You don\'t have a security question yet!')
-        }
-        if (result.answer !== answer) {
-            throw new CustomError('403', 'Incorrect answer!')
-        }
-
-        return res.status(200).json({ result: 'ok' })
-    } catch (error) {
-        next(error)
-    }
-})
-
-
 router.post('/resetPassword', async (req, res, next) => {
     try {
         const { userId, password, confirmPassword } = req.body
@@ -193,4 +158,4 @@ router.post('/resetPassword', async (req, res, next) => {
     }
 })
 
-module.exports = { router, isAuth, isAdmin }
+module.exports = { router, isAuth, hasSecurityQuestion, noSecurityQuestion, isAdmin }
