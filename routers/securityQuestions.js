@@ -6,7 +6,7 @@ const Joi = require('joi')
 const SecurityQuestionsModel = require('../models/securityQuestions')
 const userAnswersModel = require('../models/userAnswers')
 const usersModel = require('../models/users')
-
+const { isAuth } = require('../routers/auth')
 
 const searcher = searcherObject({
     filter: {
@@ -17,7 +17,16 @@ const searcher = searcherObject({
     pager: searcherObject().default.pager,
 })
 
-router.get('/', async (req, res, next) => {
+const hasSecurityQuestion = async (req, res, next) => {
+    const result = await userAnswersModel
+        .findOne({
+            userId: req.session.userId,
+        })
+        .lean()
+    return result ? next() : res.redirect('/setsecurity')
+}
+
+router.get('/', isAuth, async (req, res, next) => {
     try {
         const filter = searcher.getFilter(req.query)
         const sorter = searcher.getSorter(req.query)
@@ -110,4 +119,4 @@ router.post('/updateAnswer', async (req, res, next) => {
     }
 })
 
-module.exports = router
+module.exports = {router, hasSecurityQuestion}

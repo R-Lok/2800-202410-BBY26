@@ -10,3 +10,161 @@
 img:hover{
     content:url('/images/depresso2.gif');
 }
+
+body {
+    background-color: #000;
+  }
+  
+  #studyGen {
+    font-size:4rem;
+    font-family: 'Bad Script', cursive;
+    color: #111;
+    animation: glowing 3.10s linear infinite;
+    animation-delay: 1.65s;
+  }
+  
+  @keyframes glowing {
+    0%, 100% {
+      color: #fff;
+      filter: blur(2px);
+      text-shadow: 0 0 10px #00b3ff,
+                   0 0 20px #00b3ff,
+                   0 0 40px #00b3ff,
+                   0 0 80px #00b3ff,
+                   0 0 120px #00b3ff,
+                   0 0 200px #00b3ff,
+                   0 0 300px #00b3ff,
+                   0 0 400px #00b3ff;
+    } 5%, 95% {
+      color: #111;
+      text-shadow: none;
+      filter: blur(0px);
+    }
+  }
+
+  #nameContainer{
+    position:relative;
+  }
+
+  .nameCard{
+    position:absolute;
+  }
+
+  #name1 {
+    transform: translate(-80px, 0px) rotate(35deg);
+    animation: move1 15.75s linear 1.65s infinite;
+    visibility:hidden;
+  }
+
+  #name2 {
+    transform: translate(-40px, 0px) rotate(15deg);
+    animation: move2 15.75s linear 4.8s infinite;
+    visibility:hidden;
+  }
+
+  #name3 {
+    animation: move3 15.75s linear 7.95s infinite;
+    visibility:hidden;
+  }
+
+  #name4 {
+    transform: translate(40px, 0px) rotate(-15deg);
+    animation: move4 15.75s linear 11.1s infinite;
+    visibility:hidden;
+  }
+
+  #name5{
+    transform: translate(80px, 0px) rotate(-35deg);
+    animation: move5 15.75s linear 14.25s infinite;
+    visibility:hidden;
+  }
+
+  @keyframes move1 {
+    0% {
+        visibility: hidden;
+    }
+
+    10% {
+        visibility:visible;
+        color:white;
+        transform: translate(-130px, 50px) rotate(35deg);
+    }
+
+    20%{
+        transform: translate(-180px, 100px) rotate(35deg);
+        color:black;
+        visibility: hidden;
+    }
+  }
+
+  @keyframes move2 {
+    0% {
+        visibility: hidden;
+    }
+
+    10% {
+        visibility:visible;
+        color:white;
+        transform: translate(-80px, 40px) rotate(15deg);
+    }
+
+    20%{
+        transform: translate(-120px, 80px) rotate(15deg);
+        color:black;
+        visibility: hidden;
+    }
+  }
+
+  @keyframes move3 {
+    0% {
+        visibility: hidden;
+    }
+
+    10% {
+        visibility:visible;
+        color:white;
+        transform: translate(0px, 40px);
+    }
+
+    20%{
+        transform: translate(0px, 80px);
+        color:black;
+        visibility: hidden;
+    }
+  }
+
+  @keyframes move4 {
+    0% {
+        visibility: hidden;
+    }
+
+    10% {
+        visibility:visible;
+        color:white;
+        transform: translate(80px, 40px) rotate(-15deg);
+    }
+
+    20%{
+        transform: translate(120px, 80px) rotate(-15deg);
+        color:black;
+        visibility: hidden;
+    }
+  }
+
+  @keyframes move5 {
+    0% {
+        visibility: hidden;
+    }
+
+    10% {
+        visibility:visible;
+        color:white;
+        transform: translate(130px, 40px) rotate(-35deg);
+    }
+
+    20%{
+        transform: translate(180px, 80px) rotate(-35deg);
+        color:black;
+        visibility: hidden;
+    }
+  }
