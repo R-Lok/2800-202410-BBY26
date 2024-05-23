@@ -30,6 +30,7 @@ document.querySelectorAll(".carousel-item").forEach(ele => ele.addEventListener(
     }
 }))
 document.querySelector(".carousel-control-next").addEventListener("click", resetCards)
+document.querySelector(".carousel-control-prev").addEventListener("click", resetCards)
 
 //make each flashcard flippable
 captions.forEach(element => {
