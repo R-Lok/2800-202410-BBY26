@@ -95,17 +95,26 @@ document.querySelector('#retake').addEventListener('click', (e) => {
 let mediaStream = null
 
 async function getCamera() {
+    const frame = document.querySelector("#frame")
+    const video = document.querySelector("#cam")
+    const retake = document.querySelector("#retake")
+    const snapBtn = document.querySelector("#snap")
+    const photoModal = document.getElementById("photoModal")
+
     if (!document.querySelector('#frame').classList.contains('hidden')) {
-        const frame = document.querySelector("#frame")
-        const video = document.querySelector("#cam")
-        const retake = document.querySelector("#retake")
-        const snapBtn = document.querySelector("#snap")
         frame.classList.toggle('hidden')
         video.classList.toggle('hidden')
         retake.classList.toggle('hidden')
         snapBtn.classList.toggle('hidden')
     }
 
+    if(isLandscape()) {
+        video.style.height = '540px'
+        video.style.width = '960px'
+        frame.style.height = '540px'
+        frame.style.width = '960px'
+        photoModal.style.setProperty("--bs-modal-width", '100%')
+    }
     const generatePhotoButton = document.getElementById("generatePhotoButton")
     generatePhotoButton.disabled = true
 
@@ -148,7 +157,7 @@ function takePhoto() {
 
     const photoHeight = video.videoHeight
     const photoWidth = video.videoWidth
-    context.drawImage(video, 0, 0, 1080, 1920)
+    context.drawImage(video, 0, 0, photoWidth, photoHeight)
     const image = canvas.toDataURL('image/png')
     sessionStorage.setItem('imageURL', JSON.stringify(image))
     photoFrame.setAttribute('src', image)
@@ -162,7 +171,7 @@ function takePhoto() {
 
 //Attach eventListener for 'generate' button of photoModal
 document.querySelector("#generatePhotoButton").addEventListener('click', async (e) => {
-    const photo = sessionStorage.getItem('imageURL')
+    const photo = JSON.parse(sessionStorage.getItem('imageURL'))
     console.log(photo)
     try {
         const response = await fetch('/upload-image', {
@@ -176,8 +185,12 @@ document.querySelector("#generatePhotoButton").addEventListener('click', async (
                 numQuestions: document.getElementById("selectNumber").value
             })
         })
+        if (response.ok) {
+            const data = await response.json()
+            window.location.href = `/check?data=${data}`
+        }
     } catch (err) {
-
+        console.log(err) //implement some sort of alert that warns the user that it failed
     }
 })
 
@@ -195,3 +208,7 @@ const callback = (mutationsList, observer) => {
 
 const observer = new MutationObserver(callback)
 observer.observe(targetNode, config)
+
+function isLandscape() {
+    return screen.width > screen.height
+}
