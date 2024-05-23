@@ -26,7 +26,6 @@ function generateDaysOfCurrMonth(date) {
     let html ='';
     let i;
     for (i = 1; i <= currMonthLastDate.getDate(); i++) {
-        console.log(`here${i}`)
         if (i == date.getDate()) {
             html += `<li id="${currMonthLastDate.getMonth()}${i}"><span class="active">${i}</span></li>`;
         } else {

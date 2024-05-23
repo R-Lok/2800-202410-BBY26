@@ -88,7 +88,7 @@ app.get('/setSecurityQuestion', (req, res) => {
 })
 
 app.get('/setsecurity', (req, res) => {
-    return res.render('setSecurityQuestion')
+    return res.render('setSecurityQuestion', {pictureID:req.session.picture })
 })
 
 app.get('/generate', (req, res) => {
