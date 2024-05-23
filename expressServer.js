@@ -5,6 +5,7 @@ const MongoStore = require('connect-mongo')
 // const helmet = require('helmet')
 const compression = require('compression')
 const userRouter = require('./routers/users')
+const checkRouter = require('./routers/check')
 const { router: authRouter, isAuth, hasSecurityQuestion } = require('./routers/auth')
 const settingRouter = require('./routers/settings')
 const submitcardsRouter = require('./routers/submitcards')
@@ -65,7 +66,7 @@ app.use('/users', isAuth, hasSecurityQuestion, userRouter)
 app.use('/settings', isAuth, hasSecurityQuestion, settingRouter)
 app.use('/securityQuestions', securityQuestionsRouter)
 app.use('/collection', isAuth, hasSecurityQuestion, collectionRouter)
-app.use('/check', isAuth, hasSecurityQuestion)
+app.use('/check', isAuth, hasSecurityQuestion, checkRouter)
 app.use('/review', isAuth, hasSecurityQuestion)
 app.use('/submitcards', isAuth, hasSecurityQuestion, submitcardsRouter)
 app.use('/generate', isAuth, hasSecurityQuestion)
@@ -197,14 +198,7 @@ app.get('/review/:setid', async (req, res) => {
     }
 })
 
-app.get('/check', (req, res) => {
-    const querydata = req.query.data
-    const data = (JSON.parse(querydata)).flashcards
 
-    const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: data, queryType: 'finalize', pictureID: req.session.picture }
-
-    return res.render('review', carouselData)
-})
 
 app.get('/egg', (req, res) => {
     return res.render('egg', { pictureID: req.session.picture })
