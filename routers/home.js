@@ -20,6 +20,7 @@ router.get('/', async (req, res) => {
     let activityName
     let days
     let studiedDays
+    let streakDays
 
     let date = new Date()
     let prevMonthDays = generateDaysOfPrevMonth(date)
@@ -38,7 +39,7 @@ router.get('/', async (req, res) => {
         
         let user = await usersModel.findOne({ loginId: req.session.loginId })
         days = user.streak
-        getStreakDays(date, days)
+        streakDays = getStreakDays(date, days)
 
         let lastActivity = user.lastActivity
         
@@ -54,6 +55,7 @@ router.get('/', async (req, res) => {
                 existingActivity: existingActivity,
                 days: days, 
                 studiedDays: studiedDays,
+                streakDays: streakDays,
                 name: req.session.name,
                 email: req.session.email,
                 pictureID:req.session.picture
@@ -93,6 +95,7 @@ router.get('/', async (req, res) => {
         existingActivity: existingActivity,
         days: days,
         studiedDays: studiedDays,
+        streakDays: streakDays,
         name: req.session.name,
         email: req.session.email,
         pictureID:req.session.picture

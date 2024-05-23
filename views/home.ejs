@@ -56,18 +56,22 @@
 <%- include('template/footerBar') %>
 <script type="text/javascript">
     const studiedDays = JSON.parse('<%- JSON.stringify(studiedDays) %>');
+    const streakDays = JSON.parse('<%- JSON.stringify(streakDays) %>');
 
-    function addClass(dates) {
+    function addClass(dates, className) {
+        console.log(`className: ${className}`)
+        console.log(`streakDays: ${dates[0]}`)
         for (let i = 0; i < dates.length; i++) {
             let element = document.getElementById(dates[i]);
             if (element) {
-                element.classList.add('studied');
+                element.classList.add(className);
             }
         }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        addClass(studiedDays);
+        addClass(studiedDays, 'studied');
+        addClass(streakDays, 'streak');
     });
 </script>
 <%- include('template/footer') %>

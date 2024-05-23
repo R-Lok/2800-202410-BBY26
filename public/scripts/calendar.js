@@ -25,9 +25,8 @@ function getStudiedDays(auditLogResult) {
     return Array.from(studiedDaysSet)
 }
 
-async function getStreakDays(date, streak) {
+function getStreakDays(date, streak) {
     let streakDays = []
-    console.log(`original date: ${date}`)
     for (let i = 0; i < streak; i++) {
         date.setDate(date.getDate() - i)
         streakDays[i] = `${date.getMonth()}${date.getDate()}`

@@ -87,3 +87,7 @@ body {font-family: Verdana, sans-serif;}
 .streak {
   background-color: turquoise;
 }
+
+.studied.streak {
+  background-color: turquoise; /* make sure that streak color overrides studied */
+}
