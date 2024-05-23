@@ -2,14 +2,16 @@ const express = require('express')
 const router = new express.Router()
 const collectionsModel = require('../models/collections')
 const usersModel = require('../models/users')
+const auditLogsModel = require('../models/auditLog')
 
 const { isConsecutiveDays } = require('../public/scripts/streak')
-const { generateDaysOfPrevMonth, generateDaysOfCurrMonth, generateDaysOfNextMonth, getMonthName } = require('../public/scripts/calendar');
+const { getPrevMonthLastDate, generateDaysOfPrevMonth, generateDaysOfCurrMonth, generateDaysOfNextMonth, getMonthName } = require('../public/scripts/calendar');
 
 router.get('/', async (req, res) => {
     let existingActivity
     let activityName
     let days
+    let studiedDays
 
     let date = new Date()
     let prevMonthDays = generateDaysOfPrevMonth(date)
@@ -19,6 +21,21 @@ router.get('/', async (req, res) => {
     let year = date.getFullYear()
 
     try {
+        let prevMonthLastDate = getPrevMonthLastDate(date)
+        let calendarStartDate = prevMonthLastDate.getDate() - prevMonthLastDate.getDay()
+        prevMonthLastDate.setDate(calendarStartDate)
+    
+        let result = await auditLogsModel.find({ loginId: req.session.loginId, createdAt: { "$gte": prevMonthLastDate } })
+        
+        // makes and uses a set to store unique dates
+        let studiedDaysSet = new Set(result.map(log => {
+            let date = new Date(log.createdAt)
+            return `${date.getMonth()}${date.getDate()}`
+        }));
+
+        // gets array back from the set
+        studiedDays = Array.from(studiedDaysSet)
+
         let user = await usersModel.findOne({ loginId: req.session.loginId })
         days = user.streak
 
@@ -35,6 +52,7 @@ router.get('/', async (req, res) => {
                 activityName: activityName,
                 existingActivity: existingActivity,
                 days: days, 
+                studiedDays: studiedDays,
                 name: req.session.name,
                 email: req.session.email,
                 pictureID:req.session.picture
@@ -73,6 +91,7 @@ router.get('/', async (req, res) => {
         activityName: activityName,
         existingActivity: existingActivity,
         days: days,
+        studiedDays: studiedDays,
         name: req.session.name,
         email: req.session.email,
         pictureID:req.session.picture

@@ -52,5 +52,22 @@
         </div>
     </div>
     </div>
+
 <%- include('template/footerBar') %>
+<script type="text/javascript">
+    const studiedDays = JSON.parse('<%- JSON.stringify(studiedDays) %>');
+
+    function addStudiedClass(studiedDays) {
+        for (let i = 0; i < studiedDays.length; i++) {
+            let element = document.getElementById(studiedDays[i]);
+            if (element) {
+                element.classList.add('studied');
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        addStudiedClass(studiedDays);
+    });
+</script>
 <%- include('template/footer') %>

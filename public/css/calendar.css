@@ -79,3 +79,11 @@ body {font-family: Verdana, sans-serif;}
   background: #8714c9;
   color: white !important
 }
+
+.studied {
+  background-color: green;
+}
+
+.streak {
+  background-color: turquoise;
+}
