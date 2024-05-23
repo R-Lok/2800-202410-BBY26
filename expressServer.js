@@ -70,6 +70,7 @@ app.use('/submitcards', isAuth, hasSecurityQuestion)
 app.use('/generate', isAuth, hasSecurityQuestion)
 app.use('/api/generate', isAuth, hasSecurityQuestion)
 app.use('/home', isAuth, hasSecurityQuestion, homeRouter)
+app.use('/upload-image', isAuth)
 
 app.get('/health', (_, res) => {
     return res.status(200).send('ok')
