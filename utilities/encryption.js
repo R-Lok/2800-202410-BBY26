@@ -53,8 +53,7 @@ const hash = async (text) => {
     try {
         const data = new TextEncoder().encode(text)
         const hash = await crypto.subtle.digest('SHA-256', data)
-
-        return Buffer.from(crypto.getRandomValues(new Uint8Array(hash))).toString('base64')
+        return Buffer.from(hash).toString('base64')
     } catch (error) {
         throw new CustomError('500', error.msg)
     }
