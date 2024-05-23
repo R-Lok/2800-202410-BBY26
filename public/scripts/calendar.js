@@ -15,6 +15,13 @@ const months = [
 
 const totalWeekDays = 7;
 
+function isToday(timestamp) {
+    timestampDate = new Date(timestamp.getFullYear(), timestamp.getMonth(), timestamp.getDate())
+    today = new Date()
+    today.setHours(0, 0, 0, 0)
+    return today.getTime() === timestampDate.getTime()
+}
+
 function getStudiedDays(auditLogResult) {
     // makes and uses a set to store unique dates
     let studiedDaysSet = new Set(auditLogResult.map(log => {
@@ -25,12 +32,20 @@ function getStudiedDays(auditLogResult) {
     return Array.from(studiedDaysSet)
 }
 
-function getStreakDays(date, streak) {
+function getStreakDays(timestamp, date, streak) {
+    if (streak == 0) return;
+    if (timestamp == null) return;
     let streakDays = []
-    for (let i = 0; i < streak; i++) {
-        date.setDate(date.getDate() - i)
-        streakDays[i] = `${date.getMonth()}${date.getDate()}`
+    let i = isToday(timestamp) ? 0 : 1
+    if (i == 1 && streak == 1) {
+        streak++
     }
+    let d = new Date(date)
+    for (i; i < streak; i++) {
+        d.setDate(date.getDate() - i)
+        streakDays[i] = `${d.getMonth()}${d.getDate()}`
+    }
+
     return streakDays
 }
 

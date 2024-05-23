@@ -18,29 +18,22 @@ const {
 router.get('/', async (req, res) => {
     let existingActivity
     let activityName
-    let days
-    let studiedDays
-    let streakDays
-
     let date = new Date()
     let prevMonthDays = generateDaysOfPrevMonth(date)
     let currMonthDays = generateDaysOfCurrMonth(date)
     let nextMonthDays = generateDaysOfNextMonth(date)
     let monthName = getMonthName(date)
     let year = date.getFullYear()
+    let auditLogResult
+    let user
 
     try {
         let prevMonthLastDate = getPrevMonthLastDate(date)
         let calendarStartDate = prevMonthLastDate.getDate() - prevMonthLastDate.getDay()
         prevMonthLastDate.setDate(calendarStartDate)
     
-        let auditLogResult = await auditLogsModel.find({ loginId: req.session.loginId, createdAt: { "$gte": prevMonthLastDate } })
-        studiedDays = getStudiedDays(auditLogResult)
-        
-        let user = await usersModel.findOne({ loginId: req.session.loginId })
-        days = user.streak
-        streakDays = getStreakDays(date, days)
-
+        auditLogResult = await auditLogsModel.find({ loginId: req.session.loginId, createdAt: { "$gte": prevMonthLastDate } })        
+        user = await usersModel.findOne({ loginId: req.session.loginId })
         let lastActivity = user.lastActivity
         
         if (lastActivity == null || lastActivity.timestamp == null || lastActivity.shareId == null) {
@@ -53,9 +46,9 @@ router.get('/', async (req, res) => {
                 year: year, 
                 activityName: activityName,
                 existingActivity: existingActivity,
-                days: days, 
-                studiedDays: studiedDays,
-                streakDays: streakDays,
+                days: user.streak, 
+                studiedDays: getStudiedDays(auditLogResult),
+                streakDays: getStreakDays(user.lastActivity.timestamp, date, user.streak),
                 name: req.session.name,
                 email: req.session.email,
                 pictureID:req.session.picture
@@ -93,9 +86,9 @@ router.get('/', async (req, res) => {
         year: year,
         activityName: activityName,
         existingActivity: existingActivity,
-        days: days,
-        studiedDays: studiedDays,
-        streakDays: streakDays,
+        days: user.streak,
+        studiedDays: getStudiedDays(auditLogResult),
+        streakDays: getStreakDays(user.lastActivity.timestamp, date, user.streak),
         name: req.session.name,
         email: req.session.email,
         pictureID:req.session.picture
