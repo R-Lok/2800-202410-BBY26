@@ -5,8 +5,10 @@ const MongoStore = require('connect-mongo')
 // const helmet = require('helmet')
 const compression = require('compression')
 const userRouter = require('./routers/users')
+const checkRouter = require('./routers/check')
 const { router: authRouter, isAuth, hasSecurityQuestion } = require('./routers/auth')
 const settingRouter = require('./routers/settings')
+const submitcardsRouter = require('./routers/submitcards')
 const collectionsModel = require('./models/collections')
 const OpenAI = require('openai')
 const openai = new OpenAI({
@@ -64,13 +66,12 @@ app.use('/users', isAuth, hasSecurityQuestion, userRouter)
 app.use('/settings', isAuth, hasSecurityQuestion, settingRouter)
 app.use('/securityQuestions', securityQuestionsRouter)
 app.use('/collection', isAuth, hasSecurityQuestion, collectionRouter)
-app.use('/check', isAuth, hasSecurityQuestion)
+app.use('/check', isAuth, hasSecurityQuestion, checkRouter)
 app.use('/review', isAuth, hasSecurityQuestion)
-app.use('/submitcards', isAuth, hasSecurityQuestion)
+app.use('/submitcards', isAuth, hasSecurityQuestion, submitcardsRouter)
 app.use('/generate', isAuth, hasSecurityQuestion)
 app.use('/api/generate', isAuth, hasSecurityQuestion)
 app.use('/home', isAuth, hasSecurityQuestion, homeRouter)
-
 app.get('/health', (_, res) => {
     return res.status(200).send('ok')
 })
@@ -193,59 +194,7 @@ app.get('/review/:setid', async (req, res) => {
     }
 })
 
-app.get('/check', (req, res) => {
-    const querydata = req.query.data
-    const data = (JSON.parse(querydata)).flashcards
 
-    const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: data, queryType: 'finalize', pictureID: req.session.picture }
-
-    return res.render('review', carouselData)
-})
-
-app.post('/submitcards', async (req, res) => {
-    let lastShareCode
-    let shareId
-
-    // get the latest sharecode from collections
-    try {
-        const result = await collectionsModel.findOne().sort({ shareId: -1 }).select('shareId').exec()
-        lastShareCode = result ? result.shareId : null
-    } catch (err) {
-        console.log('Failed to fetch latestShareCode')
-    }
-
-    if (lastShareCode === null) {
-        shareId = 0
-    } else {
-        shareId = lastShareCode + 1
-    }
-
-    const inputData = JSON.parse(req.body.cards).map((card) => {
-        return {
-            shareId: `${shareId}`,
-            ...card,
-        }
-    })
-
-    const transactionSession = await mongoose.startSession()
-    transactionSession.startTransaction()
-    try {
-        await flashcardsModel.insertMany(inputData, { session: transactionSession })
-        console.log('flashcards insert ok')
-        await collectionsModel.create([{ setName: `${req.body.name}`, userId: req.session.userId, shareId: shareId }], { session: transactionSession })
-        console.log('set insert ok')
-        await transactionSession.commitTransaction()
-        transactionSession.endSession()
-        console.log(`Successfully wrote ${req.body.name} to db`)
-    } catch (err) {
-        await transactionSession.abortTransaction()
-        transactionSession.endSession()
-        console.log('Error inserting db')
-    }
-
-    res.status(200)
-    res.json(JSON.stringify({ shareId: shareId }))
-})
 
 app.get('/egg', (req, res) => {
     return res.render('egg', { pictureID: req.session.picture })
