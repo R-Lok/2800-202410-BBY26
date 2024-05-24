@@ -148,3 +148,12 @@ for (let i = 0; i < maxConfettis; i++) {
 canvas.width = W
 canvas.height = H
 Draw()
+
+document.addEventListener('visibilitychange', function() {
+    const audio = document.getElementById('EggMusic')
+    if (document.visibilityState === 'visible') {
+        audio.play()
+    } else {
+        audio.pause()
+    }
+})
