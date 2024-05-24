@@ -6,15 +6,18 @@ const UserSessionsSchema = new Schema({
         type: mongoose.ObjectId,
     },
     sessionId: {
-        type: mongoose.ObjectId,
+        type: String,
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now,
     },
     createdAt: {
         type: Date,
-        expires: process.env.SESSION_TTL,
+        default: Date.now,
     },
-}, {
-    timestamps: true,
 })
 
-module.exports = mongoose.model('UserSessions', UserSessionsSchema)
+UserSessionsSchema.index({ createdAt: 1 }, { expireAfterSeconds: Number(process.env.SESSION_TTL) })
 
+module.exports = mongoose.model('UserSessions', UserSessionsSchema)

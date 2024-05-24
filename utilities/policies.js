@@ -1,5 +1,6 @@
 const { CustomError } = require('./customError')
 const usersModel = require('../models/users')
+const userSessionModel = require('../models/userSessions')
 
 
 const isAuth = (req, res, next) => {
@@ -34,9 +35,33 @@ const noSecurityQuestion = async (req, res, next) => {
     }
 }
 
+const authorization = (req, user) => {
+    req.session.userId = user._id
+    req.session.loginId = user.loginId
+    req.session.email = user.email
+    req.session.name = user.name
+    req.session.role = user.role
+    req.session.picture = user.picture
+    console.log(req.session)
+
+    const now = new Date()
+    const updateObject = {
+        userId: user._id,
+        sessionId: req.session.id,
+        updatedAt: now,
+        createdAt: now,
+    }
+    return userSessionModel.findOneAndUpdate(
+        { sessionId: req.session.id },
+        { $set: updateObject },
+        { upsert: true },
+    )
+}
+
 module.exports = {
     isAuth,
     isAdmin,
     noSecurityQuestion,
     hasSecurityQuestion,
+    authorization,
 }

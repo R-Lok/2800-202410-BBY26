@@ -2,7 +2,7 @@ const { CustomError } = require('./customError')
 const searcherObject = require('./searcher')
 const { encrypt, decrypt, hash } = require('./encryption')
 const tools = require('./tools')
-const { isAuth, isAdmin, noSecurityQuestion, hasSecurityQuestion } = require('./policies')
+const { isAuth, isAdmin, noSecurityQuestion, hasSecurityQuestion, authorization } = require('./policies')
 
 
 module.exports = {
@@ -16,5 +16,6 @@ module.exports = {
     isAdmin,
     noSecurityQuestion,
     hasSecurityQuestion,
+    authorization,
 }
 

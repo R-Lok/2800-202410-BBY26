@@ -1,17 +1,7 @@
 const Joi = require('joi')
 const { authService } = require('../services/index')
-const { CustomError } = require('../utilities')
+const { CustomError, authorization } = require('../utilities/index')
 
-
-const authorization = (req, user) => {
-    req.session.userId = user._id
-    req.session.loginId = user.loginId
-    req.session.email = user.email
-    req.session.name = user.name
-    req.session.role = user.role
-    req.session.picture = user.picture
-    console.log(req.session)
-}
 
 const registerGET = (req, res) => {
     return res.render('register', { pictureID: req.session.picture })
@@ -22,7 +12,7 @@ const registerPOST = async (req, res, next) => {
         const { loginId, name, email, password, confirmPassword } = req.body
         const schema = Joi.object({
             loginId: Joi.string().max(20).required(),
-            name: Joi.string().alphanum().max(20).required(),
+            name: Joi.string().max(20).required(),
             email: Joi.string().email(),
             password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
             confirmPassword: Joi.ref('password'),
@@ -33,8 +23,8 @@ const registerPOST = async (req, res, next) => {
             .catch((error) => {
                 throw new CustomError('422', error)
             })
-        const user = await authService.registerPOST({ loginId, name, email, password, confirmPassword })
-        authorization(req, user)
+        const user = await authService.registerPOST(loginId.toLowerCase(), name.toLowerCase(), email.toLowerCase(), password)
+        await authorization(req, user)
         return res.status(200).json({ msg: 'ok' })
     } catch (error) {
         next(error)
@@ -57,17 +47,21 @@ const loginPOST = async (req, res, next) => {
             .catch((error) => {
                 throw new CustomError('422', error)
             })
-        const user = await authService.loginPOST({ loginId, password })
-        authorization(req, user)
+        const user = await authService.loginPOST(loginId.toLowerCase(), password)
+        await authorization(req, user)
         return res.status(200).json({ msg: 'ok' })
     } catch (error) {
         next(error)
     }
 }
 
-const logoutGET = (req, res) => {
-    req.session.destroy()
-    return res.redirect('/')
+const logoutGET = async (req, res, next) => {
+    try {
+        await authService.logoutGET(req)
+        return res.status(200).json({ msg: 'ok' })
+    } catch (error) {
+        next(error)
+    }
 }
 
 const resetPasswordPOST = async (req, res, next) => {
