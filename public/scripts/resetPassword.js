@@ -1,31 +1,24 @@
 async function getQuestion(email) {
-    console.log('Email: ' + email)
-    axios.post('getQuestion', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        email: email,
-    }).then((res) => {
-        console.log(res)
+    axios.get(`/securityQuestions/${email}`)
+        .then((res) => {
+            console.log(res)
 
-        if (res.status === 200) {
-            displayLoader()
-            setStepTwoQuestion(res.data.result)
-            setTimeout(() => {
-                switchStep(2)
-                closeLoader('.wrapper')
-            }, 1500)
-        }
-    }).catch((err) => {
-        console.log(err.response)
-        displayerErrorLoader(err.response.data.msg)
-    })
+            if (res.status === 200) {
+                displayLoader()
+                setStepTwoQuestion(res.data)
+                setTimeout(() => {
+                    switchStep(2)
+                    closeLoader('.wrapper')
+                }, 1500)
+            }
+        }).catch((err) => {
+            console.log(err.response)
+            displayerErrorLoader(err.response.data.msg)
+        })
 }
 
 function startStepOne() {
     const email = document.getElementById('userEmail').value
-    console.log('Email: ' + email)
     getQuestion(email)
 }
 
@@ -46,8 +39,7 @@ function setStepTwoQuestion(result) {
 }
 
 async function checkAnswer() {
-    await axios.post('checkAnswer', {
-        method: 'POST',
+    await axios.post('/securityQuestions/checkAnswer', {
         headers: {
             'Content-Type': 'application/json',
         },
@@ -55,7 +47,8 @@ async function checkAnswer() {
         questionId: document.getElementById('securityQues').questionId,
         answer: document.getElementById('securityAns').value,
     }).then((res) => {
-        if (res.data.result.localeCompare('ok') === 0) {
+        console.log(res)
+        if (res.status === 200) {
             displayLoader()
             setTimeout(() => {
                 switchStep(3)
@@ -89,7 +82,7 @@ async function resetPassword() {
         }
     }).catch((err) => {
         console.log(err)
-        displayerErrorLoader("")
+        displayerErrorLoader('')
     })
 }
 

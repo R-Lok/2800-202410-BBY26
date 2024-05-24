@@ -1,0 +1,237 @@
+:root {
+    --main-color1: #CAA8F5;
+    --main-color2: #9984D4;
+    --main-color3: #FED766;
+    --main-color4: #230C33;
+    --main-color5: #FFFFFF;
+    --main-color6:#8714c9;
+}
+
+body {
+    background-color: #000;
+}
+
+#eggPic{
+    width:220px;
+    height:300px;
+    border-radius: 150px;
+}
+  
+  
+.eggText {
+    font-size:4rem;
+    font-family: 'Bad Script', cursive;
+    color: #111;
+    animation: glowing 3.10s linear infinite;
+    animation-delay: 1.65s;
+}
+  
+  @keyframes glowing {
+    0%, 100% {
+      color: #fff;
+      filter: blur(1px);
+      text-shadow: 0 0 5px #9984D4,
+                   0 0 10px #9984D4,
+                   0 0 20px #9984D4;
+    }
+    5%, 95% {
+      color: #111;
+      text-shadow: none;
+      filter: none;
+    }
+  }
+
+  .eggText2 {
+    font-size:4rem;
+    font-family: 'Bad Script', cursive;
+    color: #fff;
+      filter: blur(1px);
+      text-shadow: 0 0 5px #9984D4,
+                   0 0 10px #9984D4,
+                   0 0 20px #9984D4;
+  }
+
+  #nameContainer{
+    position:relative;
+  }
+
+  .nameCard{
+    position:absolute;
+  }
+
+  .name1 {
+    transform: translate(-80px, 0px) rotate(35deg);
+    animation: move1 15.5s linear 1.65s infinite;
+    visibility:hidden;
+  }
+
+  .name2 {
+    transform: translate(-50px, 0px) rotate(15deg);
+    animation: move2 15.5s linear 4.75s infinite;
+    visibility:hidden;
+  }
+
+  .name3 {
+    animation: move3 15.5s linear 7.85s infinite;
+    transform: translate(-10px, 0px) rotate(0deg);
+    visibility:hidden;
+  }
+
+  .name4 {
+    transform: translate(30px, 0px) rotate(-15deg);
+    animation: move4 15.5s linear 10.95s infinite;
+    visibility:hidden;
+  }
+
+  .name5{
+    transform: translate(60px, 0px) rotate(-35deg);
+    animation: move5 15.5s linear 14.05s infinite;
+    visibility:hidden;
+  }
+
+  .nameCard2 {
+    animation: nextMove 2s ease-in-out infinite;
+  }
+
+  .nameCard3 {
+    animation: nextMove 2s ease-in-out -1s infinite;
+  }
+
+  .color1 {
+    color:#676ed1;
+  }
+
+  .color2 {
+    color:#dbbf71;
+  }
+
+  .color3 {
+    color:#b1ca56;
+  }
+
+  .color4 {
+    color:#d6528b;
+  }
+
+  .color5 {
+    color:#a075de;
+  }
+
+
+  @keyframes move1 {
+    0% {
+        visibility:visible;
+    }
+
+    10% {
+        visibility:visible;
+        transform: translate(-110px, 50px) rotate(35deg);
+    }
+
+    20%{
+        transform: translate(-140px, 100px) rotate(35deg);
+        color:black;
+        opacity: 0;
+        visibility:hidden;
+    }
+  }
+
+  @keyframes move2 {
+    0% {
+        visibility: hidden;
+    }
+
+    10% {
+        visibility:visible;
+        transform: translate(-70px, 50px) rotate(15deg);
+    }
+
+    18%{
+        transform: translate(-90px, 100px) rotate(15deg);
+        color:black;
+        visibility: hidden;
+        opacity: 0;
+    }
+  }
+
+  @keyframes move3 {
+    0% {
+        visibility: hidden;
+    }
+
+    10% {
+        visibility:visible;
+        transform: translate(-10px, 50px);
+    }
+
+    18%{
+        transform: translate(-10px, 100px);
+        color:black;
+        visibility: hidden;
+        opacity: 0;
+    }
+  }
+
+  @keyframes move4 {
+    0% {
+        visibility: hidden;
+    }
+
+    10% {
+        visibility:visible;
+        transform: translate(50px, 50px) rotate(-15deg);
+    }
+
+    18%{
+        transform: translate(70px, 100px) rotate(-15deg);
+        color:black;
+        visibility: hidden;
+        opacity: 0;
+    }
+  }
+
+  @keyframes move5 {
+    0% {
+        visibility: hidden;
+    }
+
+    10% {
+        visibility:visible;
+        transform: translate(90px, 50px) rotate(-35deg);
+    }
+
+    18%{
+        transform: translate(120px, 100px) rotate(-35deg);
+        color:black;
+        visibility: hidden;
+        opacity: 0;
+    }
+  }
+
+  @keyframes nextMove {
+    0% {
+        transform:translateY(40px);
+    }
+
+    50% {
+        transform:translateY(80px);
+    }
+
+    100% {
+        transform:translateY(40px);
+    }
+  }
+
+  canvas {
+    overflow-y: hidden;
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    position:absolute;
+    z-index: -1;
+  }
+
+  img.headshot {
+    width:50px;
+    height:50px;
+  }

@@ -2,7 +2,8 @@
 <link rel="stylesheet" href="/css/collections.css">
 </head>
 <body>
-<%- include("template/headerBar.ejs") %>
+  <%- include('template/headerBar', {pictureID:pictureID}) %>
+
 
   <div class="d-flex justify-content-center mt-5 headerText space">
     <h1 style="font-size:38px">Flashcard Collection</h1>
@@ -12,18 +13,27 @@
     <h6>Here are your previously generated flashcards</h6>
   </div>
 
-  <div class="container">
 
   <div class="input-group justify-content-center">
     <form class= "justify-content-center" action='/collection/search' method='post'>
-      <input name="search" type="search" placeholder="Search" />
+      <input name="search" type="search" placeholder="Search" value="<%= search %>"/>
       <button type="submit" class="btn button-bg" data-mdb-ripple-init>
       <img src='/images/search.svg'>
       </button>
     </form>
   </div>
 
-<div class="list-group">
+  <div class="container">
+    <div class="d-flex justify-content-end">
+      <select class="form-select mt-3 w-25" id="sortCollection" name="sortCollection">
+        <option value="" <%= selectedOption == '' ? 'selected' : ''%>>Oldest First</option>
+        <option value="alpha" <%= selectedOption == 'alpha' ? 'selected' : ''%>>Alphabetical Order</option>
+        <option value="new" <%= selectedOption == 'new' ? 'selected' : ''%>>Newest First</option>
+        <option value="viewed" <%= selectedOption == 'viewed' ? 'selected' : ''%>>Last Viewed</option>
+      </select>
+    </div>
+
+<div id="collectionsList" class="list-group mt-2">
   <% for(var i = 0; i<collections.length; i++) { %>
       <div class="list-group-item d-flex list-group-item-action w-100">
         <a href="/review/<%= collections[i].shareId %>" class="p-0 m-0 flex-grow-1 setText"><%= collections[i].setName %></a>
@@ -34,5 +44,6 @@
 
 </div>
 
+<script src="/scripts/collection.js"></script>
 <%- include("template/footerBar.ejs") %>
 <%- include("template/footer.ejs") %>

@@ -5,7 +5,7 @@
 
     <body>
         
-        <%- include("template/headerBar.ejs") %>
+        <%- include('template/headerBar', {pictureID:pictureID}) %>
             <div class="sign-up-container">
                 <div class="form-signup">
                     <h1 class="h3 mb-5 fw-normal text-center display-1">Log in</h1>
@@ -142,39 +142,6 @@
                                     <button type="button" id="step-4-submit" class="btn btn-primary">Log in now</button>
                                 </div>
                             </div>
-
-                            <!--
-                    <form action="/resetPassword" method="post">
-                        <select class="form-select mb-3" id="securityQues" aria-label="Large select example"
-                            name="securityQues">
-                            <option value="" selected>Security Question</option>
-                            <option value="What's your father's name?">What is your father's name?</option>
-                            <option value="What's is the last name of your favorite elementary school teacher?">What's is the last name of your favorite elementary school teacher?</option>
-                            <option value="What was the name of your first pet?">What was the name of your first pet?</option>
-                            <option value="What is the name of your favourite sports team?">What is the name of your favourite sports team?</option>
-                            <option value="What is the name of your best friend?">What is the name of your best friend?</option>
-                        </select>
-
-                        <div class="mb-3">
-                            <label for="securityAns" class="form-label">Security Answer</label>
-                            <input type="text" id="securityAns" class="form-control" name="securityAns" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="newPassword" class="form-label">New Password</label>
-                            <input type="password" id="newPassword" class="form-control" name="newPassword" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">Confirm Password</label>
-                            <input type="password" id="confirmPassword" class="form-control" name="confirmPassword" required>
-                        </div>
-
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Reset Password</button>
-                        </div>  
-                    </form>
-                    -->
                         </div>
                     </div>
                 </div>

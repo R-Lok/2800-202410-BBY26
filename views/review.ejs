@@ -8,7 +8,7 @@
             localStorage.setItem("cards", JSON.stringify(data))
         </script>
     <% } %>
-    <%- include("template/headerBar.ejs") %>
+    <%- include('template/headerBar', {pictureID:pictureID}) %>
     <div class="content-container">
         <% if (queryType === "view") { %> 
             <div class="alert alert-success alert-hidden" role="alert">

@@ -1,34 +1,57 @@
 <%- include("template/header") %>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="../css/register.css">
     </link>
     </head>
 
     <body>
-        <%- include("template/headerBar.ejs") %>
+        <%- include('template/headerBar', {pictureID:pictureID}) %>
             <div class="sign-up-container">
                 <div class="form-signup">
                     <h2 class="h3 mb-3 fw-normal text-center display-5">Set Security Question</h2>
-                    <form action="/setSecurityQuestion" method="post"></form>
-                        <select class="form-select mb-3" id="securityQues" aria-label="Large select example"
-                            name="securityQues">
+                    <form>
+                        <label for="securityQues" class="form-label mt-3">Security Question</label>
+                        <select class="form-select mb-4" id="securityQues" aria-label="Large select example"
+                            name="securityQues" value="">
                             <option value="" selected>Security Question</option>
-                            <option value="What's your father's name?">What is your father's name?</option>
-                            <option value="What's is the last name of your favorite elementary school teacher?">What's is the last name of your favorite elementary school teacher?</option>
-                            <option value="What was the name of your first pet?">What was the name of your first pet?</option>
-                            <option value="What is the name of your favourite sports team?">What is the name of your favourite sports team?</option>
-                            <option value="What is the name of your best friend?">What is the name of your best friend?</option>
+                            <option id="question-1" data-questionid="" value="">Placeholder</option>
+                            <option id="question-2" data-questionid="" value="">Placeholder
+                            </option>
+                            <option id="question-3" data-questionid="" value="">Placeholder</option>
+                            <option id="question-4" data-questionid="" value="">Placeholder</option>
+                            <option id="question-5" data-questionid="" value="">Placeholder</option>
                         </select>
 
                         <div class="mb-1">
                             <label for="securityAns" class="form-label">Security Answer</label>
-                            <input type="text" id="securityAns" class="form-control" name="securityAns" required>
+                            <input type="text" id="securityAns" class="form-control" name="securityAns" value="" required>
                         </div>
 
-                        <div class="d-grid">
-                            <button class="btn btn-primary btn-lg" type="submit">Sign Up</button>
+                        <div class="d-grid mt-3" >
+                            <button class="btn btn-primary btn-lg" type="button" id="submitBtn">Submit</button>
                         </div>
+                        <div id="error-message"></div>
                     </form>
+
+                    <div class="accordion accordion-flush mt-5" id="accordionPanelsStayOpenExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false"
+                                    aria-controls="panelsStayOpen-collapseOne">
+                                    Why I'm seeing this page?
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse"
+                                aria-labelledby="panelsStayOpen-headingOne">
+                                <div class="accordion-body">
+                                    <p>You need this security question-answer pair in password reset in case you forget it.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <script type="module" src="/scripts/setSecurity.js"></script>
             <%- include("template/footerBar.ejs") %>
-            <%- include("template/footer") %>
+                <%- include("template/footer") %>

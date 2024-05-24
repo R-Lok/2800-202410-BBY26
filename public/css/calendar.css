@@ -65,11 +65,11 @@ body {font-family: Verdana, sans-serif;}
 .days li {
   list-style-type: none;
   display: inline-block;
-  width: 14.28%; /* Adjusted width for 7 columns */
+  width: 14%; /* Adjusted width for 7 columns */
   margin: 0;
   text-align: center;
   font-size: 16px;
-  color: #777;
+  color: black;
   padding: 10px 0;
 }
 
@@ -78,4 +78,17 @@ body {font-family: Verdana, sans-serif;}
   padding: 5px;
   background: #8714c9;
   color: white !important
+}
+
+.studied {
+  color: white;
+  background-color: green;
+}
+
+.streak {
+  background-color: turquoise;
+}
+
+.studied.streak {
+  background-color: turquoise; /* make sure that streak color overrides studied */
 }

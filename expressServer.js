@@ -4,9 +4,12 @@ const MongoStore = require('connect-mongo')
 // const cors = require('cors')
 // const helmet = require('helmet')
 const compression = require('compression')
+const sharp = require("sharp");
 const userRouter = require('./routers/users')
-const { router: authRouter, isAuth } = require('./routers/auth')
+const checkRouter = require('./routers/check')
+const { router: authRouter, isAuth, hasSecurityQuestion } = require('./routers/auth')
 const settingRouter = require('./routers/settings')
+const submitcardsRouter = require('./routers/submitcards')
 const collectionsModel = require('./models/collections')
 const OpenAI = require('openai')
 const openai = new OpenAI({
@@ -15,10 +18,11 @@ const openai = new OpenAI({
 const securityQuestionsRouter = require('./routers/securityQuestions')
 const flashcardsModel = require('./models/flashcards')
 const collectionRouter = require('./routers/collection')
-const usersModel = require('./models/users')
+const homeRouter = require('./routers/home')
+const auditlogModel = require('./models/auditLog')
 const mongoose = require('mongoose')
 
-const { incrementStreak } = require('./public/scripts/incrementStreak')
+const { incrementStreak, isConsecutiveDays } = require('./public/scripts/streak')
 
 const app = express()
 const server = require('http').createServer(app)
@@ -35,7 +39,7 @@ app.use(express.static(__dirname + '/public'))
 app.set('view engine', 'ejs')
 
 const mongoUrl = process.env.NODE_ENV === 'local' ?
-    `mongodb://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}//?authSource=admin` :
+    `mongodb://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/?authSource=admin` :
     `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}/?retryWrites=true&w=majority&appName=BBY26`
 
 const options = {
@@ -59,62 +63,16 @@ app.use(session({
 }))
 
 app.use('/', authRouter)
-app.use('/users', isAuth, userRouter)
-app.use('/settings', isAuth, settingRouter)
-app.use('/securityQuestions', isAuth, securityQuestionsRouter)
-app.use('/collection', isAuth, collectionRouter)
-app.use('/check', isAuth)
-app.use('/review', isAuth)
-app.use('/submitcards', isAuth)
-app.use('/generate', isAuth)
-app.use('/api/generate', isAuth)
-app.use('/home', isAuth)
-
-app.get('/home', async (req, res) => {
-    let existingActivity
-    let activityName
-    let days
-    try {
-        let user = await usersModel.findOne({ loginId: req.session.loginId })
-        days = user.streak
-        const date = new Date()
-        const currActivityDate = date.getDate()
-        const lastActivity = user.lastActivity
-        if (lastActivity === null || lastActivity.timestamp === null || lastActivity.timestamp === undefined || lastActivity.shareId === null || lastActivity.shareId === undefined) {
-            existingActivity = 0
-            return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
-        }
-        const prevActivityDate = lastActivity.timestamp.getDate()
-
-        if ((currActivityDate != prevActivityDate + 1) && (currActivityDate != prevActivityDate)) {
-            user = await usersModel.findOneAndUpdate(
-                { loginId: req.session.loginId },
-                { $set: {
-                    'lastActivity.timestamp': user.lastActivity.timestamp,
-                    'lastActivity.shareId': user.lastActivity.shareId,
-                    'streak': 0,
-                } },
-                { returnOriginal: false },
-            )
-            await user.save()
-        }
-        existingActivity = `/review/${lastActivity.shareId}`
-        const collection = await collectionsModel.findOne({ shareId: lastActivity.shareId })
-        if (!collection) {
-            throw new Error('No collection found')
-        }
-        activityName = collection.setName
-    } catch (err) {
-        console.log(`Error occurred in /home`)
-    }
-    return res.render('home', { activityName: activityName, existingActivity: existingActivity, days: days, name: req.session.name, email: req.session.email })
-})
-
-app.post('/home/shareCode', (req, res) => {
-    const shareId = req.body.shareId
-    res.redirect(`/review/${shareId}`)
-})
-
+app.use('/users', isAuth, hasSecurityQuestion, userRouter)
+app.use('/settings', isAuth, hasSecurityQuestion, settingRouter)
+app.use('/securityQuestions', securityQuestionsRouter)
+app.use('/collection', isAuth, hasSecurityQuestion, collectionRouter)
+app.use('/check', isAuth, hasSecurityQuestion, checkRouter)
+app.use('/review', isAuth, hasSecurityQuestion)
+app.use('/submitcards', isAuth, hasSecurityQuestion, submitcardsRouter)
+app.use('/generate', isAuth, hasSecurityQuestion)
+app.use('/api/generate', isAuth, hasSecurityQuestion)
+app.use('/home', isAuth, hasSecurityQuestion, homeRouter)
 app.get('/health', (_, res) => {
     return res.status(200).send('ok')
 })
@@ -127,20 +85,54 @@ app.get('/', (req, res) => {
     return req.session.email ? res.redirect('/home') : res.render('landing')
 })
 
-app.get('/setSecurityQuestion', (req, res) => {
-    return res.render('setSecurityQuestion')
-})
-
 app.get('/generate', (req, res) => {
-    return res.render('generate')
+    return res.render('generate', { pictureID: req.session.picture })
 })
 
 // route for receiving image input from user
-app.post('/upload-image', (req, res) => {
-    console.log(req.body)
-    res.send()
-    // Jimmy will work on the backend for this endpoint - this is the endpoint for receiving image input
+app.post('/upload-image', async (req, res) => {
+    const image = req.body.image
+    const difficulty = req.body.difficulty
+    const numQuestions = req.body.numQuestions
+    // base64 string is in req.body.image
+    try {
+        const result = await generateImage(difficulty, numQuestions, image)
+        res.status(200)
+        return res.json(result)
+    } catch (err) {
+        console.log(err)
+        res.status(500)
+        res.json(err)
+    }
 })
+
+async function generateImage(difficulty, numQuestions, image) {
+    try {
+        const response = await openai.chat.completions.create({
+            model: 'gpt-4o',
+            response_format: { type: 'json_object' },
+            temperature: 1,
+            max_tokens: 4096,
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0,
+            messages: [
+                {
+                    role: 'system', content: 'You are a assistant that generate flashcards for students studying quizzes and exams',
+                },
+                {
+                    role: 'user',
+                    content: [{
+                        type: 'text', text: `Given the provided image, Generate an array in json format that contains ${numQuestions} flashcards object elments with ${difficulty} difficulty.
+                Question and answer of flashcards should be the keys of each flashcard object element` }, { 'type': 'image_url', 'image_url': { 'url': image } }],
+                },
+            ],
+        })
+        return response.choices[0].message.content
+    } catch (err) {
+        console.log(err)
+    }
+}
 
 async function generate(difficulty, number, material) {
     let completion
@@ -150,7 +142,7 @@ async function generate(difficulty, number, material) {
                 {
                     role: 'system',
                     content:
-            'You are a assistant that generates flashcards for students studying quizzes and exam.',
+                        'You are a assistant that generates flashcards for students studying quizzes and exam.',
                 },
                 {
                     role: 'user',
@@ -184,86 +176,104 @@ app.post('/api/generate', async (req, res) => {
     }
 })
 
-app.get('/api/getUserImage', async (req, res) => {
-    const userId = req.session.userId
-    if (!userId) {
-        return res.status(400).json({ error: 'No userId' })
-    } else {
-        let pictureId = await usersModel.findById(userId).select('-_id picture').lean()
-        pictureId = pictureId.picture
-        const imagePath = `/images/${pictureId}.png`
-        res.json({ imagePath })
+async function convertImageToBase64Jpg(base64Input) {
+    try {
+        // Decode the base64 input image to a buffer
+        const inputBuffer = Buffer.from(base64Input, "base64");
+
+        // Use sharp to convert the input buffer to JPG format and get the base64 string
+        const base64Output = await sharp(inputBuffer)
+            .jpeg()
+            .toBuffer()
+            .then((data) => data.toString("base64"));
+
+        return base64Output;
+    } catch (error) {
+        console.error("Error converting image to base64 JPG:", error);
+        throw error;
     }
-})
+}
+
+async function generateWithImage(base64Jpg, difficulty, numQuestions) {
+    const imageUrl = `data:image/jpeg;base64,${base64Jpg}`;
+
+    let completion;
+    try {
+        completion = await openai.chat.completions.create({
+            messages: [
+                {
+                    role: "system",
+                    content:
+                        "You are a assistant that generates flashcards for students studying quizzes and exam.",
+                },
+                {
+                    role: "user",
+                    content: [
+                        {
+                            type: "text",
+                            text: `Given the following studying material shown in the image.
+                  Generate an array in json format that contains ${numQuestions} flashcards object elments with ${difficulty} difficulty.
+                  Question and answer of flashcards should be the keys of each flashcard object element`,
+                        },
+                        {
+                            type: "image_url",
+                            image_url: {
+                                url: imageUrl,
+                            },
+                        },
+                    ],
+                },
+            ],
+            model: "gpt-4o",
+            response_format: { type: "json_object" },
+            temperature: 1,
+            max_tokens: 4096,
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0,
+        });
+    } catch (err) {
+        console.log(`API Call fails: ${err}`);
+    }
+    const jsonResult = completion.choices[0].message.content;
+
+    return jsonResult;
+}
+
+app.post("/api/generatebyimage", async (req, res) => {
+    try {
+      const {base64Input, difficulty, numQuestions} = req.body;
+      const base64Jpg = await convertImageToBase64Jpg(base64Input);
+      const result = await generateWithImage(base64Jpg, difficulty, numQuestions);
+      return res.send(`/check/?data=${encodeURIComponent(result)}`)
+    } catch {
+      res.status(400).send("Fail to generate flashcards.");
+    }
+});
 
 app.get('/review/:setid', async (req, res) => {
-    incrementStreak(req)
     try {
+        incrementStreak(req)
+        await auditlogModel.create({ loginId: req.session.loginId, type: 'flashcard', shareId: req.params.setid })
+
         console.log('set' + req.params.setid)
+        await collectionsModel.findOneAndUpdate({ shareId: Number(req.params.setid) }, { updatedAt: new Date() })
         const cards = await flashcardsModel.find({ shareId: Number(req.params.setid) }).select('-_id question answer')
         if (cards.length === 0) {
-            return res.render('404', { error: 'Flashcard set does not exist!' })
+            return res.render('404', { error: 'Flashcard set does not exist!', pictureID: req.session.picture })
         }
-        const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: cards, id: req.params.setid, queryType: 'view' }
+        const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: cards, id: req.params.setid, queryType: 'view', pictureID: req.session.picture }
         return res.render('review', carouselData)
     } catch (err) {
         console.log(`Failed to fetch cards for set ${req.params.setid}`)
-        res.render('404', { error: 'Flashcard set does not exist!' })
+        res.render('404', { error: 'Flashcard set does not exist!', pictureID: req.session.picture })
     }
 })
 
-app.get('/check', (req, res) => {
-    const querydata = req.query.data
-    const data = (JSON.parse(querydata)).flashcards
 
-    const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: data, queryType: 'finalize' }
 
-    return res.render('review', carouselData)
-})
-
-app.post('/submitcards', async (req, res) => {
-    let lastShareCode
-    let shareId
-
-    // get the latest sharecode from collections
-    try {
-        const result = await collectionsModel.findOne().sort({ shareId: -1 }).select('shareId').exec()
-        lastShareCode = result ? result.shareId : null
-    } catch (err) {
-        console.log('Failed to fetch latestShareCode')
-    }
-
-    if (lastShareCode === null) {
-        shareId = 0
-    } else {
-        shareId = lastShareCode + 1
-    }
-
-    const inputData = JSON.parse(req.body.cards).map((card) => {
-        return {
-            shareId: `${shareId}`,
-            ...card,
-        }
-    })
-
-    const transactionSession = await mongoose.startSession()
-    transactionSession.startTransaction()
-    try {
-        await flashcardsModel.insertMany(inputData, { session: transactionSession })
-        console.log('flashcards insert ok')
-        await collectionsModel.create([{ setName: `${req.body.name}`, userId: req.session.userId, shareId: shareId }], { session: transactionSession })
-        console.log('set insert ok')
-        await transactionSession.commitTransaction()
-        transactionSession.endSession()
-        console.log(`Successfully wrote ${req.body.name} to db`)
-    } catch (err) {
-        await transactionSession.abortTransaction()
-        transactionSession.endSession()
-        console.log('Error inserting db')
-    }
-
-    res.status(200)
-    res.json(JSON.stringify({ shareId: shareId }))
+app.get('/egg', (req, res) => {
+    return res.render('egg', { pictureID: req.session.picture })
 })
 
 app.get('*', (req, res) => {

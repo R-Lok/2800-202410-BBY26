@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const saltRounds = 12
 const userModel = require('../models/users')
-const { CustomError, encrypt, decrypt, hash } = require('../utilities/index')
+const { encrypt, hash } = require('../utilities/index')
 
 
 const mongoUrl = process.env.NODE_ENV === 'local' ?

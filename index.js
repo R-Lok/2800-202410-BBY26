@@ -5,7 +5,7 @@ const { server, app, mongoUrl } = require('./expressServer')
 const mongoOptions = {
     user: process.env.DATABASE_USERNAME,
     pass: process.env.DATABASE_PASSWORD,
-    autoIndex: false,
+    autoIndex: process.env.AUTO_INDEX || false,
     dbName: process.env.DATABASE_NAME,
     maxPoolSize: 100,
     ssl: process.env.NODE_ENV === 'local' ? false : true,
