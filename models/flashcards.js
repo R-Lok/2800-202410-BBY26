@@ -5,7 +5,6 @@ const flashcardsSchema = new Schema({
     shareId: {
         type: Number,
         required: true,
-        unique: true,
         ref: 'collections',
     },
     question: {
