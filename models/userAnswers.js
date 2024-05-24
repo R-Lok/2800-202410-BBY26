@@ -13,7 +13,6 @@ const UserAnswersSchema = new Schema({
     answer: {
         type: String,
         required: true,
-        unique: true,
     },
 }, {
     timestamps: true,
