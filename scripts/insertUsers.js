@@ -28,7 +28,7 @@ const main = async () => {
         const userObjects = [
             {
                 loginId: 'admin', name: 'admin', email: await encrypt('admin@gmail.com'),
-                emailHash: await hash('admin@gmail.com'), password: await bcrypt.hash('admin', saltRounds), role: 'admin',
+                emailHash: await hash('admin@gmail.com'), password: await bcrypt.hash(process.env.ADMIN, saltRounds), role: 'admin',
                 enable: true, security: true,
             },
             {

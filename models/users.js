@@ -14,11 +14,11 @@ const UsersSchema = new Schema({
     email: {
         type: String,
         required: true,
-        unique: true,
     },
     emailHash: {
         type: String,
         required: true,
+        unique: true,
     },
     password: {
         type: String,
@@ -51,7 +51,7 @@ const UsersSchema = new Schema({
         type: Number,
         min: 1,
         max: 9,
-        default: 1
+        default: 1,
     },
     enable: {
         type: Boolean,
@@ -65,8 +65,4 @@ const UsersSchema = new Schema({
     timestamps: true,
 })
 
-UsersSchema.index({ email: 1 })
-UsersSchema.index({ userId: 1 })
-
 module.exports = mongoose.model('Users', UsersSchema)
-
