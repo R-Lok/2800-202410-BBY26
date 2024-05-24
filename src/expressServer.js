@@ -1,6 +1,7 @@
 const express = require('express')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
+const path = require('path')
 // const cors = require('cors')
 // const helmet = require('helmet')
 const compression = require('compression')
@@ -36,6 +37,7 @@ app.use(compression())
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'))
+app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
 const mongoUrl = process.env.NODE_ENV === 'local' ?
