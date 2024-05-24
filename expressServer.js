@@ -4,9 +4,12 @@ const MongoStore = require('connect-mongo')
 // const cors = require('cors')
 // const helmet = require('helmet')
 const compression = require('compression')
+const sharp = require("sharp");
 const userRouter = require('./routers/users')
+const checkRouter = require('./routers/check')
 const { router: authRouter, isAuth, hasSecurityQuestion } = require('./routers/auth')
 const settingRouter = require('./routers/settings')
+const submitcardsRouter = require('./routers/submitcards')
 const collectionsModel = require('./models/collections')
 const OpenAI = require('openai')
 const openai = new OpenAI({
@@ -64,13 +67,12 @@ app.use('/users', isAuth, hasSecurityQuestion, userRouter)
 app.use('/settings', isAuth, hasSecurityQuestion, settingRouter)
 app.use('/securityQuestions', securityQuestionsRouter)
 app.use('/collection', isAuth, hasSecurityQuestion, collectionRouter)
-app.use('/check', isAuth, hasSecurityQuestion)
+app.use('/check', isAuth, hasSecurityQuestion, checkRouter)
 app.use('/review', isAuth, hasSecurityQuestion)
-app.use('/submitcards', isAuth, hasSecurityQuestion)
+app.use('/submitcards', isAuth, hasSecurityQuestion, submitcardsRouter)
 app.use('/generate', isAuth, hasSecurityQuestion)
 app.use('/api/generate', isAuth, hasSecurityQuestion)
 app.use('/home', isAuth, hasSecurityQuestion, homeRouter)
-
 app.get('/health', (_, res) => {
     return res.status(200).send('ok')
 })
@@ -140,7 +142,7 @@ async function generate(difficulty, number, material) {
                 {
                     role: 'system',
                     content:
-            'You are a assistant that generates flashcards for students studying quizzes and exam.',
+                        'You are a assistant that generates flashcards for students studying quizzes and exam.',
                 },
                 {
                     role: 'user',
@@ -174,6 +176,81 @@ app.post('/api/generate', async (req, res) => {
     }
 })
 
+async function convertImageToBase64Jpg(base64Input) {
+    try {
+        // Decode the base64 input image to a buffer
+        const inputBuffer = Buffer.from(base64Input, "base64");
+
+        // Use sharp to convert the input buffer to JPG format and get the base64 string
+        const base64Output = await sharp(inputBuffer)
+            .jpeg()
+            .toBuffer()
+            .then((data) => data.toString("base64"));
+
+        return base64Output;
+    } catch (error) {
+        console.error("Error converting image to base64 JPG:", error);
+        throw error;
+    }
+}
+
+async function generateWithImage(base64Jpg, difficulty, numQuestions) {
+    const imageUrl = `data:image/jpeg;base64,${base64Jpg}`;
+
+    let completion;
+    try {
+        completion = await openai.chat.completions.create({
+            messages: [
+                {
+                    role: "system",
+                    content:
+                        "You are a assistant that generates flashcards for students studying quizzes and exam.",
+                },
+                {
+                    role: "user",
+                    content: [
+                        {
+                            type: "text",
+                            text: `Given the following studying material shown in the image.
+                  Generate an array in json format that contains ${numQuestions} flashcards object elments with ${difficulty} difficulty.
+                  Question and answer of flashcards should be the keys of each flashcard object element`,
+                        },
+                        {
+                            type: "image_url",
+                            image_url: {
+                                url: imageUrl,
+                            },
+                        },
+                    ],
+                },
+            ],
+            model: "gpt-4o",
+            response_format: { type: "json_object" },
+            temperature: 1,
+            max_tokens: 4096,
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0,
+        });
+    } catch (err) {
+        console.log(`API Call fails: ${err}`);
+    }
+    const jsonResult = completion.choices[0].message.content;
+
+    return jsonResult;
+}
+
+app.post("/api/generatebyimage", async (req, res) => {
+    try {
+      const {base64Input, difficulty, numQuestions} = req.body;
+      const base64Jpg = await convertImageToBase64Jpg(base64Input);
+      const result = await generateWithImage(base64Jpg, difficulty, numQuestions);
+      return res.send(`/check/?data=${result}`)
+    } catch {
+      res.status(400).send("Fail to generate flashcards.");
+    }
+});
+
 app.get('/review/:setid', async (req, res) => {
     try {
         incrementStreak(req)
@@ -193,59 +270,7 @@ app.get('/review/:setid', async (req, res) => {
     }
 })
 
-app.get('/check', (req, res) => {
-    const querydata = req.query.data
-    const data = (JSON.parse(querydata)).flashcards
 
-    const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: data, queryType: 'finalize', pictureID: req.session.picture }
-
-    return res.render('review', carouselData)
-})
-
-app.post('/submitcards', async (req, res) => {
-    let lastShareCode
-    let shareId
-
-    // get the latest sharecode from collections
-    try {
-        const result = await collectionsModel.findOne().sort({ shareId: -1 }).select('shareId').exec()
-        lastShareCode = result ? result.shareId : null
-    } catch (err) {
-        console.log('Failed to fetch latestShareCode')
-    }
-
-    if (lastShareCode === null) {
-        shareId = 0
-    } else {
-        shareId = lastShareCode + 1
-    }
-
-    const inputData = JSON.parse(req.body.cards).map((card) => {
-        return {
-            shareId: `${shareId}`,
-            ...card,
-        }
-    })
-
-    const transactionSession = await mongoose.startSession()
-    transactionSession.startTransaction()
-    try {
-        await flashcardsModel.insertMany(inputData, { session: transactionSession })
-        console.log('flashcards insert ok')
-        await collectionsModel.create([{ setName: `${req.body.name}`, userId: req.session.userId, shareId: shareId }], { session: transactionSession })
-        console.log('set insert ok')
-        await transactionSession.commitTransaction()
-        transactionSession.endSession()
-        console.log(`Successfully wrote ${req.body.name} to db`)
-    } catch (err) {
-        await transactionSession.abortTransaction()
-        transactionSession.endSession()
-        console.log('Error inserting db')
-    }
-
-    res.status(200)
-    res.json(JSON.stringify({ shareId: shareId }))
-})
 
 app.get('/egg', (req, res) => {
     return res.render('egg', { pictureID: req.session.picture })
