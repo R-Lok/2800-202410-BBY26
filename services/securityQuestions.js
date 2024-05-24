@@ -89,15 +89,18 @@ const sqDELETE = async ({ req, userId }) => {
 
 const sqGETQuestion = async ({ email }) => {
     const emailHash = await hash(email)
+    console.log(`sqGETQuestion: ${email}`)
     const user = await usersModel
         .findOne({ emailHash: emailHash }, { _id: 1 })
         .lean()
     if (!user) {
         throw new CustomError('404', 'User not found.')
     }
+    console.log(user)
     const result = await userAnswersModel
         .findOne({ userId: user._id }, { _id: 0, questionId: 1, userId: 1 })
         .lean()
+    console.log(result)
     if (!result) {
         throw new CustomError('422', 'You don\'t have a security question yet!')
     }
