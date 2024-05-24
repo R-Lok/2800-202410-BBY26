@@ -96,11 +96,11 @@ const sqGETQuestion = async ({ email }) => {
     if (!user) {
         throw new CustomError('404', 'User not found.')
     }
-    console.log(`sqGETQuestion user: ${user}`)
+    console.log(user)
     const result = await userAnswersModel
         .findOne({ userId: user._id }, { _id: 0, questionId: 1, userId: 1 })
         .lean()
-    console.log(`sqGETQuestion result: ${result}`)
+    console.log(result)
     if (!result) {
         throw new CustomError('422', 'You don\'t have a security question yet!')
     }
