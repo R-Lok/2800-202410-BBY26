@@ -194,7 +194,7 @@ document.querySelector("#generatePhotoButton").addEventListener('click', async (
         })
         if (response.ok) {
             const data = await response.json()
-            window.location.href = `/check?data=${data}`
+            window.location.href = `/check?data=${encodeURIComponent(data)}`
         }
     } catch (err) {
         console.log(err) //implement some sort of alert that warns the user that it failed

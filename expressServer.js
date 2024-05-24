@@ -245,7 +245,7 @@ app.post("/api/generatebyimage", async (req, res) => {
       const {base64Input, difficulty, numQuestions} = req.body;
       const base64Jpg = await convertImageToBase64Jpg(base64Input);
       const result = await generateWithImage(base64Jpg, difficulty, numQuestions);
-      return res.send(`/check/?data=${result}`)
+      return res.send(`/check/?data=${encodeURIComponent(result)}`)
     } catch {
       res.status(400).send("Fail to generate flashcards.");
     }
