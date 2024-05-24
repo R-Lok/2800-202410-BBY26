@@ -33,19 +33,18 @@ function getStudiedDays(auditLogResult) {
 }
 
 function getStreakDays(timestamp, date, streak) {
-    if (streak == 0) return;
-    if (timestamp == null) return;
     let streakDays = []
+    if (streak == 0) return streakDays;
+    if (timestamp == null) return streakDays;
     let i = isToday(timestamp) ? 0 : 1
-    if (i == 1 && streak == 1) {
+    if (i == 1) {
         streak++
     }
-    let d = new Date(date)
     for (i; i < streak; i++) {
-        d.setDate(date.getDate() - i)
-        streakDays[i] = `${d.getMonth()}${d.getDate()}`
+        let d = new Date(date);  // Create a new Date object for each iteration
+        d.setDate(date.getDate() - i);  // Modify the date for the specific streak day
+        streakDays[i] = `${d.getMonth()}${d.getDate()}`;
     }
-
     return streakDays
 }
 
