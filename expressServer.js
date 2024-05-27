@@ -253,15 +253,14 @@ app.post("/api/generatebyimage", async (req, res) => {
 
 app.get('/review/:setid', async (req, res) => {
     try {
-        incrementStreak(req)
-        await auditlogModel.create({ loginId: req.session.loginId, type: 'flashcard', shareId: req.params.setid })
-
         console.log('set' + req.params.setid)
-        await collectionsModel.findOneAndUpdate({ shareId: Number(req.params.setid) }, { updatedAt: new Date() })
         const cards = await flashcardsModel.find({ shareId: Number(req.params.setid) }).select('-_id question answer')
         if (cards.length === 0) {
             return res.render('404', { error: 'Flashcard set does not exist!', pictureID: req.session.picture })
         }
+        await collectionsModel.findOneAndUpdate({ shareId: Number(req.params.setid) }, { updatedAt: new Date() })
+        incrementStreak(req)
+        await auditlogModel.create({ loginId: req.session.loginId, type: 'flashcard', shareId: req.params.setid })
         const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: cards, id: req.params.setid, queryType: 'view', pictureID: req.session.picture }
         return res.render('review', carouselData)
     } catch (err) {
