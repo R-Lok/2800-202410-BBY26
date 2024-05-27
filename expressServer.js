@@ -85,6 +85,7 @@ app.get('/', (req, res) => {
     return req.session.email ? res.redirect('/home') : res.render('landing')
 })
 
+// route for users to upload study material and then generate flashcards
 app.get('/generate', (req, res) => {
     return res.render('generate', { pictureID: req.session.picture })
 })
@@ -167,6 +168,7 @@ async function generate(difficulty, number, material) {
     return jsonResult
 }
 
+// route for calling Open AI api for generating flashcards based on text upload
 app.post('/api/generate', async (req, res) => {
     try {
         const result = await generate(req.body.difficulty, req.body.numQuestions, req.body.material)
@@ -194,57 +196,13 @@ async function convertImageToBase64Jpg(base64Input) {
     }
 }
 
-async function generateWithImage(base64Jpg, difficulty, numQuestions) {
-    const imageUrl = `data:image/jpeg;base64,${base64Jpg}`;
-
-    let completion;
-    try {
-        completion = await openai.chat.completions.create({
-            messages: [
-                {
-                    role: "system",
-                    content:
-                        "You are a assistant that generates flashcards for students studying quizzes and exam.",
-                },
-                {
-                    role: "user",
-                    content: [
-                        {
-                            type: "text",
-                            text: `Given the following studying material shown in the image.
-                  Generate an array in json format that contains ${numQuestions} flashcards object elments with ${difficulty} difficulty.
-                  Question and answer of flashcards should be the keys of each flashcard object element`,
-                        },
-                        {
-                            type: "image_url",
-                            image_url: {
-                                url: imageUrl,
-                            },
-                        },
-                    ],
-                },
-            ],
-            model: "gpt-4o",
-            response_format: { type: "json_object" },
-            temperature: 1,
-            max_tokens: 4096,
-            top_p: 1,
-            frequency_penalty: 0,
-            presence_penalty: 0,
-        });
-    } catch (err) {
-        console.log(`API Call fails: ${err}`);
-    }
-    const jsonResult = completion.choices[0].message.content;
-
-    return jsonResult;
-}
-
+// route for calling OpenAI api for generating flashcards based on image upload
 app.post("/api/generatebyimage", async (req, res) => {
     try {
       const {base64Input, difficulty, numQuestions} = req.body;
       const base64Jpg = await convertImageToBase64Jpg(base64Input);
-      const result = await generateWithImage(base64Jpg, difficulty, numQuestions);
+      const imageUrl = `data:image/jpeg;base64,${base64Jpg}`;
+      const result = await generateImage(difficulty, numQuestions, imageUrl);
       return res.send(`/check/?data=${encodeURIComponent(result)}`)
     } catch {
       res.status(400).send("Fail to generate flashcards.");

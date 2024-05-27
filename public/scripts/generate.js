@@ -256,16 +256,12 @@ dropArea.addEventListener('drop', (event) => {
 
 function displayFile() {
     let fileType = file.type;
-
     let validExtensions = ['image/jpeg', 'image/jpg', 'image/png', 'image/heic', 'image/heif'];
-
     if (validExtensions.includes(fileType)) {
         // console.log('This is an image file');
         let fileReader = new FileReader();
-
         fileReader.onload = async () => {
             let fileURL = fileReader.result;
-
             if (fileType === 'image/heic' || fileType === 'image/heif') {
                 try {
                     let blob = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.5 });
@@ -348,10 +344,8 @@ async function convertFileToBase64(file) {
 
 function sendImageApiRequest() {
     const generateBtn = document.getElementById('image-generate-button');
-
     generateBtn.addEventListener('click', async () => {
         const base64Output = await convertFileToBase64(file);
-
         const loader = document.querySelector('.loading-state')
         loader.style.visibility = 'visible'
         console.log('Start calling API')
