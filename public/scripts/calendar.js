@@ -1,3 +1,4 @@
+// Array of months
 const months = [
     "January",
     "February",
@@ -11,24 +12,32 @@ const months = [
     "October",
     "November",
     "December"
-];
+]
 
+// Total number of days in a week
 const totalWeekDays = 7;
 
+// isToday checkes if a given timestamp corresponds to today's date
 function isToday(timestamp) {
+    // Create a new Date object with the timestamp's year, month, date, time is defaulted to 0
     timestampDate = new Date(timestamp.getFullYear(), timestamp.getMonth(), timestamp.getDate())
     today = new Date()
+    // Set the time of today's date to 0
     today.setHours(0, 0, 0, 0)
+    // Compare today's date to the timestamp's date
     return today.getTime() === timestampDate.getTime()
 }
 
+// getStudiedDays retrieves the
 function getStudiedDays(auditLogResult) {
-    // makes and uses a set to store unique dates
+    // Creates a Set to store the unique dates of the user's auditLogs in the past month
     let studiedDaysSet = new Set(auditLogResult.map(log => {
+        // Retrieves the date the log was created
         let date = new Date(log.createdAt)
+        // Returns a string concatenating the month and date
         return `${date.getMonth()}${date.getDate()}`
     }));
-    // returns array back from the set
+    // Converts studiedDaysSet to an array and returns it
     return Array.from(studiedDaysSet)
 }
 
