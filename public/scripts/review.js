@@ -52,19 +52,35 @@ captions.forEach(element => {
     })
 })
 
-function triggerAlert(e) {
+function triggerCopyAlert(e) {
     navigator.clipboard.writeText(e.target.textContent)
 
     const alert = document.querySelector(".alert")
+    clearAlertClasses(alert)
+    alert.classList.add("alert-success")
     alert.textContent = "Sharecode copied to clipboard!"
     alert.classList.remove("alert-hidden")
-    setTimeout(() => alert.classList.add("alert-hidden"), 3000)
+    setTimeout(() => {alert.classList.add("alert-hidden")}, 3000)
+}
+
+function triggerDBFailAlert(text) {
+    const alert = document.querySelector(".alert")
+    clearAlertClasses(alert)
+    alert.classList.add("alert-warning")
+    alert.textContent = text
+    alert.classList.remove("alert-hidden")
+    setTimeout(() => {alert.classList.add("alert-hidden")}, 3000)
+}
+
+function clearAlertClasses(element) {
+    element.classList.remove("alert-success")
+    element.classList.remove("alert-warning")
 }
 
 //only attach these eventListeners if the element exists
 if(document.getElementById("sharecode")) {
-    document.getElementById("sharecode").addEventListener("touchstart", triggerAlert)
-    document.getElementById("sharecode").addEventListener("click", triggerAlert)
+    document.getElementById("sharecode").addEventListener("touchstart", triggerCopyAlert)
+    document.getElementById("sharecode").addEventListener("click", triggerCopyAlert)
 }
 
 //this needs validation in the backend to prevent injections
@@ -84,9 +100,13 @@ if(document.getElementById("save-button")) {
             if(response.ok) {
                 const data = await response.json()
                 window.location.href= `/review/${JSON.parse(data).shareId}`
+            } else {
+                const text = await response.json()
+                triggerDBFailAlert(text.message)
             }
         } catch {
             console.log("Error in submission")
+            triggerDBFailAlert('An unexpected error occurred. Please try again later.')
         }
     }
 )}

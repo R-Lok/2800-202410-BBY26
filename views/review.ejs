@@ -10,12 +10,9 @@
     <% } %>
     <%- include('template/headerBar', {pictureID:pictureID}) %>
     <div class="content-container">
-        <% if (queryType === "view") { %> 
-            <div class="alert alert-success alert-hidden" role="alert">
-                Sharecode copied to clipboard!
-            </div>
-        <% } %>
-        
+        <div class="alert alert-hidden" role="alert">
+            Sharecode copied to clipboard!
+        </div>
         <div id="counter-container">
             <span id="counter"> 1 </span>
             <span id="divide"> / </span>
