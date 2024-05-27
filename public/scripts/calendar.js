@@ -28,9 +28,9 @@ function isToday(timestamp) {
     return today.getTime() === timestampDate.getTime()
 }
 
-// getStudiedDays retrieves the
+// getStudiedDays returns the studied dates from the user's auditLogs in the past month
 function getStudiedDays(auditLogResult) {
-    // Creates a Set to store the unique dates of the user's auditLogs in the past month
+    // Creates a Set to store the unique dates of the user's auditLogs
     let studiedDaysSet = new Set(auditLogResult.map(log => {
         // Retrieves the date the log was created
         let date = new Date(log.createdAt)
@@ -41,42 +41,48 @@ function getStudiedDays(auditLogResult) {
     return Array.from(studiedDaysSet)
 }
 
-function getStreakDays(timestamp, date, streak) {
+// getStreakDays returns the streak dates from the user's streak count, last activity timestamp, and current date
+function getStreakDays(lastActivityTimestamp, date, streak) {
     let streakDays = []
-    if (streak == 0) return streakDays;
-    if (timestamp == null) return streakDays;
-    let i = isToday(timestamp) ? 0 : 1
-    if (i == 1) {
-        streak++
-    }
+    // Checks if the user has a streak to be displayed
+    if (streak == 0) return streakDays
+    if (lastActivityTimestamp == null) return streakDays
+    // Checks if user did an activity today
+    let i = isToday(lastActivityTimestamp) ? 0 : 1
+    if (i == 1) streak++
+    // Loops to retrieve the streak dates
     for (i; i < streak; i++) {
-        let d = new Date(date);  // Create a new Date object for each iteration
-        d.setDate(date.getDate() - i);  // Modify the date for the specific streak day
+        // Create a new Date object for each iteration
+        let d = new Date(date);
+        // Modify the date for the specific streak day
+        d.setDate(date.getDate() - i);  
+        // Adds a string concatenating the month and date to streakDays
         streakDays[i] = `${d.getMonth()}${d.getDate()}`;
     }
     return streakDays
 }
 
+// getMonthName retrieves the month name of a date from the months array
 function getMonthName(date) {
     return months[date.getMonth()]
 }
 
-//generates days of current month
+// generateDaysOfCurrMonth returns the days of the current month
 function generateDaysOfCurrMonth(date) {
+    // Returns a Date object with the current month's last date
     let currMonthLastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-
     let html ='';
-    let i;
-    for (i = 1; i <= currMonthLastDate.getDate(); i++) {
+    // Loops through the total days of the current month to append each day to the HTML
+    for (let i = 1; i <= currMonthLastDate.getDate(); i++) {
+        // Checks for the current date
         if (i == date.getDate()) {
+            // Appends an <li> element as the current date
             html += `<li id="${currMonthLastDate.getMonth()}${i}"><span class="active">${i}</span></li>`;
         } else {
+            // Appends an <li> element as the non-current date
             html += `<li id="${currMonthLastDate.getMonth()}${i}">${i}</li>`;
         }
     }
-    // console.log(`prev month days: ${generateDaysOfPrevMonth()}`);
-    // console.log(`curr month days: ${html}`);
-    // console.log(`next month days: ${generateDaysOfNextMonth()}`);
     return html;
 }
 
