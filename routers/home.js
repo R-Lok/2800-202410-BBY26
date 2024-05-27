@@ -4,7 +4,7 @@ const collectionsModel = require('../models/collections')
 const usersModel = require('../models/users')
 const auditLogsModel = require('../models/auditLog')
 
-const { isConsecutiveDays } = require('../public/scripts/streak')
+const { isConsecutiveDays } = require('../controllers/streak')
 const {
     getPrevMonthLastDate,
     generateDaysOfPrevMonth,

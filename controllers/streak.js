@@ -1,5 +1,5 @@
 // require('dotenv').config({ path: `${process.cwd()}/.env.${process.env.NODE_ENV}` })
-const usersModel = require('../../models/users')
+const usersModel = require('../models/users')
 
 function isConsecutiveDays(lastDate, currDate) {
     // console.log(`\nisConsecutiveDays\n`)

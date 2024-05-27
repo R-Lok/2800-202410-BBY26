@@ -7,6 +7,7 @@ const compression = require('compression')
 const sharp = require("sharp");
 const userRouter = require('./routers/users')
 const checkRouter = require('./routers/check')
+const reviewRouter = require('./routers/review')
 const { router: authRouter, isAuth, hasSecurityQuestion } = require('./routers/auth')
 const settingRouter = require('./routers/settings')
 const submitcardsRouter = require('./routers/submitcards')
@@ -21,8 +22,6 @@ const collectionRouter = require('./routers/collection')
 const homeRouter = require('./routers/home')
 const auditlogModel = require('./models/auditLog')
 const mongoose = require('mongoose')
-
-const { incrementStreak, isConsecutiveDays } = require('./public/scripts/streak')
 
 const app = express()
 const server = require('http').createServer(app)
@@ -68,7 +67,7 @@ app.use('/settings', isAuth, hasSecurityQuestion, settingRouter)
 app.use('/securityQuestions', securityQuestionsRouter)
 app.use('/collection', isAuth, hasSecurityQuestion, collectionRouter)
 app.use('/check', isAuth, hasSecurityQuestion, checkRouter)
-app.use('/review', isAuth, hasSecurityQuestion)
+app.use('/review', isAuth, hasSecurityQuestion, reviewRouter)
 app.use('/submitcards', isAuth, hasSecurityQuestion, submitcardsRouter)
 app.use('/generate', isAuth, hasSecurityQuestion)
 app.use('/api/generate', isAuth, hasSecurityQuestion)
@@ -208,25 +207,6 @@ app.post("/api/generatebyimage", async (req, res) => {
       res.status(400).send("Fail to generate flashcards.");
     }
 });
-
-app.get('/review/:setid', async (req, res) => {
-    try {
-        console.log('set' + req.params.setid)
-        const cards = await flashcardsModel.find({ shareId: Number(req.params.setid) }).select('-_id question answer')
-        if (cards.length === 0) {
-            return res.render('404', { error: 'Flashcard set does not exist!', pictureID: req.session.picture })
-        }
-        await collectionsModel.findOneAndUpdate({ shareId: Number(req.params.setid) }, { updatedAt: new Date() })
-        incrementStreak(req)
-        await auditlogModel.create({ loginId: req.session.loginId, type: 'flashcard', shareId: req.params.setid })
-        const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: cards, id: req.params.setid, queryType: 'view', pictureID: req.session.picture }
-        return res.render('review', carouselData)
-    } catch (err) {
-        console.log(`Failed to fetch cards for set ${req.params.setid}`)
-        res.render('404', { error: 'Flashcard set does not exist!', pictureID: req.session.picture })
-    }
-})
-
 
 
 app.get('/egg', (req, res) => {
