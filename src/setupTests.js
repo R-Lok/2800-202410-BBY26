@@ -1,41 +1,37 @@
 const mongoose = require('mongoose')
-const { MongoMemoryServer } = require('mongodb-memory-server')
+const { MongoMemoryReplSet } = require('mongodb-memory-server')
 require('dotenv').config({ path: `${__dirname}/.env.${process.env.NODE_ENV}` })
 
-let mongod
 
 const mockMongooseUtils = {
     connect: async () => {
-        mongod = await MongoMemoryServer.create()
-        const uri = mongod.getUri()
+        this.replset = await MongoMemoryReplSet.create()
+        const uri = this.replset.getUri()
         console.log(uri)
 
         const mongooseOpts = {
         }
 
-        await mongoose.connect(uri, mongooseOpts)
+        return mongoose.connect(uri, mongooseOpts)
     },
     close: async () => {
         await mongoose.connection.dropDatabase()
         await mongoose.connection.close()
-        if (mongod) {
-            await mongod.stop()
+        if (this.replset) {
+            await this.replset.stop()
         }
     },
-    clear: async () => {
+    clear: () => {
         const collections = mongoose.connection.collections
-
-        // eslint-disable-next-line guard-for-in
-        for (const key in collections) {
-            const collection = collections[key]
-            await collection.deleteMany({})
-        }
+        return Promise.all(
+            Object.values(collections).map((collection) => collection.deleteMany({})),
+        )
     },
 
 }
 
-beforeAll(async () => await mockMongooseUtils.connect())
+beforeAll(() => mockMongooseUtils.connect())
 
-afterEach(async () => await mockMongooseUtils.clear())
+afterEach(() => mockMongooseUtils.clear())
 
-afterAll(async () => await mockMongooseUtils.close())
+afterAll(() => mockMongooseUtils.close())

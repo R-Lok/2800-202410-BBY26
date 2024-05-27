@@ -6,6 +6,7 @@
 	"scripts": {
 		"lint": "esw . --color --fix",
 		"test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles",
+		"coverage": "cross-env NODE_ENV=test jest --detectOpenHandles --coverage",
 		"local": "cross-env NODE_ENV=local nodemon src/index.js",
 		"dev": "cross-env NODE_ENV=dev nodemon src/index.js",
 		"prod": "cross-env NODE_ENV=prod nodemon src/index.js"

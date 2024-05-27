@@ -11,9 +11,8 @@ module.exports = {
     // Matches parent folder `__tests__` and filename
     // should contain `test` or `spec`.
     // testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$',
-
-    // Module file extensions for importing
-    moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+    coverageReporters: ['clover', 'json', 'lcov', 'text'],
+    moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
     coverageThreshold: {
         global: {
             branches: 1,
@@ -23,8 +22,12 @@ module.exports = {
         },
     },
     clearMocks: true,
-    coverageReporters: ['text', 'cobertura', 'lcov'],
     testEnvironment: 'node',
-    testPathIgnorePatterns: ['/node_modules/'],
+    testPathIgnorePatterns: ['/node_modules/', '/src/public/scripts/'],
+    coveragePathIgnorePatterns: ['/node_modules/', '/src/public/scripts/'],
     setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
+    collectCoverageFrom: [
+        'src/**/*.{js,jsx,ts,tsx}',
+        '!src/**/*.d.ts',
+    ],
 }
