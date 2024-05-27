@@ -36,7 +36,7 @@ function getStudiedDays(auditLogResult) {
         let date = new Date(log.createdAt)
         // Returns a string concatenating the month and date
         return `${date.getMonth()}${date.getDate()}`
-    }));
+    }))
     // Converts studiedDaysSet to an array and returns it
     return Array.from(studiedDaysSet)
 }
@@ -53,11 +53,11 @@ function getStreakDays(lastActivityTimestamp, date, streak) {
     // Loops to retrieve the streak dates
     for (i; i < streak; i++) {
         // Create a new Date object for each iteration
-        let d = new Date(date);
+        let d = new Date(date)
         // Modify the date for the specific streak day
-        d.setDate(date.getDate() - i);  
+        d.setDate(date.getDate() - i)
         // Adds a string concatenating the month and date to streakDays
-        streakDays[i] = `${d.getMonth()}${d.getDate()}`;
+        streakDays[i] = `${d.getMonth()}${d.getDate()}`
     }
     return streakDays
 }
@@ -67,63 +67,63 @@ function getMonthName(date) {
     return months[date.getMonth()]
 }
 
-// generateDaysOfCurrMonth returns the days of the current month
+// generateDaysOfCurrMonth returns the days of the current month as HTML
 function generateDaysOfCurrMonth(date) {
     // Returns a Date object with the current month's last date
-    let currMonthLastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    let html ='';
+    let currMonthLastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0)
+    let html =''
     // Loops through the total days of the current month to append each day to the HTML
     for (let i = 1; i <= currMonthLastDate.getDate(); i++) {
         // Checks for the current date
         if (i == date.getDate()) {
             // Appends an <li> element as the current date
-            html += `<li id="${currMonthLastDate.getMonth()}${i}"><span class="active">${i}</span></li>`;
+            html += `<li id="${currMonthLastDate.getMonth()}${i}"><span class="active">${i}</span></li>`
         } else {
             // Appends an <li> element as the non-current date
-            html += `<li id="${currMonthLastDate.getMonth()}${i}">${i}</li>`;
+            html += `<li id="${currMonthLastDate.getMonth()}${i}">${i}</li>`
         }
     }
     return html;
 }
 
+// getPrevMonthLastDate retrieves the previous month's last date
 function getPrevMonthLastDate(date) {
-    return new Date(date.getFullYear(), date.getMonth(), 0);
+    return new Date(date.getFullYear(), date.getMonth(), 0)
 } 
 
+// generateDaysOfPrevMonth returns the days of the previous month as HTML
 function generateDaysOfPrevMonth(date) {
-    let prevMonthLastDate = getPrevMonthLastDate(date);
-    let prevMonthLastWeekday = prevMonthLastDate.getDay();
-    let prevMonthTotalDays = prevMonthLastDate.getDate();
-
-    let html = '';
-    if (prevMonthLastWeekday == 6) {
-        return html;
-    } 
-
-    let d = prevMonthTotalDays - prevMonthLastWeekday;
+    let prevMonthLastDate = getPrevMonthLastDate(date)
+    let prevMonthLastWeekday = prevMonthLastDate.getDay()
+    let prevMonthTotalDays = prevMonthLastDate.getDate()
+    let html = ''
+    // Ensures an extra week is not printed to the calendar
+    if (prevMonthLastWeekday == 6) return html
+    // Calculates the first date of the previous month that is visible on the calendar
+    let d = prevMonthTotalDays - prevMonthLastWeekday
+    // Loops through the visible dates of the calendar and appends them to HTML
     for (let i = 0; i <= prevMonthLastWeekday; i++) {
-        html += `<li id="${prevMonthLastDate.getMonth()}${d}">${d}</li>`;
-        d++;
+        html += `<li id="${prevMonthLastDate.getMonth()}${d}">${d}</li>`
+        d++
     }
-    return html;
+    return html
 }
 
+// generateDaysOfNextMonth returns the days of the next month as HTML
 function generateDaysOfNextMonth(date) {
-    let currMonthLastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-
-    let currMonthLastWeekday = currMonthLastDate.getDay();
-    let nextMonthFirstWeekday = totalWeekDays - currMonthLastWeekday - 1;
-
+    // Returns a Date object with the current month's last date
+    let currMonthLastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0)
+    let currMonthLastWeekday = currMonthLastDate.getDay()
+    // Retrieves the next month's first weekday
+    let nextMonthFirstWeekday = totalWeekDays - currMonthLastWeekday - 1
     let html = '';
-    if (nextMonthFirstWeekday == 0) {
-        return html;
-    } 
-
+    // Ensures an extra week is not printed to the calendar
+    if (nextMonthFirstWeekday == 0) return html
+    // Iterates through the days of next month and appends them to HTML
     for (let d = 1; d <= nextMonthFirstWeekday; d++) {
-        html += `<li id="${currMonthLastDate.getMonth()}${d}">${d}</li>`;
-    };
-
-    return html;
+        html += `<li id="${currMonthLastDate.getMonth()}${d}">${d}</li>`
+    }
+    return html
 }
 
 module.exports = {
