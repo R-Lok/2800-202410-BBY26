@@ -31,6 +31,16 @@
     margin-bottom:7px;
 }
 
+.button-bg:active {
+    background-color:#560d81;
+    margin-bottom:7px;
+}
+
+.button-bg:hover {
+    background-color:#560d81;
+    margin-bottom:7px;
+}
+
 .input-group input[type="search"] {
     width: 300px; /* Adjust the width as per your requirement */
     height: 40px; /* Adjust the height as per your requirement */
@@ -50,4 +60,8 @@
     padding: 0 !important;
     margin: 0 !important;
     line-height: 1 !important;
+}
+
+.search {
+    filter: brightness(0) invert(1);
 }

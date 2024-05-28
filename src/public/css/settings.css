@@ -47,9 +47,9 @@
 }
 
 .verticalLine{
-    width: 2px;              /* Width of the vertical line */
-    height: 30px;           /* Height of the vertical line */
-    background-color: white; /* Color of the vertical line */
+    width: 2px;
+    height: 30px;
+    background-color: white;
 }
 
 .btnStyle {
@@ -57,4 +57,14 @@
     border: black solid 2px;
     color:white;
     font-weight:bold;
+}
+
+.btn:active{
+    background-color:#560d81;
+    color:white;
+}
+
+.btn:hover{
+    background-color:#560d81;
+    color:white;
 }
