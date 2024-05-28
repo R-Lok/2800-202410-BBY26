@@ -71,7 +71,7 @@ router.post('/sortCollection', async (req, res) => {
 })
 
 // Deletion route, flashcard set to be deleted depends on shareId request parameter
-router.get('/delete/:sharedId', async (req, res) => {
+router.get('/delete/:shareId', async (req, res) => {
     const userId = req.session.userId
     const shareId = req.params.shareId
 
