@@ -134,6 +134,13 @@ async function generateImage(difficulty, numQuestions, image) {
     }
 }
 
+/**
+ * Generate flashcards objects in JSON format by calling OpenAI API based on text study material
+ * @param {String} difficulty - Difficulty of flashcards: Easy, Medium, or Difficult
+ * @param {String} number - Number of flashcards
+ * @param {String} material - Study material in text format
+ * @returns {Object} jsonResult - flashcards objects in JSON format
+ */
 async function generate(difficulty, number, material) {
     let completion
     try {
@@ -177,6 +184,11 @@ app.post('/api/generate', async (req, res) => {
     }
 })
 
+/**
+ * Convert blob into base64 string
+ * @param {object} file - The length of the rectangle
+ * @returns {Promise} promise - Promise that resolves to a base64 file in string representation
+ */
 async function convertImageToBase64Jpg(base64Input) {
     try {
         // Decode the base64 input image to a buffer

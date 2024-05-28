@@ -148,3 +148,13 @@ video, #frame {
   height: 100%;
   object-fit: cover;
 }
+
+#enterTextButton {
+  background-color: rgb(135, 20, 201);
+  border-color: rgb(135, 20, 201);
+}
+
+.generate-btn {
+  background-color: rgb(135, 20, 201);
+  border-color: rgb(135, 20, 201);
+}
