@@ -121,10 +121,7 @@ async function getCamera() {
     const photoModal = document.getElementById("photoModal")
 
     if (!document.querySelector('#frame').classList.contains('hidden')) {
-        frame.classList.toggle('hidden')
-        video.classList.toggle('hidden')
-        retake.classList.toggle('hidden')
-        snapBtn.classList.toggle('hidden')
+        [frame, video, retake, snapBtn].forEach( elem => toggleHidden(elem))
     }
 
     if (isLandscape()) {
@@ -136,8 +133,17 @@ async function getCamera() {
     }
     const generatePhotoButton = document.getElementById("generatePhotoButton")
     generatePhotoButton.disabled = true
+    connectToCamera()
+}
 
+//This function toggles the hidden class on the input element
+function toggleHidden(element) {
+    element.classList.toggle('hidden')
+}
 
+//This function assigns the user's device camera to the mediaStream reference
+//and sets the source for the video to the mediaStream (user's camera)
+async function connectToCamera() {
     try {
         mediaStream = await navigator.mediaDevices.getUserMedia({
             audio: false,
