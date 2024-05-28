@@ -1,3 +1,7 @@
+.headerText {
+  color:var(--main-color6);
+}
+
 .generate-container {
   height: 90vh;
   display: flex;
@@ -157,4 +161,19 @@ video, #frame {
 .generate-btn {
   background-color: rgb(135, 20, 201);
   border-color: rgb(135, 20, 201);
+}
+
+.btn-success {
+  --bs-btn-hover-bg: #560d81;
+  --bs-btn-hover-border-color: #560d81;
+  --bs-btn-active-bg: #560d81;
+  --bs-btn-active-border-color: #560d81;
+}
+
+.btn-primary {
+  box-shadow: 0 8px 6px -6px black;
+}
+
+.nav-link {
+  color: #8900d8;
 }
