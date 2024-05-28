@@ -4,8 +4,10 @@ const adminController = require('../controllers/admin')
 
 router.get('/userList', adminController.userListGET)
 
-router.post('/impersonation/:loginIn', adminController.impersonationPOST)
+router.post('/impersonation', adminController.impersonationPOST)
 
-router.post('/revoke/:loginIn', adminController.revokePOST)
+router.post('/revoke', adminController.revokePOST)
+
+router.post('/enable', adminController.enablePOST)
 
 module.exports = router
