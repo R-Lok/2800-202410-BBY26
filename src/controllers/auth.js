@@ -39,8 +39,13 @@ const loginPOST = async (req, res, next) => {
     try {
         const { loginId, password } = req.body
         const schema = Joi.object({
-            loginId: Joi.string().max(20).required(),
-            password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
+            loginId: Joi.string().max(20).required().messages({
+                'string.empty': 'Login ID is required'
+            }),
+            password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required().messages({
+                'string.empty': 'Password is required',
+                'string.pattern.base': 'Password must be between 3 and 20 alpha-numeric characters'
+            }),
         })
 
         await schema.validateAsync({ loginId, password })

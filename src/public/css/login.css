@@ -3,11 +3,6 @@ body, html {
   margin: 0;
 }
 
-.btn {
-  background-color: rgb(135, 20, 201);
-  border-color: rgb(135, 20, 201);
-}
-
 .sign-up-container {
   height: 80vh;
   display: flex;
