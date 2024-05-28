@@ -47,12 +47,10 @@
     border-radius: 20px;
     padding: 10px;
     border: 1px solid #ced4da; /* Border color */
-  }
+}
 
-  .list-group{
-    max-height: 395px;
-    margin-bottom: 10px;
-    overflow:scroll;
+.list-group{
+    margin-bottom: 100px;
     margin-top:20px
 }
 
@@ -64,4 +62,8 @@
 
 .search {
     filter: brightness(0) invert(1);
+}
+
+.btn.btn-danger {
+    border: black solid 2px;
 }
