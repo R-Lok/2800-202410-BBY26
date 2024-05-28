@@ -77,7 +77,7 @@ function generateDaysOfCurrMonth(date) {
         // Checks for the current date
         if (i == date.getDate()) {
             // Appends an <li> element as the current date
-            html += `<li id="${currMonthLastDate.getMonth()}${i}"><span class="active">${i}</span></li>`
+            html += `<li class="active" id="${currMonthLastDate.getMonth()}${i}">${i}</li>`
         } else {
             // Appends an <li> element as the non-current date
             html += `<li id="${currMonthLastDate.getMonth()}${i}">${i}</li>`
