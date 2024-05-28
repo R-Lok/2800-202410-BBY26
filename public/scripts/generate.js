@@ -351,7 +351,7 @@ function addResetImageEvent(dropArea, button, input, file) {
 addResetImageEvent(dropArea, button, input, file);
 
 /**
- * Convert blob into base64 object
+ * Convert blob into base64 string
  * @param {object} file - The length of the rectangle
  * @returns {Promise} promise - Promise that resolves to a base64 file in string representation
  */

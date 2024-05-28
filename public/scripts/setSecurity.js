@@ -1,3 +1,4 @@
+// Fetch all available security questions from database and then display them for users
 function loadSecurityQuestions() {
     document.addEventListener('DOMContentLoaded', async () => {
         await axios
@@ -16,6 +17,7 @@ function loadSecurityQuestions() {
     })
 }
 
+// List all available security questions to users
 function insertQuestions(questions) {
     const questionOptions = document.querySelectorAll('[id*="question"]')
 
@@ -25,10 +27,10 @@ function insertQuestions(questions) {
         option.innerHTML = questions[i].question
     })
 }
-
 loadSecurityQuestions()
 
-async function submitAnswers() {
+// Add event to allow users to submit security answers and store it in database
+async function addSubmitAnswersEvent() {
     const submitBtn = document.getElementById('submitBtn')
 
     submitBtn.addEventListener('click', async () => {
@@ -54,5 +56,4 @@ async function submitAnswers() {
             })
     })
 }
-
-submitAnswers()
+addSubmitAnswersEvent()
