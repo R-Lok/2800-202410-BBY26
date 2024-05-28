@@ -10,12 +10,28 @@
 
 .content-container {
     margin: 0;
+    margin-top: 8em;
     padding: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    /* height: 100vh; */
+}
+
+#setName {
+    width: 300px;
+    height: 40px;
+    border-radius: 20px;
+    padding: 10px;
+    border: 1px solid #ced4da;
+}
+
+#save-button {
+    margin: 0.5em;
+    border-radius: 15px;
+    background-color: #8714c9;
+    padding: 0.5em;
 }
 
 img {
