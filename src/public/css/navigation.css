@@ -7,10 +7,32 @@
     --main-color6:#8714c9;
 }
 
+.navbar {
+    font-size: 14pt;
+    padding: 0 !important;
+    margin: 0;
+    line-height: 1;
+}
+
 .navbar-bg {
     background-color: var(--main-color6);
 }
 
 .nav-button{
     border-width:0px;
+}
+
+nav button img {
+    width:80px;
+}
+
+nav button span {
+    color:white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif; 
+    font-size: 20pt;
+    padding-top: 25px;
+}
+
+#headerProfilePic{
+    width:60px;
 }
