@@ -1,8 +1,7 @@
 console.log("review.js loaded")
 
-
-//below functions: need to set a delay that prevents the counter incrementing faster than the cards swap.
-
+//this function is used to "unflip" a flashcard, so the question side is showing
+//when they go back to it in the same review session.
 function resetCards(e) {
         const flippedCaption = document.querySelector(".carousel-caption[flipped]")
 
@@ -16,10 +15,7 @@ function resetCards(e) {
         }
 }
 
-const captions = document.querySelectorAll(".carousel-caption")
-console.log(captions)
-
-//This adds event listeners to each flashcard that updates the counter at the top according to which flashcard is currently displayed
+//This adds event listeners to each flashcard that updates the counter at the top according to which flashcard is currently being displayed
 document.querySelectorAll(".carousel-item").forEach(ele => ele.addEventListener("transitionend", (e) => {
     const activeCard = document.querySelector(".carousel-item-next") ? document.querySelector(".carousel-item-next") : document.querySelector(".carousel-item-prev")
     console.log(activeCard)
@@ -29,10 +25,15 @@ document.querySelectorAll(".carousel-item").forEach(ele => ele.addEventListener(
         counter.textContent = activeCard.getAttribute("number")
     }
 }))
+
+//these event listeners are applied to the 'next' and 'previous' arrows of the page, to
+//reset the card to the question face when the user moves to the previous or next card
 document.querySelector(".carousel-control-next").addEventListener("click", resetCards)
 document.querySelector(".carousel-control-prev").addEventListener("click", resetCards)
 
-//make each flashcard flippable
+//This forEach call makes it so each flashcard is "flippable". When the user clicks/taps the flashcard,
+//it will "flip" to the other side
+const captions = document.querySelectorAll(".carousel-caption")
 captions.forEach(element => {
     element.addEventListener("click", (e) => {
         console.log("flip")
@@ -52,6 +53,8 @@ captions.forEach(element => {
     })
 })
 
+//this function is used for triggering the "Sharecode copied to clipboard" message when the
+//user taps or clicks on the sharecode
 function triggerCopyAlert(e) {
     navigator.clipboard.writeText(e.target.textContent)
 
@@ -63,6 +66,8 @@ function triggerCopyAlert(e) {
     setTimeout(() => {alert.classList.add("alert-hidden")}, 3000)
 }
 
+//this function is used to alert the user of an error when the app fails to reach the server,
+//or if the write to database failed.
 function triggerDBFailAlert(text) {
     const alert = document.querySelector(".alert")
     clearAlertClasses(alert)
@@ -72,17 +77,19 @@ function triggerDBFailAlert(text) {
     setTimeout(() => {alert.classList.add("alert-hidden")}, 3000)
 }
 
+//This function clears all alert classes from the alert element (removes the color)
 function clearAlertClasses(element) {
     element.classList.remove("alert-success")
     element.classList.remove("alert-warning")
 }
 
-//only attach these eventListeners if the element exists
+//only attach these eventListeners if the element exists (only exists when "viewing")
 if(document.getElementById("sharecode")) {
     document.getElementById("sharecode").addEventListener("touchstart", triggerCopyAlert)
     document.getElementById("sharecode").addEventListener("click", triggerCopyAlert)
 }
 
+//Attach eventListener to the "save" button if it exists on the page (only when "finalizing" the set)
 //this needs validation in the backend to prevent injections
 if(document.getElementById("save-button")) {
     document.getElementById("save-button").addEventListener("click", async (e) => {

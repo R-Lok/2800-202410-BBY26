@@ -54,23 +54,31 @@ function sendApiRequest() {
 }
 sendApiRequest()
 
+//sets the target for "upload study material" button to imageModal
+//if the upload image tab is pressed
 const imageTab = document.querySelector("#image-tab")
 imageTab.addEventListener('click', (e) => {
     const submitMaterialsBtn = document.querySelector("#enterTextButton")
     submitMaterialsBtn.setAttribute("data-bs-target", '#imageModal')
 })
 
+//sets the target for "upload study material" button to photo capture modal
+//if the 'take photo' tab is pressed
 const photoTab = document.querySelector("#photo-tab")
 photoTab.addEventListener('click', (e) => {
     const submitMaterialsBtn = document.querySelector("#enterTextButton")
     submitMaterialsBtn.setAttribute("data-bs-target", '#photoModal')
 })
 
+//sets the target for "upload study material" button to text upload modal
+//if the 'text upload' tab is pressed
 const textTab = document.querySelector("#text-tab").addEventListener('click', (e) => {
     const submitMaterialsBtn = document.querySelector("#enterTextButton")
     submitMaterialsBtn.setAttribute("data-bs-target", "#textModal")
 })
 
+//Turns on the camera if the bs-target for the upload study button is #photoModal,
+//and it is pressed (so camera is on as soon as the modal opens)
 document.querySelector('#enterTextButton').addEventListener('click', (e) => {
     const uploadMaterialButton = document.querySelector('#enterTextButton')
 
@@ -79,6 +87,8 @@ document.querySelector('#enterTextButton').addEventListener('click', (e) => {
     }
 })
 
+//EventListener for 'take photo' button that hides/shows relevant elements when
+//a photo is taken
 const snap = document.querySelector("#snap")
 snap.addEventListener('click', (e) => {
     takePhoto()
@@ -94,12 +104,15 @@ snap.addEventListener('click', (e) => {
     turnOffCamera()
 })
 
+//Turns on the camera and show relevant elements when the 'retake' button is pressed
 document.querySelector('#retake').addEventListener('click', (e) => {
     getCamera()
 })
 
+//mediaStream reference variable needed for video/camera 
 let mediaStream = null
 
+//turns on the camera and feeds the stream to the video element
 async function getCamera() {
     const frame = document.querySelector("#frame")
     const video = document.querySelector("#cam")
@@ -142,6 +155,7 @@ async function getCamera() {
     }
 }
 
+//turns off the camera
 async function turnOffCamera() {
     if (mediaStream) {
         let tracks = mediaStream.getTracks()
@@ -152,6 +166,7 @@ async function turnOffCamera() {
     }
 }
 
+//takes a snapshot of what the user's device camera is currently seeing (what is in the video element right now)
 function takePhoto() {
     let photoFrame = document.querySelector("#frame")
     let video = document.querySelector("#cam")
@@ -176,6 +191,7 @@ function takePhoto() {
 }
 
 //Attach eventListener for 'generate' button of photoModal
+//sends a request to the server to generate flashcards based on the photo taken
 document.querySelector("#generatePhotoButton").addEventListener('click', async (e) => {
     const photo = JSON.parse(sessionStorage.getItem('imageURL'))
     try {
@@ -201,6 +217,8 @@ document.querySelector("#generatePhotoButton").addEventListener('click', async (
     }
 })
 
+//mutationObserver to look at the photoModal for changes
+//if the classList of photoModal doesn't have 'show', turn off the camera
 const targetNode = document.querySelector('#photoModal')
 const config = { attributes: true, attributeFilter: ['class'] }
 
@@ -216,6 +234,8 @@ const callback = (mutationsList, observer) => {
 const observer = new MutationObserver(callback)
 observer.observe(targetNode, config)
 
+
+//Checks if the user device is landscape or portrait
 function isLandscape() {
     return screen.width > screen.height
 }
@@ -256,16 +276,12 @@ dropArea.addEventListener('drop', (event) => {
 
 function displayFile() {
     let fileType = file.type;
-
     let validExtensions = ['image/jpeg', 'image/jpg', 'image/png', 'image/heic', 'image/heif'];
-
     if (validExtensions.includes(fileType)) {
         // console.log('This is an image file');
         let fileReader = new FileReader();
-
         fileReader.onload = async () => {
             let fileURL = fileReader.result;
-
             if (fileType === 'image/heic' || fileType === 'image/heif') {
                 try {
                     let blob = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.5 });
@@ -348,10 +364,8 @@ async function convertFileToBase64(file) {
 
 function sendImageApiRequest() {
     const generateBtn = document.getElementById('image-generate-button');
-
     generateBtn.addEventListener('click', async () => {
         const base64Output = await convertFileToBase64(file);
-
         const loader = document.querySelector('.loading-state')
         loader.style.visibility = 'visible'
         console.log('Start calling API')

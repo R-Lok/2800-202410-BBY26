@@ -105,6 +105,7 @@ router.get('/deleteAll', async (req, res) => {
         const sets = await collectionsModel.find({ userId: userId }).select('shareId')
         const shareIds = sets.map((set) => set.shareId)
 
+        // Write to database to delete all flashcard sets and flashcards associated with the user
         await collectionsModel.deleteMany({ userId: userId })
         await flashcardsModel.deleteMany({ shareId: { $in: shareIds } })
     } catch (error) {

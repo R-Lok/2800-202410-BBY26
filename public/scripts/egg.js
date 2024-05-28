@@ -39,7 +39,7 @@ for (let i = 0; i < names.length; i++) {
     names[i].addEventListener('click', (e) => {
         const link = e.target.getAttribute('data-link')
         if (link) {
-            confirm('Are you sure you want to leave StudyGen?') ? window.location.href = `https://github.com/${link}` : ''
+            confirm('Are you sure you want to leave StudyGen?') ? window.open(`https://github.com/${link}`, '_blank').focus() : ''
         }
     })
 }
@@ -148,12 +148,3 @@ for (let i = 0; i < maxConfettis; i++) {
 canvas.width = W
 canvas.height = H
 Draw()
-
-document.addEventListener('visibilitychange', function() {
-    const audio = document.getElementById('EggMusic')
-    if (document.visibilityState === 'visible') {
-        audio.play()
-    } else {
-        audio.pause()
-    }
-})
