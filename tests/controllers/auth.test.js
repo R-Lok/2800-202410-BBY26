@@ -1,4 +1,4 @@
-const { authController } = require('../../src/controllers/index')
+const authController = require('../../src/controllers/auth')
 const { authService } = require('../../src/services/index')
 const { CustomError } = require('../../src/utilities')
 

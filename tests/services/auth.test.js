@@ -1,5 +1,6 @@
 const { authService } = require('../../src/services/index')
 const userSessionModel = require('../../src/models/userSessions')
+const usersModel = require('../../src/models/users')
 
 const users = [
     { loginId: 'admin', name: 'admin', email: 'admin@gmail.com', password: 'admin' },
@@ -45,6 +46,12 @@ describe('auth service', () => {
         it('should throw an error (incorrect password)', async () => {
             await expect(authService.loginPOST('admin', 'password'))
                 .rejects.toThrow(new Error('[401] loginId or password incorrect!'))
+        })
+
+        it('should throw an error (account disabled)', async () => {
+            await usersModel.updateOne({ loginId: users[1].loginId }, { enable: false })
+            await expect(authService.loginPOST(users[1].loginId, users[1].password))
+                .rejects.toThrow(new Error('[403] account disable!'))
         })
     })
 

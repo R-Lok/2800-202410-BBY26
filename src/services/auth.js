@@ -25,6 +25,9 @@ const loginPOST = async (loginId, password) => {
     if (!user) {
         throw new CustomError('404', 'user not found')
     }
+    if (!user.enable) {
+        throw new CustomError('403', 'account disable!')
+    }
     const result = await bcrypt.compare(password, user.password)
     if (!result) {
         throw new CustomError('401', 'loginId or password incorrect!')

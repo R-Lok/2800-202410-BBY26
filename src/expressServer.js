@@ -12,6 +12,7 @@ const reviewRouter = require('./routers/review')
 const authRouter = require('./routers/auth')
 const settingRouter = require('./routers/settings')
 const submitcardsRouter = require('./routers/submitcards')
+const adminRouter = require('./routers/admin')
 const { isAuth, isAdmin, hasSecurityQuestion } = require('./utilities/index')
 const OpenAI = require('openai')
 const openai = new OpenAI({
@@ -62,7 +63,7 @@ app.use(session({
 
 app.use('/', authRouter)
 app.use('/users', isAuth, hasSecurityQuestion, userRouter)
-app.use('/admin', isAdmin, authRouter)
+app.use('/admin', isAdmin, adminRouter)
 app.use('/settings', isAuth, hasSecurityQuestion, settingRouter)
 app.use('/securityQuestions', securityQuestionsRouter)
 app.use('/collection', isAuth, hasSecurityQuestion, collectionRouter)
