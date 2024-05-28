@@ -19,3 +19,42 @@
     border-width: 5px;
     border-color:var(--main-color6);
 }
+
+.settingsBlock {
+    padding: 15px;
+    border-style: outset;
+    border-color:black;
+    border-width:2px;
+    background: var(--main-color6);
+    border-radius: 10px;
+    color:white;
+    text-shadow:#230C33;
+    margin-bottom:5px;
+}
+
+
+.settingsBlock img {
+    width: 40%;
+    height: 60%;
+    align-self:center;
+    background-color: darkgrey;
+    background: transparent;
+    filter: brightness(0) invert(1);
+}
+
+.settingsBlock span {
+    width:40px;
+}
+
+.verticalLine{
+    width: 2px;              /* Width of the vertical line */
+    height: 30px;           /* Height of the vertical line */
+    background-color: white; /* Color of the vertical line */
+}
+
+.btnStyle {
+    background: var(--main-color6);
+    border: black solid 2px;
+    color:white;
+    font-weight:bold;
+}
