@@ -80,7 +80,9 @@ const sqGETQuestion = async (req, res, next) => {
     try {
         const { email } = req.params
         const schema = Joi.object({
-            email: Joi.string().email().required(),
+            email: Joi.string().email().required().messages({
+                'string.email': 'Invalid Email. Try again.'
+            }),
         })
         await schema.validateAsync({ email })
             .catch((error) => {

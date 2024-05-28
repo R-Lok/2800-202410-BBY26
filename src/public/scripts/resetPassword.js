@@ -1,9 +1,11 @@
 // Fetch all available questions from users
 async function getQuestion(email) {
+    if (email.length == 0) {
+        displayerErrorLoader("Email cannot be empty. Try again.");
+        return;
+    } 
     axios.get(`/securityQuestions/${email}`)
         .then((res) => {
-            console.log(res)
-
             if (res.status === 200) {
                 displayLoader()
                 setStepTwoQuestion(res.data)
@@ -13,7 +15,6 @@ async function getQuestion(email) {
                 }, 1500)
             }
         }).catch((err) => {
-            console.log(err.response)
             displayerErrorLoader(err.response.data.msg)
         })
 }
@@ -43,6 +44,11 @@ function setStepTwoQuestion(result) {
 
 // POST security answer to database for user input validation
 async function checkAnswer() {
+    const answer = document.getElementById('securityAns').value
+    if (answer.length == 0) {
+        displayerErrorLoader("Answer cannot be empty");
+        return;
+    } 
     await axios.post('/securityQuestions/checkAnswer', {
         headers: {
             'Content-Type': 'application/json',
@@ -51,7 +57,6 @@ async function checkAnswer() {
         questionId: document.getElementById('securityQues').questionId,
         answer: document.getElementById('securityAns').value,
     }).then((res) => {
-        console.log(res)
         if (res.status === 200) {
             displayLoader()
             setTimeout(() => {
@@ -60,7 +65,7 @@ async function checkAnswer() {
             }, 1500)
         }
     }).catch((err) => {
-        console.log(err.response)
+        console.log(err);
         displayerErrorLoader(err.response.data.msg)
     })
 }
@@ -68,6 +73,15 @@ activateBtn(2, checkAnswer)
 
 // POST user new password to database
 async function resetPassword() {
+    const password = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    if (password.length == 0) {
+        displayerErrorLoader("New password cannot be empty");
+        return;
+    } else if (confirmPassword.length == 0) {
+        displayerErrorLoader("Please confirm your password first.");
+        return;
+    }
     await axios.post('resetPassword', {
         method: 'POST',
         headers: {
@@ -86,10 +100,9 @@ async function resetPassword() {
         }
     }).catch((err) => {
         console.log(err)
-        displayerErrorLoader('')
+        displayerErrorLoader(err.response.data.msg.details[0].message)
     })
 }
-
 activateBtn(3, resetPassword)
 
 // Redirect user to login page
