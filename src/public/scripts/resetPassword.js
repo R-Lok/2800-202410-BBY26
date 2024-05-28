@@ -134,7 +134,7 @@ function displayerErrorLoader(message) {
     modalBody.appendChild(loader)
 }
 
-// Change steps for the modal 
+// Change steps for the modal
 function switchStep(step) {
     for (let i = 1; i <= 4; i++) {
         const elem = document.getElementById(`step-${i}`)

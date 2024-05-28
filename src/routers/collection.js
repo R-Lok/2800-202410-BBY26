@@ -82,7 +82,7 @@ router.delete('/delete/:shareId', async (req, res) => {
         if (!setOwnerId) {
             return res.status(404).render('404', { error: 'Flashcard set not found', pictureID: req.session.picture })
         }
-        if (userId != setOwnerId.userId) {
+        if (userId !== setOwnerId.userId) {
             res.status(403).render('403', { error: 'User Not Authorized', pictureID: req.session.picture })
         }
 

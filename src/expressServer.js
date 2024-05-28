@@ -13,17 +13,13 @@ const authRouter = require('./routers/auth')
 const settingRouter = require('./routers/settings')
 const submitcardsRouter = require('./routers/submitcards')
 const { isAuth, isAdmin, hasSecurityQuestion } = require('./utilities/index')
-const collectionsModel = require('./models/collections')
 const OpenAI = require('openai')
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 })
 const securityQuestionsRouter = require('./routers/securityQuestions')
-const flashcardsModel = require('./models/flashcards')
 const collectionRouter = require('./routers/collection')
 const homeRouter = require('./routers/home')
-const auditlogModel = require('./models/auditLog')
-const mongoose = require('mongoose')
 
 const app = express()
 const server = require('http').createServer(app)
@@ -190,7 +186,7 @@ app.post('/api/generate', async (req, res) => {
 
 /**
  * Convert blob into base64 string
- * @param {object} file - The length of the rectangle
+ * @param {object} base64Input - The length of the rectangle
  * @return {Promise} promise - Promise that resolves to a base64 file in string representation
  */
 async function convertImageToBase64Jpg(base64Input) {

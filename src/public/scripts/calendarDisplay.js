@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // addClass adds a CSS class to elements with matching IDs that match the date provided
     function addClass(dates, className) {
         for (let i = 0; i < dates.length; i++) {
-            let element = document.getElementById(dates[i])
+            const element = document.getElementById(dates[i])
             if (element) {
                 element.classList.add(className)
             }
@@ -16,4 +16,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     addClass(studiedDays, 'studied')
     addClass(streakDays, 'streak')
-});
+})

@@ -1,7 +1,5 @@
 require('dotenv').config({ path: `${process.cwd()}/.env.${process.env.NODE_ENV}` })
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
-const saltRounds = 12
 const collectionModel = require('../models/collections')
 
 

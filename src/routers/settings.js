@@ -21,7 +21,14 @@ router.get('/', async (req, res) => {
     req.session.securityQuestionId = randomQuestionId
     const securityQues = await securityQuestionsModel.findById(randomQuestionId).select('question').lean()
     const email = await decrypt(user.email)
-    return res.render('settings', { imageId: user.picture, name: user.name, loginId: user.loginId, email: email, securityQuestion: securityQues.question, pictureID: req.session.picture })
+    return res.render('settings', {
+        imageId: user.picture,
+        name: user.name,
+        loginId: user.loginId,
+        email: email,
+        securityQuestion: securityQues.question,
+        pictureID: req.session.picture,
+    })
 })
 
 router.post('/editLoginId', async (req, res) => {

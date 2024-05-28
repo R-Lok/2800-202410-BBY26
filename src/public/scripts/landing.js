@@ -1,5 +1,5 @@
-const canvas = document.getElementById('lottieCanvas');
-const context = canvas.getContext('2d');
+const canvas = document.getElementById('lottieCanvas')
+const context = canvas.getContext('2d')
 
 lottie.loadAnimation({
     container: canvas, // the canvas element
@@ -12,6 +12,6 @@ lottie.loadAnimation({
         scaleMode: 'noScale',
         clearCanvas: true,
         progressiveLoad: false,
-        hideOnTransparent: true
-    }
-});
+        hideOnTransparent: true,
+    },
+})

@@ -9,33 +9,33 @@ const {
     getPrevMonthLastDate,
     generateDaysOfPrevMonth,
     generateDaysOfCurrMonth,
-    generateDaysOfNextMonth, 
+    generateDaysOfNextMonth,
     getMonthName,
     getStudiedDays,
-    getStreakDays
-} = require('../controllers/calendar');
+    getStreakDays,
+} = require('../controllers/calendar')
 
 // Route to handle GET requests to the home page
 router.get('/', async (req, res) => {
     const date = new Date()
-    let existingActivity = 0, activityName, auditLogResult, user
+    let existingActivity = 0; let activityName; let auditLogResult; let user
     try {
-        let prevMonthLastDate = getPrevMonthLastDate(date)
-        let calendarStartDate = prevMonthLastDate.getDate() - prevMonthLastDate.getDay()
+        const prevMonthLastDate = getPrevMonthLastDate(date)
+        const calendarStartDate = prevMonthLastDate.getDate() - prevMonthLastDate.getDay()
         prevMonthLastDate.setDate(calendarStartDate)
         // Retrieves user auditLogs from all dates of the current calendar
-        auditLogResult = await auditLogsModel.find({ loginId: req.session.loginId, createdAt: { "$gte": prevMonthLastDate } })        
+        auditLogResult = await auditLogsModel.find({ loginId: req.session.loginId, createdAt: { '$gte': prevMonthLastDate } })
         user = await usersModel.findOne({ loginId: req.session.loginId })
-        if (user.lastActivity == null || user.lastActivity.timestamp == null || user.lastActivity.shareId == null) return renderHome(req, res, date, activityName, existingActivity, user, auditLogResult)
+        if (user.lastActivity === null || user.lastActivity.timestamp === null || user.lastActivity.shareId === null) return renderHome(req, res, date, activityName, existingActivity, user, auditLogResult)
         const dayDifference = isConsecutiveDays(user.lastActivity.timestamp, date)
-        // If dates are not consecutive and not the same, then reset the streak. 
-        if ((dayDifference != 1) && (dayDifference != 0)) {
-            user = await usersModel.findOneAndUpdate( { loginId: req.session.loginId },
-                { $set: { 'lastActivity.timestamp': user.lastActivity.timestamp, 'lastActivity.shareId': user.lastActivity.shareId, 'streak': 0, } },
-                { returnOriginal: false }, )
+        // If dates are not consecutive and not the same, then reset the streak.
+        if ((dayDifference !== 1) && (dayDifference !== 0)) {
+            user = await usersModel.findOneAndUpdate({ loginId: req.session.loginId },
+                { $set: { 'lastActivity.timestamp': user.lastActivity.timestamp, 'lastActivity.shareId': user.lastActivity.shareId, 'streak': 0 } },
+                { returnOriginal: false })
             await user.save()
         }
-        const collection = await collectionsModel.findOne( { shareId: user.lastActivity.shareId } )
+        const collection = await collectionsModel.findOne({ shareId: user.lastActivity.shareId })
         // If a collection exists, then store its endpoint to existingActivity and its collection name to activityName
         if (collection) {
             existingActivity = `/review/${user.lastActivity.shareId}`
@@ -51,7 +51,7 @@ router.get('/', async (req, res) => {
 // Route to handle POST requests to the sharecode endpoint
 router.post('/shareCode', (req, res) => {
     // Checks if shareId entered to form is "egg"
-    if(req.body.shareId.toLowerCase() == 'egg'){
+    if (req.body.shareId.toLowerCase() === 'egg') {
         res.redirect('/egg')
     } else {
         res.redirect(`/review/${req.body.shareId}`)
@@ -73,7 +73,7 @@ function renderHome(req, res, date, activityName, existingActivity, user, auditL
         streakDays: getStreakDays(user.lastActivity.timestamp, date, user.streak),
         name: req.session.name,
         email: req.session.email,
-        pictureID:req.session.picture
+        pictureID: req.session.picture,
     })
 }
 

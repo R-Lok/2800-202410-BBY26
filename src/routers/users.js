@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/profile', (req, res) => {
-    return res.render('profile', { name: req.session.name, pictureID:req.session.picture })
+    return res.render('profile', { name: req.session.name, pictureID: req.session.picture })
 })
 
 module.exports = router

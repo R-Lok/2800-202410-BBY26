@@ -1,81 +1,81 @@
 const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-];
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+]
 
-const totalWeekDays = 7;
+const totalWeekDays = 7
 
 function getMonthName(date) {
     return months[date.getMonth()]
 }
 
-//generates days of current month
+// generates days of current month
 function generateDaysOfCurrMonth(date) {
-    let currMonthLastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    const currMonthLastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0)
 
-    let html ='';
-    let i;
+    let html = ''
+    let i
     for (i = 1; i <= currMonthLastDate.getDate(); i++) {
-        if (i == date.getDate()) {
-            html += `<li id="${currMonthLastDate.getMonth()}${i}"><span class="active">${i}</span></li>`;
+        if (i === date.getDate()) {
+            html += `<li id="${currMonthLastDate.getMonth()}${i}"><span class="active">${i}</span></li>`
         } else {
-            html += `<li id="${currMonthLastDate.getMonth()}${i}">${i}</li>`;
+            html += `<li id="${currMonthLastDate.getMonth()}${i}">${i}</li>`
         }
     }
     // console.log(`prev month days: ${generateDaysOfPrevMonth()}`);
     // console.log(`curr month days: ${html}`);
     // console.log(`next month days: ${generateDaysOfNextMonth()}`);
-    return html;
+    return html
 }
 
 function getPrevMonthLastDate(date) {
-    return new Date(date.getFullYear(), date.getMonth(), 0);
-} 
+    return new Date(date.getFullYear(), date.getMonth(), 0)
+}
 
 function generateDaysOfPrevMonth(date) {
-    let prevMonthLastDate = getPrevMonthLastDate(date);
-    let prevMonthLastWeekday = prevMonthLastDate.getDay();
-    let prevMonthTotalDays = prevMonthLastDate.getDate();
+    const prevMonthLastDate = getPrevMonthLastDate(date)
+    const prevMonthLastWeekday = prevMonthLastDate.getDay()
+    const prevMonthTotalDays = prevMonthLastDate.getDate()
 
-    let html = '';
-    if (prevMonthLastWeekday == 6) {
-        return html;
-    } 
-
-    let d = prevMonthTotalDays - prevMonthLastWeekday;
-    for (let i = 0; i <= prevMonthLastWeekday; i++) {
-        html += `<li id="${prevMonthLastDate.getMonth()}${d}">${d}</li>`;
-        d++;
+    let html = ''
+    if (prevMonthLastWeekday === 6) {
+        return html
     }
-    return html;
+
+    let d = prevMonthTotalDays - prevMonthLastWeekday
+    for (let i = 0; i <= prevMonthLastWeekday; i++) {
+        html += `<li id="${prevMonthLastDate.getMonth()}${d}">${d}</li>`
+        d++
+    }
+    return html
 }
 
 function generateDaysOfNextMonth(date) {
-    let currMonthLastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    const currMonthLastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0)
 
-    let currMonthLastWeekday = currMonthLastDate.getDay();
-    let nextMonthFirstWeekday = totalWeekDays - currMonthLastWeekday - 1;
+    const currMonthLastWeekday = currMonthLastDate.getDay()
+    const nextMonthFirstWeekday = totalWeekDays - currMonthLastWeekday - 1
 
-    let html = '';
-    if (nextMonthFirstWeekday == 0) {
-        return html;
-    } 
+    let html = ''
+    if (nextMonthFirstWeekday === 0) {
+        return html
+    }
 
     for (let d = 1; d <= nextMonthFirstWeekday; d++) {
-        html += `<li id="${currMonthLastDate.getMonth()}${d}">${d}</li>`;
-    };
+        html += `<li id="${currMonthLastDate.getMonth()}${d}">${d}</li>`
+    }
 
-    return html;
+    return html
 }
 
-module.exports = { getPrevMonthLastDate, generateDaysOfPrevMonth, generateDaysOfCurrMonth, generateDaysOfNextMonth, getMonthName };
+module.exports = { getPrevMonthLastDate, generateDaysOfPrevMonth, generateDaysOfCurrMonth, generateDaysOfNextMonth, getMonthName }
