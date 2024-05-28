@@ -10,27 +10,29 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="../css/landing.css">
   </link>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+  crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.11/lottie.min.js"></script>
 </head>
 
 <body onclick="window.location.href='/login'">
 
   <%- include("template/header") %>
     <div class="container-fluid min-vh-100 d-flex flex-column justify-content-between">
-      <div class="row flex-grow-1">
-        <div class="col d-flex align-items-center justify-content-center">
+      <div class="row flex-grow-1 logo-container">
+        <div class="col d-flex flex-column align-items-center justify-content-center">
+          <img id="logo" src="/images/LogoRobot.png" alt="logo"/>
           <h1 class="title">StudyGen</h1>
         </div>
       </div>
+
       <div class="row">
         <div class="col d-flex align-items-center justify-content-center">
           <p class="message mb-1">Tap anywhere to begin</p>
         </div>
       </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"></script>
+    </div>    
 </body>
 
 </html>
