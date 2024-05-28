@@ -143,7 +143,7 @@ router.post('/editEmail', async (req, res) => {
 router.post('/changePic', async (req, res) => {
     const picChoice = req.body.picture
     const userId = req.session.userId
-    req.session.picture = picChoice;
+    req.session.picture = picChoice
     await usersModel.findByIdAndUpdate(userId, { picture: picChoice })
     res.redirect('/settings')
 })
