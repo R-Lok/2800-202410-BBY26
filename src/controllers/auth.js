@@ -1,6 +1,6 @@
 const Joi = require('joi')
 const { authService } = require('../services/index')
-const { CustomError, authorization } = require('../utilities/index')
+const { CustomError, authorization, tools } = require('../utilities/index')
 
 
 const registerGET = (req, res) => {
@@ -68,17 +68,24 @@ const resetPasswordPOST = async (req, res, next) => {
     try {
         const { userId, password, confirmPassword } = req.body
         const schema = Joi.object({
+            userId: Joi.string().required().custom((value, helper) => {
+                if (!tools.isObjectId(value)) {
+                    return helper.message('Invalid object id')
+                }
+            }),
             password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
             confirmPassword: Joi.ref('password'),
         })
             .with('password', 'confirmPassword')
 
-        await schema.validateAsync({ password, confirmPassword })
+        await schema.validateAsync({ userId, password, confirmPassword })
             .catch((error) => {
-                console.log(error)
                 throw new CustomError('422', error)
             })
-        await authService.resetPasswordPOST({ userId, password })
+        const result = await authService.resetPasswordPOST({ userId, password })
+        if (!result) {
+            throw new CustomError('404', 'user not found')
+        }
         return res.status(200).json({ msg: 'ok' })
     } catch (error) {
         next(error)

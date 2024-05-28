@@ -1,5 +1,5 @@
-const { authService } = require('../services/index')
-const userSessionModel = require('../models/userSessions')
+const { authService } = require('../../src/services/index')
+const userSessionModel = require('../../src/models/userSessions')
 
 const users = [
     { loginId: 'admin', name: 'admin', email: 'admin@gmail.com', password: 'admin' },

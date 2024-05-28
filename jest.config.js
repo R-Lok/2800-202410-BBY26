@@ -1,7 +1,7 @@
 module.exports = {
     // The root of your source code, typically /src
     // `<rootDir>` is a token Jest substitutes
-    roots: ['<rootDir>/src'],
+    roots: ['<rootDir>'],
 
     // Runs special logic, such as cleaning up components
     // when using React Testing Library and adds special
@@ -10,7 +10,6 @@ module.exports = {
     // Test spec file resolution pattern
     // Matches parent folder `__tests__` and filename
     // should contain `test` or `spec`.
-    // testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$',
     coverageReporters: ['clover', 'json', 'lcov', 'text'],
     moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
     coverageThreshold: {
