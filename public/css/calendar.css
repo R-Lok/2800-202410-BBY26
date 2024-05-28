@@ -69,9 +69,13 @@ li {
 }
 
 /* Highlight the "current" day */
-.days li .active {
+.active {
+  display: flex;
   background: #8714c9;
-  color: white !important
+  color: white !important;
+  border-radius: 25%;
+  width: 80%;
+  margin: 0 auto;
 }
 
 .studied {
@@ -81,12 +85,13 @@ li {
 .studied::after {
   content: '';
   position: absolute;
-  bottom: 0;
-  right: -5px;
+  bottom: -3px;
+  right: -6px;
   width: 22px;
   height: 22px;
   background-image: url('../images/fire.svg');
   background-size: cover;
+  opacity: 0.6;
 }
 
 .streak {
@@ -96,10 +101,11 @@ li {
 .streak::after {
   content: '';
   position: absolute;
-  bottom: 0;
-  right: -5px;
+  bottom: -3px;
+  right: -6px;
   width: 22px;
   height: 22px;
   background-image: url('../images/fire.svg');
   background-size: cover;
+  opacity: 1;
 }
