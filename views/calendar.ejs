@@ -6,20 +6,16 @@
         <li><%- monthName %> <span style="font-size:18px"><%- year %></span></li>
     </ul>
     </div>
-    
-    <ul class="weekdays">
-        <li>Su</li>
-        <li>Mo</li>
-        <li>Tu</li>
-        <li>We</li>
-        <li>Th</li>
-        <li>Fr</li>
-        <li>Sa</li>
-    </ul>
-    
-    <ul class="days">
+    <ol class="calendar">
+        <li class="weekdays">Su</li>
+        <li class="weekdays">Mo</li>
+        <li class="weekdays">Tu</li>
+        <li class="weekdays">We</li>
+        <li class="weekdays">Th</li>
+        <li class="weekdays">Fr</li>
+        <li class="weekdays">Sa</li>
         <%- prevMonthDays %>
         <%- currMonthDays %>
         <%- nextMonthDays %>
-    </ul>
+    </ol>
 </div>
