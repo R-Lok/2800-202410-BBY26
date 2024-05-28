@@ -135,8 +135,12 @@ router.post('/resetPassword', async (req, res, next) => {
     try {
         const { userId, password, confirmPassword } = req.body
         const schema = Joi.object({
-            password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
-            confirmPassword: Joi.ref('password'),
+            password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required().messages({
+                'string.pattern.base': 'Password must be between 3 and 20 alpha-numeric characters'
+            }),
+            confirmPassword: Joi.string().required().valid(Joi.ref('password')).messages({
+                'any.only': 'Passwords do not match'
+            })
         })
             .with('password', 'confirmPassword')
 
