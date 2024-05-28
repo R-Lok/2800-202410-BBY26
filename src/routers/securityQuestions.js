@@ -1,6 +1,6 @@
 const express = require('express')
 const router = new express.Router()
-const { isAuth, isAdmin, noSecurityQuestion } = require('../routers/auth')
+const { isAuth, isAdmin, noSecurityQuestion } = require('../utilities/index')
 const { sqController } = require('../controllers/index')
 
 

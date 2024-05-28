@@ -2,8 +2,8 @@ require('dotenv').config({ path: `${process.cwd()}/.env.${process.env.NODE_ENV}`
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const saltRounds = 12
-const userModel = require('../models/users')
-const { encrypt, hash } = require('../utilities/index')
+const userModel = require('../src/models/users')
+const { encrypt, hash } = require('../src/utilities/index')
 
 
 const mongoUrl = process.env.NODE_ENV === 'local' ?

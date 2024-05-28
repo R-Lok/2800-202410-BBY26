@@ -1,16 +1,18 @@
 const express = require('express')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
+const path = require('path')
 // const cors = require('cors')
 // const helmet = require('helmet')
 const compression = require('compression')
-const sharp = require("sharp");
+const sharp = require('sharp')
 const userRouter = require('./routers/users')
 const checkRouter = require('./routers/check')
 const reviewRouter = require('./routers/review')
-const { router: authRouter, isAuth, hasSecurityQuestion } = require('./routers/auth')
+const authRouter = require('./routers/auth')
 const settingRouter = require('./routers/settings')
 const submitcardsRouter = require('./routers/submitcards')
+const { isAuth, isAdmin, hasSecurityQuestion } = require('./utilities/index')
 const collectionsModel = require('./models/collections')
 const OpenAI = require('openai')
 const openai = new OpenAI({
@@ -35,6 +37,7 @@ app.use(compression())
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'))
+app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
 const mongoUrl = process.env.NODE_ENV === 'local' ?
@@ -63,6 +66,7 @@ app.use(session({
 
 app.use('/', authRouter)
 app.use('/users', isAuth, hasSecurityQuestion, userRouter)
+app.use('/admin', isAdmin, authRouter)
 app.use('/settings', isAuth, hasSecurityQuestion, settingRouter)
 app.use('/securityQuestions', securityQuestionsRouter)
 app.use('/collection', isAuth, hasSecurityQuestion, collectionRouter)
@@ -139,7 +143,7 @@ async function generateImage(difficulty, numQuestions, image) {
  * @param {String} difficulty - Difficulty of flashcards: Easy, Medium, or Difficult
  * @param {String} number - Number of flashcards
  * @param {String} material - Study material in text format
- * @returns {Object} jsonResult - flashcards objects in JSON format
+ * @return {Object} jsonResult - flashcards objects in JSON format
  */
 async function generate(difficulty, number, material) {
     let completion
@@ -187,38 +191,38 @@ app.post('/api/generate', async (req, res) => {
 /**
  * Convert blob into base64 string
  * @param {object} file - The length of the rectangle
- * @returns {Promise} promise - Promise that resolves to a base64 file in string representation
+ * @return {Promise} promise - Promise that resolves to a base64 file in string representation
  */
 async function convertImageToBase64Jpg(base64Input) {
     try {
         // Decode the base64 input image to a buffer
-        const inputBuffer = Buffer.from(base64Input, "base64");
+        const inputBuffer = Buffer.from(base64Input, 'base64')
 
         // Use sharp to convert the input buffer to JPG format and get the base64 string
         const base64Output = await sharp(inputBuffer)
             .jpeg()
             .toBuffer()
-            .then((data) => data.toString("base64"));
+            .then((data) => data.toString('base64'))
 
-        return base64Output;
+        return base64Output
     } catch (error) {
-        console.error("Error converting image to base64 JPG:", error);
-        throw error;
+        console.error('Error converting image to base64 JPG:', error)
+        throw error
     }
 }
 
 // route for calling OpenAI api for generating flashcards based on image upload
-app.post("/api/generatebyimage", async (req, res) => {
+app.post('/api/generatebyimage', async (req, res) => {
     try {
-      const {base64Input, difficulty, numQuestions} = req.body;
-      const base64Jpg = await convertImageToBase64Jpg(base64Input);
-      const imageUrl = `data:image/jpeg;base64,${base64Jpg}`;
-      const result = await generateImage(difficulty, numQuestions, imageUrl);
-      return res.send(`/check/?data=${encodeURIComponent(result)}`)
+        const { base64Input, difficulty, numQuestions } = req.body
+        const base64Jpg = await convertImageToBase64Jpg(base64Input)
+        const imageUrl = `data:image/jpeg;base64,${base64Jpg}`
+        const result = await generateImage(difficulty, numQuestions, imageUrl)
+        return res.send(`/check/?data=${encodeURIComponent(result)}`)
     } catch {
-      res.status(400).send("Fail to generate flashcards.");
+        res.status(400).send('Fail to generate flashcards.')
     }
-});
+})
 
 
 app.get('/egg', (req, res) => {

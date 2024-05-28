@@ -9,7 +9,7 @@
             <div class="sign-up-container">
                 <div class="form-signup">
                     <h1 class="h3 mb-5 fw-normal text-center display-1">Log in</h1>
-                    <form action="/login" method="post" class="mb-3">
+                    <form id="form-login" class="mb-3">
                         <div class="mb-3">
                             <label for="loginId" class="form-label">Login ID</label>
                             <input type="text" id="loginId" class="form-control" name="loginId" required>
@@ -147,5 +147,6 @@
                 </div>
             </div>
             <script type="module" src="../scripts/resetPassword.js"></script>
+            <script type="module" src="../scripts/login.js"></script>
             <%- include("template/footerBar.ejs") %>
             <%- include("template/footer") %>
