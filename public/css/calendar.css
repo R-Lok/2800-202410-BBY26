@@ -38,6 +38,21 @@ body {font-family: Verdana, sans-serif;}
   float: right;
 }
 
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+li {
+  padding: 6px;
+}
 /* Weekdays (Mon-Sun) */
 .weekdays {
   margin: 0;
@@ -45,50 +60,46 @@ body {font-family: Verdana, sans-serif;}
   background-color:rgb(255, 255, 255);
 }
 
-.weekdays li {
-  display: inline-block;
-  width: 11%;
-  color: #898989;
-  text-align: center;
-  margin: 0.15em;
-  font-weight: 1000;
-
+.prevMonthDays {
+  color: rgb(184, 184, 184);
 }
 
-/* Days (1-31) */
-.days {
-  padding: 0 0;
-  background: #ffffff;
-  margin: 0;
-}
-
-.days li {
-  list-style-type: none;
-  display: inline-block;
-  width: 14%; /* Adjusted width for 7 columns */
-  margin: 0;
-  text-align: center;
-  font-size: 16px;
-  color: black;
-  padding: 10px 0;
+.nextMonthDays {
+  color: rgb(184, 184, 184);
 }
 
 /* Highlight the "current" day */
 .days li .active {
-  padding: 5px;
   background: #8714c9;
   color: white !important
 }
 
 .studied {
-  color: white;
-  background-color: green;
+  position: relative;
+}
+
+.studied::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: -5px;
+  width: 22px;
+  height: 22px;
+  background-image: url('../images/fire.svg');
+  background-size: cover;
 }
 
 .streak {
-  background-color: turquoise;
+  position: relative;
 }
 
-.studied.streak {
-  background-color: turquoise; /* make sure that streak color overrides studied */
+.streak::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: -5px;
+  width: 22px;
+  height: 22px;
+  background-image: url('../images/fire.svg');
+  background-size: cover;
 }

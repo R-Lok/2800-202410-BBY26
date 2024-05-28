@@ -1,3 +1,4 @@
+// Fetch all available questions from users
 async function getQuestion(email) {
     axios.get(`/securityQuestions/${email}`)
         .then((res) => {
@@ -17,19 +18,21 @@ async function getQuestion(email) {
         })
 }
 
+// Pass email to getQuestion function
 function startStepOne() {
     const email = document.getElementById('userEmail').value
     getQuestion(email)
 }
 
+// Add event handlers to start getQuestion function
 function activateBtn(step, next) {
     const submitBtn = document.getElementById(`step-${step}-submit`)
 
     submitBtn.addEventListener('click', next)
 }
-
 activateBtn(1, startStepOne)
 
+// Transition from step 1 to step 2. Add userID to localStorage
 function setStepTwoQuestion(result) {
     const { question, questionId, userId } = result
     const questionInput = document.getElementById('securityQues')
@@ -38,6 +41,7 @@ function setStepTwoQuestion(result) {
     localStorage.setItem('userId', userId)
 }
 
+// POST security answer to database for user input validation
 async function checkAnswer() {
     await axios.post('/securityQuestions/checkAnswer', {
         headers: {
@@ -60,9 +64,9 @@ async function checkAnswer() {
         displayerErrorLoader(err.response.data.msg)
     })
 }
-
 activateBtn(2, checkAnswer)
 
+// POST user new password to database
 async function resetPassword() {
     await axios.post('resetPassword', {
         method: 'POST',
@@ -88,13 +92,14 @@ async function resetPassword() {
 
 activateBtn(3, resetPassword)
 
+// Redirect user to login page
 function redirectLogin() {
     window.location.href = '/login'
 }
 
 activateBtn(4, redirectLogin)
 
-/* loading animation and error message */
+// Display loading animation and error message
 function displayLoader() {
     const modalBody = document.querySelector('.modal-body')
     const loader = document.createElement('div')
@@ -108,6 +113,7 @@ function displayLoader() {
     modalBody.appendChild(loader)
 }
 
+// Display error loader when users give invalid inputs
 function displayerErrorLoader(message) {
     const modalBody = document.querySelector('.modal-body')
 
@@ -128,8 +134,7 @@ function displayerErrorLoader(message) {
     modalBody.appendChild(loader)
 }
 
-
-/* Change steps for the modal */
+// Change steps for the modal 
 function switchStep(step) {
     for (let i = 1; i <= 4; i++) {
         const elem = document.getElementById(`step-${i}`)
@@ -144,6 +149,7 @@ function switchStep(step) {
     }
 }
 
+// Close loading animation
 function closeLoader(className) {
     const loader = document.querySelector(`${className}`)
     loader.remove()
@@ -151,13 +157,12 @@ function closeLoader(className) {
 
 const modal = document.getElementById('resetPasswordModal')
 const config = { attributes: true }
+// Function to observe changes in the modal
 const callback = (mutationList, observer) => {
     for (const mutation of mutationList) {
         if (mutation.type === 'attributes' && !modal.classList.contains('show')) {
             switchStep(1)
-
             document.querySelectorAll('input').forEach((input) => input.value = '')
-
             const loader = document.querySelector('.wrapper')
             if (loader) {
                 loader.remove()
@@ -169,6 +174,7 @@ const callback = (mutationList, observer) => {
         }
     }
 }
+
 const observer = new MutationObserver(callback)
 observer.observe(modal, config)
 
