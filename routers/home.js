@@ -13,77 +13,59 @@ const {
     getMonthName,
     getStudiedDays,
     getStreakDays
-} = require('../public/scripts/calendar');
+} = require('../controllers/calendar');
 
+// Route to handle GET requests to the home page
 router.get('/', async (req, res) => {
-    let existingActivity
-    let activityName
-    let date = new Date()
-    let prevMonthDays = generateDaysOfPrevMonth(date)
-    let currMonthDays = generateDaysOfCurrMonth(date)
-    let nextMonthDays = generateDaysOfNextMonth(date)
-    let monthName = getMonthName(date)
-    let year = date.getFullYear()
-    let auditLogResult
-    let user
-
+    const date = new Date()
+    let existingActivity = 0, activityName, auditLogResult, user
     try {
         let prevMonthLastDate = getPrevMonthLastDate(date)
         let calendarStartDate = prevMonthLastDate.getDate() - prevMonthLastDate.getDay()
         prevMonthLastDate.setDate(calendarStartDate)
-    
+        // Retrieves user auditLogs from all dates of the current calendar
         auditLogResult = await auditLogsModel.find({ loginId: req.session.loginId, createdAt: { "$gte": prevMonthLastDate } })        
         user = await usersModel.findOne({ loginId: req.session.loginId })
-        let lastActivity = user.lastActivity
-        
-        if (lastActivity == null || lastActivity.timestamp == null || lastActivity.shareId == null) {
-            existingActivity = 0
-            return res.render('home', {
-                prevMonthDays: prevMonthDays,
-                currMonthDays: currMonthDays,
-                nextMonthDays: nextMonthDays,
-                monthName: monthName,
-                year: year, 
-                activityName: activityName,
-                existingActivity: existingActivity,
-                days: user.streak, 
-                studiedDays: getStudiedDays(auditLogResult),
-                streakDays: getStreakDays(user.lastActivity.timestamp, date, user.streak),
-                name: req.session.name,
-                email: req.session.email,
-                pictureID:req.session.picture
-            })
-        }
-        let dayDifference = isConsecutiveDays(lastActivity.timestamp, date)
-
-        // If dates are NOT consecutive (isConsecutiveDays == 1) AND NOT the same (isConsecutiveDays == 0),
-        // then reset the streak. 
+        if (user.lastActivity == null || user.lastActivity.timestamp == null || user.lastActivity.shareId == null) return renderHome(req, res, date, activityName, existingActivity, user, auditLogResult)
+        const dayDifference = isConsecutiveDays(user.lastActivity.timestamp, date)
+        // If dates are not consecutive and not the same, then reset the streak. 
         if ((dayDifference != 1) && (dayDifference != 0)) {
             user = await usersModel.findOneAndUpdate( { loginId: req.session.loginId },
-                { $set: {
-                    'lastActivity.timestamp': user.lastActivity.timestamp,
-                    'lastActivity.shareId': user.lastActivity.shareId,
-                    'streak': 0,
-                } }, { returnOriginal: false }, )
+                { $set: { 'lastActivity.timestamp': user.lastActivity.timestamp, 'lastActivity.shareId': user.lastActivity.shareId, 'streak': 0, } },
+                { returnOriginal: false }, )
             await user.save()
         }
-
-        const collection = await collectionsModel.findOne( { shareId: lastActivity.shareId } )
-        if (!collection) {
-            existingActivity = 0
-        } else {
-            existingActivity = `/review/${lastActivity.shareId}`
+        const collection = await collectionsModel.findOne( { shareId: user.lastActivity.shareId } )
+        // If a collection exists, then store its endpoint to existingActivity and its collection name to activityName
+        if (collection) {
+            existingActivity = `/review/${user.lastActivity.shareId}`
             activityName = collection.setName
         }
     } catch (err) {
         console.log(`Error occurred in /home: ${err}`)
+        res.render('404', { error: 'Error retrieving data!', pictureID: req.session.picture })
     }
+    return renderHome(req, res, date, activityName, existingActivity, user, auditLogResult)
+})
+
+// Route to handle POST requests to the sharecode endpoint
+router.post('/shareCode', (req, res) => {
+    // Checks if shareId entered to form is "egg"
+    if(req.body.shareId.toLowerCase() == 'egg'){
+        res.redirect('/egg')
+    } else {
+        res.redirect(`/review/${req.body.shareId}`)
+    }
+})
+
+// renderHome renders the home page
+function renderHome(req, res, date, activityName, existingActivity, user, auditLogResult) {
     return res.render('home', {
-        prevMonthDays: prevMonthDays,
-        currMonthDays: currMonthDays,
-        nextMonthDays: nextMonthDays,
-        monthName: monthName,
-        year: year,
+        prevMonthDays: generateDaysOfPrevMonth(date),
+        currMonthDays: generateDaysOfCurrMonth(date),
+        nextMonthDays: generateDaysOfNextMonth(date),
+        monthName: getMonthName(date),
+        year: date.getFullYear(),
         activityName: activityName,
         existingActivity: existingActivity,
         days: user.streak,
@@ -93,14 +75,11 @@ router.get('/', async (req, res) => {
         email: req.session.email,
         pictureID:req.session.picture
     })
-})
+}
 
-router.post('/shareCode', (req, res) => {
-    if(req.body.shareId.toLowerCase() == 'egg'){
-        res.redirect('/egg')
-    } else {
-        res.redirect(`/review/${req.body.shareId}`)
-    }
+// Route for handling all undefined routes
+router.get('*', (req, res) => {
+    return res.render('404', { error: 'Page does not exist!', pictureID: req.session.picture })
 })
 
 module.exports = router
