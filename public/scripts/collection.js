@@ -23,7 +23,7 @@ document.getElementById('sortCollection').addEventListener('change', async funct
                 htmlString += `<div class="list-group-item d-flex list-group-item-action w-100">
                 <a href="/review/${collections[i].shareId}" class="p-0 m-0 flex-grow-1 setText">${collections[i].setName}</a>
                 <button class="btn btn-danger" onclick="confirm('Are you sure you want to delete this set?') ? 
-                location.href ='/collection/delete/` + collections[i].shareId + `' : event.preventDefault()">Delete</button></div>`
+                deleteFlashCardSet('${collections[i].shareId}') : event.preventDefault()">Delete</button></div>`
             }
             collectionsList.innerHTML = htmlString
         }
