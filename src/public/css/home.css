@@ -16,7 +16,18 @@
     color: white;
 }
 
+.btn-primary {
+    --bs-btn-hover-bg: #560d81;
+    --bs-btn-hover-border-color: #560d81;
+    --bs-btn-active-bg: #560d81;
+    --bs-btn-active-border-color: #560d81;
+}
+
 .container-alert {
+    font-size: 14pt;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
     width: auto;
     height: auto;
     position: relative;
@@ -35,7 +46,10 @@
 }
 
 .container-calendar {
+    font-size: 14pt;
+    padding: 0;
     margin: 1em;
+    line-height: 1;
 }
 
 .calendar {
@@ -46,11 +60,6 @@
 
 .container-search-bar {
     margin: 1em;
-}
-
-.custom-search-bar {
-    border-radius: 15px;
-    border-color: black;
 }
 
 .container-buttons{
@@ -94,5 +103,3 @@
 .search {
     filter: brightness(0) invert(1);
 }
-
-/* ++++++++++++++ */

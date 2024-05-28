@@ -36,3 +36,11 @@ nav button span {
 #headerProfilePic{
     width:60px;
 }
+
+.btn-primary {
+    --bs-btn-bg: #8714c9 !important;
+    --bs-btn-hover-bg: #560d81 !important;
+    --bs-btn-hover-border-color: #560d81 !important;
+    --bs-btn-active-bg: #560d81 !important;
+    --bs-btn-active-border-color: #560d81 !important;
+}
