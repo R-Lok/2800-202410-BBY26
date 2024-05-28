@@ -4,10 +4,14 @@
 <link rel="stylesheet" href="/css/calendar.css">
 </head>
 <body>
+    <div id="data-container"
+        data-studied-days='<%- JSON.stringify(studiedDays) %>'
+        data-streak-days='<%- JSON.stringify(streakDays) %>'>
+    </div>
     <div class="container-alert">
         <div class="alert alert-light custom-alert" role="alert">
             <p>Hi <%= name %>!</p>
-            <p>You've been studying for <%= days %> days!<img src="/images/fire.svg" width="30" height="30"></p>
+            <p>You've been studying for <%= days %> days in a row!<img src="/images/fire.svg" width="30" height="30"></p>
         </div>
     </div>
 
@@ -53,25 +57,6 @@
     </div>
     </div>
 
+<script src="/scripts/calendarDisplay.js"></script>
 <%- include('template/footerBar') %>
-<script type="text/javascript">
-    const studiedDays = JSON.parse('<%- JSON.stringify(studiedDays) %>');
-    const streakDays = JSON.parse('<%- JSON.stringify(streakDays) %>');
-
-    function addClass(dates, className) {
-        console.log(`className: ${className}`)
-        console.log(`streakDays: ${dates[0]}`)
-        for (let i = 0; i < dates.length; i++) {
-            let element = document.getElementById(dates[i]);
-            if (element) {
-                element.classList.add(className);
-            }
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        addClass(studiedDays, 'studied');
-        addClass(streakDays, 'streak');
-    });
-</script>
 <%- include('template/footer') %>

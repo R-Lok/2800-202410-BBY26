@@ -103,7 +103,7 @@ function generateDaysOfPrevMonth(date) {
     let d = prevMonthTotalDays - prevMonthLastWeekday
     // Loops through the visible dates of the calendar and appends them to HTML
     for (let i = 0; i <= prevMonthLastWeekday; i++) {
-        html += `<li id="${prevMonthLastDate.getMonth()}${d}">${d}</li>`
+        html += `<li class="prevMonthDays" id="${prevMonthLastDate.getMonth()}${d}">${d}</li>`
         d++
     }
     return html
@@ -121,7 +121,7 @@ function generateDaysOfNextMonth(date) {
     if (nextMonthFirstWeekday == 0) return html
     // Iterates through the days of next month and appends them to HTML
     for (let d = 1; d <= nextMonthFirstWeekday; d++) {
-        html += `<li id="${currMonthLastDate.getMonth()}${d}">${d}</li>`
+        html += `<li class="nextMonthDays" id="${currMonthLastDate.getMonth()}${d}">${d}</li>`
     }
     return html
 }
