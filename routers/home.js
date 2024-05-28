@@ -15,16 +15,15 @@ const {
     getStreakDays
 } = require('../public/scripts/calendar');
 
+// Route to handle GET requests to the home page
 router.get('/', async (req, res) => {
     const date = new Date()
-    let existingActivity = 0
-    let activityName
-    let auditLogResult
-    let user
+    let existingActivity = 0, activityName, auditLogResult, user
     try {
         let prevMonthLastDate = getPrevMonthLastDate(date)
         let calendarStartDate = prevMonthLastDate.getDate() - prevMonthLastDate.getDay()
         prevMonthLastDate.setDate(calendarStartDate)
+        // Retrieves user auditLogs from all dates of the current calendar
         auditLogResult = await auditLogsModel.find({ loginId: req.session.loginId, createdAt: { "$gte": prevMonthLastDate } })        
         user = await usersModel.findOne({ loginId: req.session.loginId })
         if (user.lastActivity == null || user.lastActivity.timestamp == null || user.lastActivity.shareId == null) return renderHome(req, res, date, activityName, existingActivity, user, auditLogResult)
@@ -37,17 +36,21 @@ router.get('/', async (req, res) => {
             await user.save()
         }
         const collection = await collectionsModel.findOne( { shareId: user.lastActivity.shareId } )
+        // If a collection exists, then store its endpoint to existingActivity and its collection name to activityName
         if (collection) {
             existingActivity = `/review/${user.lastActivity.shareId}`
             activityName = collection.setName
         }
     } catch (err) {
         console.log(`Error occurred in /home: ${err}`)
+        res.render('404', { error: 'Error retrieving data!', pictureID: req.session.picture })
     }
     return renderHome(req, res, date, activityName, existingActivity, user, auditLogResult)
 })
 
+// Route to handle POST requests to the sharecode endpoint
 router.post('/shareCode', (req, res) => {
+    // Checks if shareId entered to form is "egg"
     if(req.body.shareId.toLowerCase() == 'egg'){
         res.redirect('/egg')
     } else {
@@ -72,5 +75,10 @@ function renderHome(req, res, date, activityName, existingActivity, user, auditL
         pictureID:req.session.picture
     })
 }
+
+// Route for handling all undefined routes
+router.get('*', (req, res) => {
+    return res.render('404', { error: 'Page does not exist!', pictureID: req.session.picture })
+})
 
 module.exports = router
