@@ -10,7 +10,7 @@ const saltRounds = 12
 const Joi = require('joi')
 const { CustomError, encrypt, decrypt, hash } = require('../utilities/index')
 
-
+// Renders the User Profile page to the client
 router.get('/', async (req, res) => {
     const userId = req.session.userId
     const user = await usersModel.findById(userId).select('-_id picture name loginId email').lean()
@@ -31,6 +31,7 @@ router.get('/', async (req, res) => {
     })
 })
 
+// Updates the user's login Id with their input login Id
 router.post('/editLoginId', async (req, res) => {
     try {
         const userId = req.session.userId
@@ -54,6 +55,7 @@ router.post('/editLoginId', async (req, res) => {
     }
 })
 
+// Updates the user's display name with their input display name
 router.post('/editName', async (req, res) => {
     try {
         const userId = req.session.userId
@@ -77,55 +79,57 @@ router.post('/editName', async (req, res) => {
     }
 })
 
+// Updates the user's password with their input password
 router.post('/changePwd', async (req, res) => {
     try {
         const userId = req.session.userId
-        const user = await usersModel.findById(userId)
         const currPass = req.body.currentPwd
         const newPass = req.body.newPwd
         const confirmNewPass = req.body.confirmPwd
         const securityAns = req.body.securityAns
         const securityQuesId = req.session.securityQuestionId
 
-        const userAnswer = await userAnswersModel.findOne({ userId: userId, questionId: securityQuesId }).select('answer').lean()
-        console.log(userAnswer)
-        console.log(userAnswer.answer)
-        console.log(securityAns)
-        if (userAnswer.answer !== securityAns) {
-            console.log('Incorrect security Answer')
-            throw new CustomError('401', 'Incorrect Security Answer')
-        }
+        await validatePasswordChange(userId, currPass, newPass, confirmNewPass, securityQuesId, securityAns)
 
-        if (newPass !== confirmNewPass) {
-            console.log(newPass)
-            console.log(confirmNewPass)
-            console.log('Incorrect pass check')
-            throw new CustomError('401', 'New Password and Confirm Password do not match')
-        }
-
-        const schema = Joi.object({
-            currPass: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
-            newPass: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
-        })
-        await schema.validateAsync({ currPass, newPass })
-            .catch((error) => {
-                throw new CustomError('422', 'Missing Password Fields')
-            })
-
-        const result = await bcrypt.compare(currPass, user.password)
-        if (!result) {
-            console.log('Incorrect current password')
-            throw new CustomError('401', 'Incorrect Current Password')
-        }
         const hashedPass = await bcrypt.hash(newPass, saltRounds)
         await usersModel.findByIdAndUpdate(userId, { password: hashedPass })
         return res.status(200).json({ message: 'ok' })
     } catch (error) {
-        console.log(error.statusCode)
         res.status(400).json({ message: error.message })
     }
 })
 
+// Function used to validate security answer, current password, and new password matching requirements for password change
+async function validatePasswordChange(userId, currPass, newPass, confirmNewPass, securityQuesId, securityAns) {
+    const userAnswer = await userAnswersModel.findOne({ userId: userId, questionId: securityQuesId }).select('answer').lean()
+    const user = await usersModel.findById(userId)
+
+    if (userAnswer.answer !== securityAns) {
+        console.log('Incorrect Security Answer')
+        throw new CustomError('401', 'Incorrect Security Answer')
+    }
+
+    if (newPass !== confirmNewPass) {
+        throw new CustomError('401', 'New Password and Confirm Password do not match')
+    }
+
+    const schema = Joi.object({
+        currPass: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
+        newPass: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
+    })
+
+    await schema.validateAsync({ currPass, newPass })
+        .catch((error) => {
+            throw new CustomError('422', 'Missing Password Fields')
+        })
+
+    const result = await bcrypt.compare(currPass, user.password)
+    if (!result) {
+        throw new CustomError('401', 'Incorrect Current Password')
+    }
+}
+
+// Updates the user's email with their input email
 router.post('/editEmail', async (req, res) => {
     const userId = req.session.userId
     const email = req.body.email
@@ -147,6 +151,7 @@ router.post('/editEmail', async (req, res) => {
     }
 })
 
+// Updates the user's profile picture with their selected preset profile picture
 router.post('/changePic', async (req, res) => {
     const picChoice = req.body.picture
     const userId = req.session.userId

@@ -1,3 +1,6 @@
+let picChoice = 1
+
+// Post fetch request function for user's changing password
 const changePwd = async (securityAns, currentPwd, newPwd, confirmPwd) => {
     console.log(securityAns, currentPwd, newPwd, confirmPwd)
     try {
@@ -27,7 +30,7 @@ const changePwd = async (securityAns, currentPwd, newPwd, confirmPwd) => {
     }
 }
 
-
+// Post fetch request function for user's editing name
 const editName = async (newName) => {
     try {
         console.log(newName)
@@ -57,6 +60,7 @@ const editName = async (newName) => {
     }
 }
 
+// Post fetch request function for editing user's Login Id
 const editLoginId = async (loginId) => {
     try {
         const response = await fetch(`/settings/editLoginId`, {
@@ -85,6 +89,7 @@ const editLoginId = async (loginId) => {
     }
 }
 
+// Post fetch request for editing user's email
 const editEmail = async (email) => {
     console.log(email)
     try {
@@ -114,8 +119,7 @@ const editEmail = async (email) => {
     }
 }
 
-let picChoice = 1
-
+// Function to highlight icon when user selects between preset profile pictures
 function highlightIcon(clickedImage) {
     // Remove 'profilePicBorder' class for all images
     for (let i = 1; i <= 9; i++) {
@@ -132,7 +136,7 @@ function highlightIcon(clickedImage) {
     picChoice = imageId[5]
 }
 
-
+// Function to save the selected profile picture
 document.getElementById('SaveButton').addEventListener('click', async function() {
     try {
         const response = await fetch(`/settings/changePic`, {
