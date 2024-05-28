@@ -71,18 +71,26 @@ router.post('/sortCollection', async (req, res) => {
 })
 
 // Deletion route, flashcard set to be deleted depends on shareId request parameter
-router.get('/delete/:shareId', async (req, res) => {
+router.delete('/delete/:shareId', async (req, res) => {
     const userId = req.session.userId
     const shareId = req.params.shareId
 
-    // Database read for the owner of the flashcard set and checks for authorization to delete
-    const setOwnerId = await collectionsModel.findOne({ shareId: shareId }).select('userId')
+    try {
+        // Database read for the owner of the flashcard set and checks for authorization to delete
+        const setOwnerId = await collectionsModel.findOne({ shareId: shareId }).select('userId')
 
-    if (userId != setOwnerId.userId) {
-        res.render('403', { error: 'User Not Authorized', pictureID: req.session.picture })
-    } else {
+        if (!setOwnerId) {
+            return res.status(404).render('404', { error: 'Flashcard set not found', pictureID: req.session.picture })
+        }
+        if (userId != setOwnerId.userId) {
+            res.status(403).render('403', { error: 'User Not Authorized', pictureID: req.session.picture })
+        }
+
         await deleteSet(shareId)
-        res.redirect('/collection')
+        return res.status(200).json({ message: 'Flashcard set deleted successfully' })
+    } catch (err) {
+        console.error('Error during deletion process: ', err)
+        return res.status(404).render('404', { error: 'An error occurred during deletion', pictureID: req.session.picture })
     }
 })
 
@@ -95,11 +103,12 @@ async function deleteSet(shareId) {
         console.log('Document deleted successfully')
     } catch (err) {
         console.error('Error deleting document: ', err)
+        throw (err)
     }
 }
 
 // Delete All route used to delete all flashcards sets and flashcards of user
-router.get('/deleteAll', async (req, res) => {
+router.delete('/deleteAll', async (req, res) => {
     try {
         const userId = req.session.userId
         const sets = await collectionsModel.find({ userId: userId }).select('shareId')
@@ -108,10 +117,11 @@ router.get('/deleteAll', async (req, res) => {
         // Write to database to delete all flashcard sets and flashcards associated with the user
         await collectionsModel.deleteMany({ userId: userId })
         await flashcardsModel.deleteMany({ shareId: { $in: shareIds } })
+        return res.status(200).json({ message: 'All flashcards sets deleted successfully' })
     } catch (error) {
         console.log(error)
+        return res.status(404).render('404', { error: 'Something went wrong', pictureID: req.session.picture })
     }
-    res.redirect('/collection')
 })
 
 module.exports = router

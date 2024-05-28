@@ -31,3 +31,48 @@ document.getElementById('sortCollection').addEventListener('change', async funct
         console.log(error)
     }
 })
+
+
+// Function to make a DELETE fetch request for a particular flashcard set
+async function deleteFlashCardSet(shareId) {
+    try {
+        const response = await fetch(`/collection/delete/${shareId}`, {
+            method: 'DELETE',
+        })
+
+        const result = await response.json()
+
+        if (response.ok) {
+            console.log(result.message)
+            window.location.href = '/collection'
+        } else {
+            if (response.status === 403 || response.status === 404) {
+                window.location.href = response.url
+            }
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// Function to make a DELETE fetch request for all of user's flashcard sets
+async function deleteAll() {
+    try {
+        const response = await fetch(`/collection/deleteAll`, {
+            method: 'DELETE',
+        })
+
+        const result = await response.json()
+
+        if (response.ok) {
+            console.log(result.message)
+            window.location.href = '/collection'
+        } else {
+            if (response.status === 403 || response.status === 404) {
+                window.location.href = response.url
+            }
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
