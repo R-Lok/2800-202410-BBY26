@@ -10,7 +10,7 @@
     <%- include('template/headerBar', {pictureID:pictureID}) %>
 
     <div class="d-flex justify-content-center mt-3 fw-bold headerText space">
-      <h1 style="font-size:38px">User Profile</h1>
+      <h1 class="headerText fw-bold">User Profile</h1>
     </div>
 
     <div class="px-4 text-center">
@@ -44,7 +44,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btnStyleClose" data-dismiss="modal">Close</button>
               <button id="SaveButton" type="button" class="btn btnStyle" data-dismiss="modal">Save Changes</button>
             </div>
           </div>
@@ -56,31 +56,34 @@
         Edit Display Name
       </button>
       <hr>
-      <div class="d-flex justify-content-between align-items-center flex-row settingsBlock">
+      <div class="d-flex justify-content-between align-items-center flex-row settingsBlock"
+      data-toggle='modal' data-target='#loginIdModal'>
         <div class="d-inline fw-bold">Login ID</div>
         <div class="d-inline fw-bold"><%= loginId %></div>
 
         <span class="d-flex justify-content-around">
           <div class="d-inline verticalLine"></div>
-          <img class="d-inline" data-toggle='modal' data-target='#loginIdModal' src="images/right-arrow.svg">
+          <img src="images/right-arrow.svg">
         </span>
       </div>
 
-      <div class="d-flex justify-content-between align-items-center flex-row settingsBlock">
+      <div class="d-flex justify-content-between align-items-center flex-row settingsBlock"
+      data-toggle='modal' data-target='#changePwdModal'>
         <div class="d-inline fw-bold">Password</div>
         <div class="d-inline fw-bold">**********</div>
         <span class="d-flex justify-content-around">
           <div class="d-inline verticalLine"></div>
-          <img data-toggle='modal' data-target='#changePwdModal' src="images/right-arrow.svg">
+          <img src="images/right-arrow.svg"/>
         </span>
       </div>
 
-      <div class="d-flex justify-content-between align-items-center flex-row settingsBlock">
+      <div class="d-flex justify-content-between align-items-center flex-row settingsBlock"
+      data-toggle='modal' data-target='#editEmailModal'>
         <div class="d-inline fw-bold">Email</div>
         <div class="d-inline fw-bold"><%= email %></div>
         <span class="d-flex justify-content-around">
           <div class="d-inline verticalLine"></div>
-          <img data-toggle='modal' data-target='#editEmailModal' src="images/right-arrow.svg">
+          <img src="images/right-arrow.svg">
         </span>
       </div>
       <hr>
@@ -99,7 +102,7 @@
               </form>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btnStyleClose" data-dismiss="modal">Close</button>
               <button type="button" class="btn btnStyle" onclick="editLoginId(document.getElementById('newLoginId').value)">Submit</button>
             </div>
           </div>
@@ -146,7 +149,7 @@
             </div>
 
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btnStyleClose" data-dismiss="modal">Close</button>
               <button type="button" class="btn btnStyle" onclick="changePwd(
                     document.getElementById('securityAns').value,
                     document.getElementById('currentPwd').value,
@@ -174,7 +177,7 @@
           </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btnStyleClose" data-dismiss="modal">Close</button>
             <button type="button" class="btn btnStyle" onclick="editName(document.getElementById('newName').value)">Submit</button>
           </div>
         </div>
@@ -194,7 +197,7 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btnStyleClose" data-dismiss="modal">Close</button>
             <button type="button" class="btn btnStyle" onclick="editEmail(document.getElementById('newEmail').value)">Submit</button>
           </div>
         </div>

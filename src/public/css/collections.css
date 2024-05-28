@@ -29,6 +29,7 @@
 .button-bg{
     background-color:var(--main-color6);
     margin-bottom:7px;
+    box-shadow: 0 8px 6px -6px black;
 }
 
 .button-bg:active {
@@ -66,4 +67,5 @@
 
 .btn.btn-danger {
     border: black solid 2px;
+    box-shadow: 0 8px 6px -6px black;
 }

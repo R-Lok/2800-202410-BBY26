@@ -7,6 +7,12 @@
     --main-color6:#8714c9;
 }
 
+.headerText {
+    color:var(--main-color6);
+    font-size:38px;
+}
+
+
 .profilePicBorder {
     border-style: solid;
     border-width: 2px;
@@ -30,6 +36,7 @@
     color:white;
     text-shadow:#230C33;
     margin-bottom:5px;
+    box-shadow: 0 8px 6px -6px black;
 }
 
 
@@ -57,6 +64,7 @@
     border: black solid 2px;
     color:white;
     font-weight:bold;
+    box-shadow: 0 8px 6px -6px black;
 }
 
 .btn:active{
@@ -67,4 +75,17 @@
 .btn:hover{
     background-color:#560d81;
     color:white;
+}
+
+.btnStyleClose {
+    color:white;
+    background: gray;
+    border: black solid 2px;
+    color:white;
+    font-weight:bold;
+    box-shadow: 0 8px 6px -6px black;
+}
+
+#logout-btn {
+    margin-bottom:100px;
 }

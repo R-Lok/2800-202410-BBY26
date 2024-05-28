@@ -102,4 +102,18 @@
 
 .search {
     filter: brightness(0) invert(1);
+<<<<<<< Updated upstream
 }
+=======
+}
+
+.btn {
+    box-shadow: 0 8px 6px -6px black;
+}
+
+#logout-btn {
+    padding-bottom:50px;
+}
+
+/* ++++++++++++++ */
+>>>>>>> Stashed changes

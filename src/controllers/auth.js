@@ -63,7 +63,7 @@ const loginPOST = async (req, res, next) => {
 const logoutGET = async (req, res, next) => {
     try {
         await authService.logoutGET(req)
-        return res.status(200).json({ msg: 'ok' })
+        return res.status(200).redirect('./')
     } catch (error) {
         next(error)
     }
@@ -79,11 +79,11 @@ const resetPasswordPOST = async (req, res, next) => {
                 }
             }),
             password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required().messages({
-                'string.pattern.base': 'Password must be between 3 and 20 alpha-numeric characters'
+                'string.pattern.base': 'Password must be between 3 and 20 alpha-numeric characters',
             }),
             confirmPassword: Joi.string().required().valid(Joi.ref('password')).messages({
-                'any.only': 'Passwords do not match'
-            })
+                'any.only': 'Passwords do not match',
+            }),
         })
             .with('password', 'confirmPassword')
 
