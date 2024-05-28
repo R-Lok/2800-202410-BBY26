@@ -79,12 +79,14 @@ li {
 }
 
 .studied::after {
-  content: '\1F4DA'; /* Unicode for the desired emoji */
+  content: '';
   position: absolute;
   bottom: 0;
-  right: 0;
-  width: 15px;
-  height: 15px;
+  right: -5px;
+  width: 22px;
+  height: 22px;
+  background-image: url('../images/fire.svg');
+  background-size: cover;
 }
 
 .streak {
@@ -98,6 +100,6 @@ li {
   right: -5px;
   width: 22px;
   height: 22px;
-  background-image: url('../images/fire.svg'); /* Replace with your image URL */
-  background-size: cover; /* Ensures the image covers the entire element */
+  background-image: url('../images/fire.svg');
+  background-size: cover;
 }
