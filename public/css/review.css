@@ -20,8 +20,11 @@
 }
 
 #setName {
-    border-radius: 15px;
-    border-color: black;
+    width: 300px;
+    height: 40px;
+    border-radius: 20px;
+    padding: 10px;
+    border: 1px solid #ced4da;
 }
 
 #save-button {
