@@ -71,6 +71,8 @@ li {
 /* Highlight the "current" day */
 .active {
   display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: center;
   background: #8714c9;
   color: white !important;
   border-radius: 25%;
