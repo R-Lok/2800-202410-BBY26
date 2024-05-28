@@ -93,7 +93,7 @@ const sqGETQuestion = async ({ email }) => {
         .findOne({ emailHash: emailHash }, { _id: 1 })
         .lean()
     if (!user) {
-        throw new CustomError('404', 'User not found.')
+        throw new CustomError('404', 'Invalid email. Try again.')
     }
     const result = await userAnswersModel
         .findOne({ userId: user._id }, { _id: 0, questionId: 1, userId: 1 })
