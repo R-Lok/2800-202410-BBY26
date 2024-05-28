@@ -2,6 +2,7 @@ const eggPic = document.getElementById('eggPic')
 const studyGen = document.getElementById('studyGen')
 const spans = document.getElementsByTagName('span')
 
+// Onclick event listener for modifying Easter Egg elements' css classes
 eggPic.addEventListener('click', () => {
     if (eggPic.src.includes('/images/depresso2.gif')) {
         eggPic.src = '/images/depresso1.gif'
@@ -20,7 +21,6 @@ eggPic.addEventListener('click', () => {
         eggPic.src = '/images/depresso2.gif'
         studyGen.classList.remove('eggText')
         studyGen.classList.add('eggText2')
-
         for (let i = 1; i < spans.length; i++) {
             if ((i % 2) === 0) {
                 spans[i].classList.add('nameCard3')
@@ -33,18 +33,24 @@ eggPic.addEventListener('click', () => {
     }
 })
 
-const names = document.getElementsByClassName('fw-bold')
+// Sets Click EventListener for names of each team member to open their github pages on a new window
+function setGitHubLinks() {
+    const names = document.getElementsByClassName('fw-bold')
 
-for (let i = 0; i < names.length; i++) {
-    names[i].addEventListener('click', (e) => {
-        const link = e.target.getAttribute('data-link')
-        if (link) {
-            confirm('Are you sure you want to leave StudyGen?') ? window.open(`https://github.com/${link}`, '_blank').focus() : ''
-        }
-    })
+    for (let i = 0; i < names.length; i++) {
+        names[i].addEventListener('click', (e) => {
+            const link = e.target.getAttribute('data-link')
+            if (link) {
+                confirm('Are you sure you want to leave StudyGen?') ? window.open(`https://github.com/${link}`, '_blank').focus() : ''
+            }
+        })
+    }
 }
 
+setGitHubLinks()
 
+
+// Javascript for Easter Egg background confetti animation (all code + comments below this) - copied from Jonathan Bell at codepen.io
 let W = window.innerWidth
 let H = window.innerHeight
 const canvas = document.getElementById('canvas')
