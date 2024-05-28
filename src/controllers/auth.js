@@ -73,8 +73,12 @@ const resetPasswordPOST = async (req, res, next) => {
                     return helper.message('Invalid object id')
                 }
             }),
-            password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
-            confirmPassword: Joi.ref('password'),
+            password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required().messages({
+                'string.pattern.base': 'Password must be between 3 and 20 alpha-numeric characters'
+            }),
+            confirmPassword: Joi.string().required().valid(Joi.ref('password')).messages({
+                'any.only': 'Passwords do not match'
+            })
         })
             .with('password', 'confirmPassword')
 
