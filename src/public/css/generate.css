@@ -187,3 +187,10 @@ video, #frame {
 .nav-link {
   color: #8900d8;
 }
+
+.btn-secondary {
+  --bs-btn-hover-bg: #560d81;
+  --bs-btn-hover-border-color : #560d81;
+  --bs-btn-active-bg: #560d81;
+  --bs-btn-active-border-color: #560d81;
+}
