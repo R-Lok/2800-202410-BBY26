@@ -97,6 +97,7 @@ if (document.getElementById('sharecode')) {
 // this needs validation in the backend to prevent injections
 if (document.getElementById('save-button')) {
     document.getElementById('save-button').addEventListener('click', async (e) => {
+        e.target.disabled = true
         const data = {
             name: document.getElementById('setName').value,
             cards: localStorage.getItem('cards') }
@@ -114,6 +115,7 @@ if (document.getElementById('save-button')) {
             } else {
                 const text = await response.json()
                 triggerDBFailAlert(text.message)
+                e.target.disabled = false
             }
         } catch {
             console.log('Error in submission')
