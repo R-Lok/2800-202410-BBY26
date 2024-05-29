@@ -53,7 +53,7 @@ const loginGET = (req, res) => {
 
 const loginPOST = async (req, res, next) => {
     try {
-        const { loginId, password, name, email, confirmPassword } = req.body
+        const { loginId, password } = req.body
         const schema = Joi.object({
             loginId: Joi.string().max(20).required().messages({
                 'string.empty': 'Login ID is required',
