@@ -29,12 +29,12 @@ const main = async () => {
             {
                 loginId: 'admin', name: 'admin', email: await encrypt('admin@gmail.com'),
                 emailHash: await hash('admin@gmail.com'), password: await bcrypt.hash(process.env.ADMIN, saltRounds), role: 'admin',
-                enable: true, security: true,
+                enable: true, security: false,
             },
             {
                 loginId: 'test', name: 'test', email: await encrypt('test@gmail.com'),
                 emailHash: await hash('test@gmail.com'), password: await bcrypt.hash('123', saltRounds), role: 'normal',
-                enable: true, security: true,
+                enable: true, security: false,
             }]
         const results = await userModel.insertMany(userObjects)
         console.log(results)
