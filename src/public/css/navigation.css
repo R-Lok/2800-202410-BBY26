@@ -52,4 +52,5 @@ footer {
 
 .footer-btn img {
     width: 40px;
+    filter: brightness(0) invert(1);
 }

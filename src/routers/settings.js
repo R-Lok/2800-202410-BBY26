@@ -38,7 +38,7 @@ router.post('/editLoginId', async (req, res) => {
         const newId = req.body.loginId
 
         const schema = Joi.object({
-            newId: Joi.string().max(15).required(),
+            newId: Joi.string().alphanum().max(15).required(),
         })
 
         await schema.validateAsync({ newId })
@@ -50,6 +50,7 @@ router.post('/editLoginId', async (req, res) => {
             })
 
         await usersModel.findByIdAndUpdate(userId, { loginId: newId })
+        req.session.loginId = newId
         return res.status(200).json({
             msg: 'ok',
         })
@@ -64,7 +65,7 @@ router.post('/editName', async (req, res) => {
         const userId = req.session.userId
         const newName = req.body.newName
         const schema = Joi.object({
-            newName: Joi.string().alphanum().max(15).required(),
+            newName: Joi.string().max(20).required(),
         })
 
         await schema.validateAsync({ newName })
@@ -149,6 +150,7 @@ router.post('/editEmail', async (req, res) => {
         const hashedEmail = await hash(email)
 
         await usersModel.findByIdAndUpdate(userId, { email: encryptEmail, emailHash: hashedEmail })
+        req.session.email = email
         return res.status(200).json({
             msg: 'ok',
         })
