@@ -8,7 +8,7 @@ function resetCards(e) {
     if (flippedCaption) {
         flippedCaption.removeAttribute('flipped')
         flippedCaption.childNodes.forEach((child) => {
-            if (child.nodeType == 1) {
+            if (child.nodeType === 1) {
                 child.classList.toggle('hidden')
             }
         })
@@ -37,7 +37,7 @@ const captions = document.querySelectorAll('.carousel-caption')
 captions.forEach((element) => {
     element.addEventListener('click', (e) => {
         console.log('flip')
-        const target = e.target.tagName == 'H5' || e.target.tagName == 'P' ? e.target.parentNode : e.target
+        const target = e.target.tagName === 'H5' || e.target.tagName === 'P' ? e.target.parentNode : e.target
         console.log(target)
         const answer = target.querySelector('p')
         const prompt = target.querySelector('h5')

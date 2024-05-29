@@ -55,23 +55,21 @@ sendApiRequest()
 
 // sets the target for "upload study material" button to imageModal
 // if the upload image tab is pressed
-const imageTab = document.querySelector('#image-tab')
-imageTab.addEventListener('click', (e) => {
+document.querySelector('#image-tab').addEventListener('click', (e) => {
     const submitMaterialsBtn = document.querySelector('#enterTextButton')
     submitMaterialsBtn.setAttribute('data-bs-target', '#imageModal')
 })
 
 // sets the target for "upload study material" button to photo capture modal
 // if the 'take photo' tab is pressed
-const photoTab = document.querySelector('#photo-tab')
-photoTab.addEventListener('click', (e) => {
+document.querySelector('#photo-tab').addEventListener('click', (e) => {
     const submitMaterialsBtn = document.querySelector('#enterTextButton')
     submitMaterialsBtn.setAttribute('data-bs-target', '#photoModal')
 })
 
 // sets the target for "upload study material" button to text upload modal
 // if the 'text upload' tab is pressed
-const textTab = document.querySelector('#text-tab').addEventListener('click', (e) => {
+document.querySelector('#text-tab').addEventListener('click', (e) => {
     const submitMaterialsBtn = document.querySelector('#enterTextButton')
     submitMaterialsBtn.setAttribute('data-bs-target', '#textModal')
 })
