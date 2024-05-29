@@ -86,7 +86,7 @@ const sqGETQuestion = async (req, res, next) => {
         })
         await schema.validateAsync({ email })
             .catch((error) => {
-                throw new CustomError('422', error)
+                throw new CustomError('422', error.details[0].message)
             })
         const result = await sqService.sqGETQuestion({ email })
         return res.status(200).json(result)

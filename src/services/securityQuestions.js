@@ -93,13 +93,13 @@ const sqGETQuestion = async ({ email }) => {
         .findOne({ emailHash: emailHash }, { _id: 1 })
         .lean()
     if (!user) {
-        throw new CustomError('404', 'Invalid email. Try again.')
+        throw new CustomError('404', 'User does not exist. Try again.')
     }
     const result = await userAnswersModel
         .findOne({ userId: user._id }, { _id: 0, questionId: 1, userId: 1 })
         .lean()
     if (!result) {
-        throw new CustomError('422', 'You don\'t have a security question yet!')
+        throw new CustomError('422', `You haven\'t set up security question.`)
     }
     const question = await SecurityQuestionsModel
         .findById(result.questionId)
