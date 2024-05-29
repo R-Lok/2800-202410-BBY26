@@ -9,7 +9,7 @@
             <div class="sign-up-container">
                 <div class="form-signup">
                     <h1 class="h3 mb-3 fw-normal text-center display-1">Sign Up</h1>
-                    <form id="form-register">
+                    <form id="form-register" novalidate>
                         <div class="mb-1">
                             <label for="displayName" class="form-label">Display Name</label>
                             <input type="text" id="displayName" class="form-control" name="name" required>
@@ -42,6 +42,9 @@
                             <input type="password" id="confirmPassword" class="form-control" name="confirmPassword"
                                 required>
                             <small id="confirmPasswordHelp" class="form-text text-muted">Must match password</small>
+                            <div id="password-feedback" class="invalid-feedback">
+                                <p>Invalid Message Placeholder</p>
+                            </div>
                         </div>
 
                         <div class="d-grid">

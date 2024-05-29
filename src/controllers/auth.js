@@ -11,11 +11,26 @@ const registerPOST = async (req, res, next) => {
     try {
         const { loginId, name, email, password, confirmPassword } = req.body
         const schema = Joi.object({
-            loginId: Joi.string().max(20).required(),
-            name: Joi.string().max(20).required(),
-            email: Joi.string().email(),
-            password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
-            confirmPassword: Joi.ref('password'),
+            name: Joi.string().max(20).required().messages({
+                'string.max': 'Display name must be at most 30 characters long',
+                'string.empty': 'Display name is required',
+            }),
+            email: Joi.string().email().messages({
+                'string.email': 'Email must be a valid email',
+                'string.empty': 'Email is required',
+            }),
+            loginId: Joi.string().max(20).required().messages({
+                'string.max': 'Login ID must be at most 20 characters long',
+                'string.empty': 'Login ID is required',
+            }),
+            password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required().messages({
+                'string.pattern.base': 'Password must be between 3 and 20 characters long and contain only alpha-numeric characters',
+                'string.empty': 'Password is required',
+            }),
+            confirmPassword: Joi.string().required().valid(Joi.ref('password')).messages({
+                'any.only': 'Passwords do not match',
+                'string.empty': 'Please confirm your password',
+            }),
         })
             .with('password', 'confirmPassword')
 
@@ -37,7 +52,7 @@ const loginGET = (req, res) => {
 
 const loginPOST = async (req, res, next) => {
     try {
-        const { loginId, password } = req.body
+        const { loginId, password, name, email, confirmPassword} = req.body
         const schema = Joi.object({
             loginId: Joi.string().max(20).required().messages({
                 'string.empty': 'Login ID is required'
