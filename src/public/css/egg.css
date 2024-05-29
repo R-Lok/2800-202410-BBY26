@@ -16,6 +16,16 @@ body {
     height:300px;
     border-radius: 150px;
 }
+
+@media only screen and (max-width: 500px) {
+
+  #eggPic {
+      width:200px;
+      height:250px;
+      border-radius: 150px;
+  }
+
+}
   
   
 .eggText {

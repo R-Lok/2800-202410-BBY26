@@ -98,3 +98,11 @@
 #logout-btn {
     margin-bottom:100px;
 }
+
+@media only screen and (max-width: 383px) {
+
+    .settingsModalIcon {
+        width:75px;
+    }
+
+}
