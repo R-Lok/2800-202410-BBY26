@@ -14,6 +14,10 @@ body {font-family: Verdana, sans-serif;}
   border-bottom-right-radius: 5px;
 }
 
+.month-header {
+  box-shadow: 0 8px 6px -6px black;
+}
+
 /* Month list */
 .month ul {
   margin: 0;
@@ -56,7 +60,6 @@ li {
 .weekdays {
   margin: 0;
   padding: 8px 0;
-  background-color:rgb(255, 255, 255);
 }
 
 .prevMonthDays {
