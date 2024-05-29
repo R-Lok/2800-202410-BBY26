@@ -227,7 +227,7 @@ app.get('/egg', (req, res) => {
 })
 
 app.get('*', (req, res) => {
-    return res.status(404).json({ msg: 'page not found' })
+    return res.status(404).render('404', { error: 'Page does not exist!', pictureID: req.session.picture })
 })
 
 app.use((err, req, res, next) => {

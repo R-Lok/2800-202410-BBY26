@@ -77,9 +77,5 @@ function renderHome(req, res, date, activityName, existingActivity, user, auditL
     })
 }
 
-// Route for handling all undefined routes
-router.get('*', (req, res) => {
-    return res.render('404', { error: 'Page does not exist!', pictureID: req.session.picture })
-})
 
 module.exports = router
