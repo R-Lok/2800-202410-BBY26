@@ -21,6 +21,10 @@ const openai = new OpenAI({
 const securityQuestionsRouter = require('./routers/securityQuestions')
 const collectionRouter = require('./routers/collection')
 const homeRouter = require('./routers/home')
+const swaggerUi = require('swagger-ui-express')
+const OpenApiValidator = require('express-openapi-validator')
+const yaml = require('js-yaml')
+const fs = require('node:fs')
 
 const app = express()
 const server = require('http').createServer(app)
@@ -61,6 +65,37 @@ app.use(session({
     cookie: { secure: false },
 }))
 
+const openapiPath = path.join(__dirname, 'openapi.yaml')
+const swaggerDocument = yaml.load(fs.readFileSync(openapiPath))
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+// app.use(
+//     OpenApiValidator.middleware({
+//         apiSpec: openapiPath,
+//         validateRequests: true, // (default)
+//         validateResponses: false, // false by default
+//     }),
+// )
+
+
+app.post('/buyTitle', async (req, res) => {
+    res.status(400).json({ error: 'Not enough currency' })
+
+    // const title = req.body.title
+
+    // const price = parseInt(req.body.price)
+    // const userEmail = req.session.email
+    // const user = await userCollection.findOne({ email: userEmail })
+
+    // if (user.slotsCurrency < price) {
+    //     res.status(400).json({ error: 'Not enough currency' })
+    //     return
+    // } else {
+    //     await userCollection.updateOne({ email: userEmail }, { $inc: { slotsCurrency: -price }, $push: { titles: title } })
+    //     res.redirect('/profile')
+    // }
+},
+)
+
 app.use('/', authRouter)
 app.use('/users', isAuth, hasSecurityQuestion, userRouter)
 app.use('/admin', isAdmin, adminRouter)
@@ -73,6 +108,7 @@ app.use('/submitcards', isAuth, hasSecurityQuestion, submitcardsRouter)
 app.use('/generate', isAuth, hasSecurityQuestion)
 app.use('/api/generate', isAuth, hasSecurityQuestion)
 app.use('/home', isAuth, hasSecurityQuestion, homeRouter)
+
 app.get('/health', (_, res) => {
     return res.status(200).send('ok')
 })

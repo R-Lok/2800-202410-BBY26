@@ -47,13 +47,15 @@
 		"dotenv": "^16.4.5",
 		"ejs": "^3.1.10",
 		"express": "^4.19.2",
+		"express-openapi-validator": "^5.1.6",
 		"express-session": "^1.18.0",
 		"helmet": "^7.1.0",
 		"joi": "^17.13.1",
 		"mongoose": "^8.3.4",
 		"nodemon": "^3.1.0",
 		"openai": "^4.47.1",
-		"sharp": "^0.33.4"
+		"sharp": "^0.33.4",
+		"swagger-ui-express": "^5.0.0"
 	},
 	"devDependencies": {
 		"cross-env": "^7.0.3",
