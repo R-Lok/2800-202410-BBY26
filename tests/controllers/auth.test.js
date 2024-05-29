@@ -64,7 +64,7 @@ describe('auth controller', () => {
             expect(next).toHaveBeenCalledWith(expect.any(CustomError))
             const error = next.mock.calls[0][0]
             expect(error).toBeInstanceOf(CustomError)
-            expect(error.message).toBe('[422] ValidationError: "password" with value "1" fails to match the required pattern: /^[a-zA-Z0-9]{3,20}$/')
+            expect(error.message).toBe('[422] ValidationError: Password must be between 3 and 20 characters long and contain only alpha-numeric characters')
             expect(error.code).toBe(422)
         })
 
@@ -84,7 +84,7 @@ describe('auth controller', () => {
             expect(next).toHaveBeenCalledWith(expect.any(CustomError))
             const error = next.mock.calls[0][0]
             expect(error).toBeInstanceOf(CustomError)
-            expect(error.message).toBe('[422] ValidationError: "email" must be a valid email')
+            expect(error.message).toBe('[422] ValidationError: Email must be a valid email')
             expect(error.code).toBe(422)
         })
     })
@@ -127,7 +127,7 @@ describe('auth controller', () => {
             expect(next).toHaveBeenCalledWith(expect.any(CustomError))
             const error = next.mock.calls[0][0]
             expect(error).toBeInstanceOf(CustomError)
-            expect(error.message).toBe('[422] ValidationError: "loginId" is not allowed to be empty')
+            expect(error.message).toBe('[422] ValidationError: Login ID is required')
             expect(error.code).toBe(422)
         })
     })
@@ -207,7 +207,7 @@ describe('auth controller', () => {
             expect(next).toHaveBeenCalledWith(expect.any(CustomError))
             const error = next.mock.calls[0][0]
             expect(error).toBeInstanceOf(CustomError)
-            expect(error.message).toBe('[422] ValidationError: "confirmPassword" must be [ref:password]')
+            expect(error.message).toBe('[422] ValidationError: Passwords do not match')
             expect(error.code).toBe(422)
         })
     })
