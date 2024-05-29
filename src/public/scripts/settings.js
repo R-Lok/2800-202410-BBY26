@@ -23,6 +23,8 @@ const changePwd = async (securityAns, currentPwd, newPwd, confirmPwd) => {
         } else {
             const errorMessage = responseData.message || 'Password change failed'
             alert(`${errorMessage}`)
+            const submitButton = document.getElementById('submitPass')
+            submitButton.disabled = false
         }
     } catch (error) {
         console.error('Error:', error)
@@ -53,6 +55,8 @@ const editName = async (newName) => {
         } else {
             const errorMessage = responseData.message || 'Name change failed'
             alert(`${errorMessage}`)
+            const submitButton = document.getElementById('submitName')
+            submitButton.disabled = false
         }
     } catch (error) {
         console.error('Error:', error)
@@ -82,6 +86,8 @@ const editLoginId = async (loginId) => {
         } else {
             const errorMessage = responseData.message || 'Login Id change failed'
             alert(`${errorMessage}`)
+            const submitButton = document.getElementById('submitLogin')
+            submitButton.disabled = false
         }
     } catch (error) {
         console.error('Error:', error)
@@ -112,6 +118,8 @@ const editEmail = async (email) => {
         } else {
             const errorMessage = responseData.message || 'Email change failed'
             alert(`${errorMessage}`)
+            const submitButton = document.getElementById('submitEmail')
+            submitButton.disabled = false
         }
     } catch (error) {
         console.error('Error:', error)

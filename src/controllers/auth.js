@@ -19,7 +19,7 @@ const registerPOST = async (req, res, next) => {
                 'string.email': 'Email must be a valid email',
                 'string.empty': 'Email is required',
             }),
-            loginId: Joi.string().max(20).required().messages({
+            loginId: Joi.string().alphanum().max(20).required().messages({
                 'string.max': 'Login ID must be at most 20 characters long',
                 'string.empty': 'Login ID is required',
             }),
@@ -52,14 +52,14 @@ const loginGET = (req, res) => {
 
 const loginPOST = async (req, res, next) => {
     try {
-        const { loginId, password, name, email, confirmPassword} = req.body
+        const { loginId, password, name, email, confirmPassword } = req.body
         const schema = Joi.object({
             loginId: Joi.string().max(20).required().messages({
-                'string.empty': 'Login ID is required'
+                'string.empty': 'Login ID is required',
             }),
             password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required().messages({
                 'string.empty': 'Password is required',
-                'string.pattern.base': 'Password must be between 3 and 20 alpha-numeric characters'
+                'string.pattern.base': 'Password must be between 3 and 20 alpha-numeric characters',
             }),
         })
 

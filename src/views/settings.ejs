@@ -103,7 +103,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btnStyleClose" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btnStyle" onclick="editLoginId(document.getElementById('newLoginId').value)">Submit</button>
+              <button id="submitLogin" type="button" class="btn btnStyle" onclick="editLoginId(document.getElementById('newLoginId').value); this.disabled = true">Submit</button>
             </div>
           </div>
         </div>
@@ -150,12 +150,12 @@
 
             <div class="modal-footer">
               <button type="button" class="btn btnStyleClose" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btnStyle" onclick="changePwd(
+              <button id="submitPass" type="button" class="btn btnStyle" onclick="changePwd(
                     document.getElementById('securityAns').value,
                     document.getElementById('currentPwd').value,
                     document.getElementById('newPwd').value,
                     document.getElementById('confirmPwd').value
-                )">Submit
+                ); this.disabled = true">Submit
               </button>
             </div>            
           </div>
@@ -178,7 +178,7 @@
 
           <div class="modal-footer">
             <button type="button" class="btn btnStyleClose" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btnStyle" onclick="editName(document.getElementById('newName').value)">Submit</button>
+            <button id="submitName" type="button" class="btn btnStyle" onclick="editName(document.getElementById('newName').value); this.disabled = true">Submit</button>
           </div>
         </div>
       </div>
@@ -198,7 +198,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btnStyleClose" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btnStyle" onclick="editEmail(document.getElementById('newEmail').value)">Submit</button>
+            <button id="submitEmail" type="button" class="btn btnStyle" onclick="editEmail(document.getElementById('newEmail').value); this.disabled = true">Submit</button>
           </div>
         </div>
       </div>
