@@ -19,5 +19,22 @@ form.addEventListener('submit', (e) => {
         })
         .catch((err) => {
             console.log(err)
+            displayErrorMessage(err.response.data.msg.details[0].message);
         })
 })
+
+function displayErrorMessage(message) {
+    const displayNameInput = document.getElementById('displayName');
+    const emailInput = document.getElementById('email');
+    const loginIdInput = document.getElementById('loginId');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+
+    const messageElem = document.querySelector('.invalid-feedback')
+    messageElem.innerHTML = message;
+    displayNameInput.classList.add('is-invalid');
+    emailInput.classList.add('is-invalid');
+    loginIdInput.classList.add('is-invalid');
+    passwordInput.classList.add('is-invalid');
+    confirmPasswordInput.classList.add('is-invalid');
+}
