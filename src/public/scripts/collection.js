@@ -43,11 +43,12 @@ async function deleteFlashCardSet(shareId) {
         const result = await response.json()
 
         if (response.ok) {
-            console.log(result.message)
             window.location.href = '/collection'
+            alert('Flashcard Set Successfully Deleted')
         } else {
             if (response.status === 403 || response.status === 404) {
-                window.location.href = response.url
+                const errorMessage = result.message || 'Failed to Delete Flashcard Set'
+                alert(`${errorMessage}`)
             }
         }
     } catch (error) {
@@ -65,11 +66,12 @@ async function deleteAll() {
         const result = await response.json()
 
         if (response.ok) {
-            console.log(result.message)
             window.location.href = '/collection'
+            alert('All Flashcards Deleted Successfully')
         } else {
             if (response.status === 403 || response.status === 404) {
-                window.location.href = response.url
+                const errorMessage = result.message || 'Failed to Delete All Flashcard Set'
+                alert(`${errorMessage}`)
             }
         }
     } catch (error) {

@@ -43,7 +43,10 @@ router.post('/editLoginId', async (req, res) => {
 
         await schema.validateAsync({ newId })
             .catch((error) => {
-                throw new CustomError('400', error.message)
+                const errorMsgParts = error.message.split(' ')
+                errorMsgParts.shift()
+                const errorMsg = errorMsgParts.join(' ')
+                throw new CustomError('400', 'Login Id ' + errorMsg)
             })
 
         await usersModel.findByIdAndUpdate(userId, { loginId: newId })
@@ -66,7 +69,10 @@ router.post('/editName', async (req, res) => {
 
         await schema.validateAsync({ newName })
             .catch((error) => {
-                throw new CustomError('400', error.message)
+                const errorMsgParts = error.message.split(' ')
+                errorMsgParts.shift()
+                const errorMsg = errorMsgParts.join(' ')
+                throw new CustomError('400', 'Name ' + errorMsg)
             })
 
         await usersModel.findByIdAndUpdate(userId, { name: newName })
@@ -147,7 +153,10 @@ router.post('/editEmail', async (req, res) => {
             msg: 'ok',
         })
     } catch (error) {
-        return res.status(400).json({ message: error.message })
+        const errorMsgParts = error.message.split(' ')
+        errorMsgParts.shift()
+        const errorMsg = errorMsgParts.join(' ')
+        return res.status(400).json({ message: 'Email ' + errorMsg })
     }
 })
 

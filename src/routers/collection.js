@@ -78,19 +78,20 @@ router.delete('/delete/:shareId', async (req, res) => {
     try {
         // Database read for the owner of the flashcard set and checks for authorization to delete
         const setOwnerId = await collectionsModel.findOne({ shareId: shareId }).select('userId')
+        const setOwnerIdString = setOwnerId.userId.toString()
 
         if (!setOwnerId) {
-            return res.status(404).render('404', { error: 'Flashcard set not found', pictureID: req.session.picture })
+            return res.status(404).json({ message: 'Flashcard set not found' })
         }
-        if (userId !== setOwnerId.userId) {
-            res.status(403).render('403', { error: 'User Not Authorized', pictureID: req.session.picture })
+        if (userId !== setOwnerIdString) {
+            console.log('I am here')
+            return res.status(403).json({ message: 'User not authorized' })
         }
 
         await deleteSet(shareId)
         return res.status(200).json({ message: 'Flashcard set deleted successfully' })
     } catch (err) {
-        console.error('Error during deletion process: ', err)
-        return res.status(404).render('404', { error: 'An error occurred during deletion', pictureID: req.session.picture })
+        return res.status(404).json({ message: 'Error! Cannot delete this flashcard set' })
     }
 })
 
@@ -120,7 +121,7 @@ router.delete('/deleteAll', async (req, res) => {
         return res.status(200).json({ message: 'All flashcards sets deleted successfully' })
     } catch (error) {
         console.log(error)
-        return res.status(404).render('404', { error: 'Something went wrong', pictureID: req.session.picture })
+        return res.status(404).json({ message: 'Error! Cannot delete all flashcards' })
     }
 })
 

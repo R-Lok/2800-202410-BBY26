@@ -7,9 +7,18 @@
     --main-color6:#8714c9;
 }
 
+@font-face {
+    font-family: 'Linotte';
+    src: url('../images/Linotte.otf') format('opentype');
+    font-weight: bolder;
+    font-style: normal;
+}
+
 .headerText {
     color:var(--main-color6);
     font-size: 38px;
+    font-family: 'Linotte';
+    text-shadow: 1px 1px var(--main-color4);
 }
 
 
