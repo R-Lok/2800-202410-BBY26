@@ -1,6 +1,6 @@
 require('dotenv').config({ path: `${process.cwd()}/.env.${process.env.NODE_ENV}` })
 const mongoose = require('mongoose')
-const flashcardModel = require('../models/flashcards')
+const flashcardModel = require('../src/models/flashcards')
 
 
 const mongoUrl = process.env.NODE_ENV === 'local' ?

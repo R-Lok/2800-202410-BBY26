@@ -12,18 +12,19 @@ const registerPOST = async (req, res, next) => {
         const { loginId, name, email, password, confirmPassword } = req.body
         const schema = Joi.object({
             name: Joi.string().max(20).required().messages({
-                'string.max': 'Display name must be at most 30 characters long',
+                'string.max': 'Display name must be at most 20 characters long',
                 'string.empty': 'Display name is required',
             }),
-            email: Joi.string().email().messages({
+            email: Joi.string().required().email().messages({
                 'string.email': 'Email must be a valid email',
                 'string.empty': 'Email is required',
             }),
-            loginId: Joi.string().alphanum().max(20).required().messages({
+            loginId: Joi.string().alphanum().min(3).max(20).required().messages({
                 'string.max': 'Login ID must be at most 20 characters long',
+                'string.pattern.base': 'Login ID must be between 3 and 20 characters long and contain only alpha-numeric characters',
                 'string.empty': 'Login ID is required',
             }),
-            password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required().messages({
+            password: Joi.string().required().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).messages({
                 'string.pattern.base': 'Password must be between 3 and 20 characters long and contain only alpha-numeric characters',
                 'string.empty': 'Password is required',
             }),

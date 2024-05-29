@@ -38,7 +38,7 @@ router.post('/editLoginId', async (req, res) => {
         const newId = req.body.loginId
 
         const schema = Joi.object({
-            newId: Joi.string().alphanum().max(15).required(),
+            newId: Joi.string().alphanum().min(3).max(20).required(),
         })
 
         await schema.validateAsync({ newId })

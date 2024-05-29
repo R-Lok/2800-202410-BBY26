@@ -18,23 +18,22 @@ form.addEventListener('submit', (e) => {
             return window.location.href = '/'
         })
         .catch((err) => {
-            console.log(err)
-            displayErrorMessage(err.response.data.msg.details[0].message);
+            const message = err.response.data.msg.details[0].message
+            const key = err.response.data.msg.details[0].context.key
+            displayErrorMessage(message, key);
         })
 })
 
-function displayErrorMessage(message) {
-    const displayNameInput = document.getElementById('displayName');
-    const emailInput = document.getElementById('email');
-    const loginIdInput = document.getElementById('loginId');
-    const passwordInput = document.getElementById('password');
-    const confirmPasswordInput = document.getElementById('confirmPassword');
+function displayErrorMessage(message, key) {
+    document.querySelectorAll('.invalid-feedback').forEach((elem) => {
+        elem.innerHTML = "";
+    })
+    document.querySelectorAll('input').forEach((elem) => {
+        elem.classList.remove('is-invalid');
+    })
 
-    const messageElem = document.querySelector('.invalid-feedback')
-    messageElem.innerHTML = message;
-    displayNameInput.classList.add('is-invalid');
-    emailInput.classList.add('is-invalid');
-    loginIdInput.classList.add('is-invalid');
-    passwordInput.classList.add('is-invalid');
-    confirmPasswordInput.classList.add('is-invalid');
+    const elem = document.querySelector(`input[name=${key}]`);
+    const messageElem = document.getElementById(`${key}-feedback`);
+    messageElem.innerHTML = `<p>${message}</p>`;
+    elem.classList.add('is-invalid');
 }
