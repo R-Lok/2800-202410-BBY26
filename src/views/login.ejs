@@ -99,7 +99,10 @@
 
                                     <div class="mb-3">
                                         <label for="securityAns" class="form-label">Answer: </label>
-                                        <input type="text" id="securityAns" class="form-control" name="securityAns" placeholder="Type your answer here" required>
+                                        <input type="text" id="answer" class="form-control" name="answer" placeholder="Type your answer here" required>
+                                        <div id="answer-feedback" class="invalid-feedback">
+                                            <p>Invalid Message Placeholder</p>
+                                       </div>
                                     </div>
 
                                     <div class="d-grid">
@@ -117,13 +120,20 @@
 
                                     <div class="mb-4">
                                         <label for="newPassword" class="form-label">New Password</label>
-                                        <input type="password" id="newPassword" class="form-control" name="password" placeholder="Type your new password here" required>
+                                        <input type="password" id="newPassword" class="form-control" name="newPassword" placeholder="Type your new password here" required>
                                         <small id="passworldHelp" class="form-text text-muted">Alphabet or Number 3 to 20 characters</small>
+                                        <div id="newPassword-feedback" class="invalid-feedback">
+                                            <p>Invalid Message Placeholder</p>
+                                       </div>
                                     </div>
             
                                     <div class="mb-3">
                                         <label for="confirmPassword" class="form-label">Confirm Password</label>
                                         <input type="password" id="confirmPassword" class="form-control" name="confirmPassword" placeholder="Repeat your new password" required>
+                                        <small id="confirmPassworldHelp" class="form-text text-muted">Must match Password</small>
+                                        <div id="confirmPassword-feedback" class="invalid-feedback">
+                                            <p>Invalid Message Placeholder</p>
+                                       </div>
                                     </div>
 
                                     <div class="d-grid">

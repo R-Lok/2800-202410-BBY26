@@ -19,8 +19,10 @@ form.addEventListener('submit', (e) => {
         })
         .catch((err) => {
             if (err.response.status === 422) {
+                console.log(error);
                 displayErrorMessage(err.response.data.msg.details[0].message);
             } else if (err.response.status === 401) {
+                console.log(error);
                 displayErrorMessage(err.response.data.msg);
             }
             
