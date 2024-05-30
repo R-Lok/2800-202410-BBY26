@@ -46,6 +46,12 @@ an easy-to-find labeled section called Technologies describes everything the tea
 ├── .gitignore               # Git ignore file
 ├── .jest.config.js          # jest config file
 ├── .eslintrc.js             # Eslint config file
+├── .docker-compose.yml      # Docker-compose file
+├── Dockerfile               # Dockerfile for StudyGen
+├── Dockerfile_mongodb       # Dockerfile for Mongodb replica set
+├── generate-keyfile.sh      # Generate key for Mongodb replica set
+├── mongo-init.js            # JS script for setting up Mongodb replica set
+├── mongod.cong              # Mongodb config file
 ├── package.json             # npm config file
 └── README.md
 
@@ -85,6 +91,7 @@ Top level folders and their subfolders/files:
     ├── expressServer.js     # Express server setup file
     ├── index.js             # Server runtime file
     ├── setupTests.js        # setup file for jest
+    ├── setup.sh             # bash file to populate database
 ├── tests                    #
       ├── controllers        # test for controllers
           .js
