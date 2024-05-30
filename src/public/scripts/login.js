@@ -18,22 +18,25 @@ form.addEventListener('submit', (e) => {
             return window.location.href = '/'
         })
         .catch((err) => {
-            if (err.response.status === 422) {
-                console.log(error);
-                displayErrorMessage(err.response.data.msg.details[0].message);
-            } else if (err.response.status === 401) {
-                console.log(error);
-                displayErrorMessage(err.response.data.msg);
-            }
-            
+            console.log(err); 
+            const message = err.response.data.msg.details[0].message
+            const key = err.response.data.msg.details[0].context.key
+            displayErrorMessage(message, key)
         })
 })
 
-function displayErrorMessage(message) {
-    const passwordInput = document.getElementById('password');
-    const loginIdInput = document.getElementById('loginId');
-    const messageElem = document.querySelector('.invalid-feedback')
-    messageElem.innerHTML = message;
-    loginIdInput.classList.add('is-invalid');
-    passwordInput.classList.add('is-invalid');
+// Display error message below the corresponding form field
+function displayErrorMessage(message, key) {
+    document.querySelectorAll('.invalid-feedback').forEach((elem) => {
+        elem.innerHTML = "";
+    })
+    document.querySelectorAll('input').forEach((elem) => {
+        elem.innerHTML = ""
+        elem.classList.remove('is-invalid');
+    })
+
+    const elem = document.querySelector(`input[name=${key}]`);
+    const messageElem = document.getElementById(`${key}-feedback`);
+    messageElem.innerHTML = `<p>${message}</p>`;
+    elem.classList.add('is-invalid');
 }
