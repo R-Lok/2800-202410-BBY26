@@ -1,6 +1,7 @@
 const { authService } = require('../../src/services/index')
 const userSessionModel = require('../../src/models/userSessions')
 const usersModel = require('../../src/models/users')
+const Joi = require('joi')
 
 const users = [
     { loginId: 'admin', name: 'admin', email: 'admin@gmail.com', password: 'admin' },
@@ -11,14 +12,27 @@ const users = [
 describe('auth service', () => {
     describe('register POST', () => {
         it('should post', async () => {
-            const { loginId, name, email, password } = users[0]
-            const user = await authService.registerPOST(loginId, name, email, password)
+            const user = await authService.registerPOST(users[0].loginId, users[0].name, users[0].email, users[0].password)
             expect(user.email).toBe(users[0].email)
         })
 
         it('should throw an error (bad request)', async () => {
             await expect(authService.registerPOST())
                 .rejects.toThrow(new Error('data and salt arguments required'))
+        })
+
+        it('should throw an error (loginId already exists)', async () => {
+            const { loginId, name, email, password } = users[0]
+            await authService.registerPOST(loginId, name, email, password)
+            await expect(authService.registerPOST(loginId, name, email, password))
+                .rejects.toThrow(new Error('[422] LoginId already exists.'))
+        })
+
+        it('should throw an error (email already exists)', async () => {
+            const { loginId, name, email, password } = users[0]
+            await authService.registerPOST(loginId, name, email, password)
+            await expect(authService.registerPOST(users[1].loginId, name, email, password))
+                .rejects.toThrow(new Error('[422] Email already exists.'))
         })
     })
 
@@ -40,7 +54,14 @@ describe('auth service', () => {
 
         it('should throw an error (user not found)', async () => {
             await expect(authService.loginPOST('notExisting', 'password'))
-                .rejects.toThrow(new Error('[404] user not found'))
+                .rejects.toThrow(new Joi.ValidationError('ValidationError', [{
+                    message: 'user not found.',
+                    path: ['loginId'],
+                    type: 'not found',
+                    context: {
+                        key: 'loginId',
+                    },
+                }], null))
         })
 
         it('should throw an error (incorrect password)', async () => {
