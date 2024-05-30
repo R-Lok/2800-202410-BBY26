@@ -19,6 +19,35 @@ function addLoadingEvent() {
 }
 addLoadingEvent()
 
+// Add event listener to reset the text upload
+function addResetTextEvent() {
+    const btn = document.getElementById("reset-text-button");
+    const textarea = document.getElementById('material');
+    btn.addEventListener('click', () => {
+        textarea.value = ""
+
+        // Manually trigger the input event
+        const event = new Event('input', { bubbles: true });
+        textarea.dispatchEvent(event);
+    })
+}
+addResetTextEvent()
+
+//Disable the generate button for the text modal if the textarea element is empty
+//enable if the textarea contains a value (text)
+function addDisableBtnEvent() {
+    document.getElementById("material").addEventListener("input", (e) => {
+        const generateBtn = document.getElementById("generateButton");
+    
+        if (e.target.value === '') {
+            generateBtn.disabled = true;
+        } else {
+            generateBtn.disabled = false;
+        }
+    });
+}
+addDisableBtnEvent()
+
 // Add event listener to generate button to fetch parameters to our API call endpoint
 function sendApiRequest() {
     const generateBtn = document.getElementById('generateButton')
@@ -466,14 +495,3 @@ function sendImageApiRequestHelper(base64Output, difficulty, numQuestions) {
 }
 sendImageApiRequest();
 
-//Disable the generate button for the text modal if the textarea element is empty
-//enable if the textarea contains a value (text)
-document.getElementById("material").addEventListener("input", (e) => {
-    const generateBtn = document.getElementById("generateButton");
-
-    if (e.target.value === '') {
-        generateBtn.disabled = true;
-    } else {
-        generateBtn.disabled = false;
-    }
-});
