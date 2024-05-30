@@ -1,5 +1,4 @@
 const { adminService } = require('../../src/services/index')
-const { authController } = require('../../src/controllers/index')
 const { CustomError, encrypt, hash } = require('../../src/utilities')
 const usersModel = require('../../src/models/users')
 
@@ -120,25 +119,13 @@ describe('admin service', () => {
 
     describe('revokePOST', () => {
         it('should post', async () => {
-            const req = {
-                body: {
-                    loginId: users[1].loginId,
-                    password: users[1].password,
-                },
-                session: {
-                    destroy: jest.fn(),
-                },
-            }
-            await authController.loginPOST(req, {}, jest.fn())
-
-            const result = await adminService.revokePOST(req, users[1].loginId)
+            const result = await adminService.revokePOST(users[1].loginId)
             expect(result.loginId).toBe(users[1].loginId)
             expect(result.enable).toBe(false)
         })
 
         it('should throw an error (user not found)', async () => {
-            const req = {}
-            await expect(adminService.revokePOST(req, 'notExisting'))
+            await expect(adminService.revokePOST('notExisting'))
                 .rejects.toThrow(new CustomError('404', 'user not found'))
         })
     })
