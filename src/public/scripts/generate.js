@@ -460,3 +460,14 @@ function sendImageApiRequest() {
 }
 sendImageApiRequest()
 
+//Disable the generate button for the text modal if the textarea element is empty
+//enable if the textarea contains a value (text)
+document.getElementById("material").addEventListener("input", (e) => {
+    const generateBtn = document.getElementById("generateButton")
+
+    if(e.target.value === '') {
+        generateBtn.disabled = true
+    } else {
+        generateBtn.disabled = false
+    }
+})
