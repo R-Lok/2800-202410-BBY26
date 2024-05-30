@@ -29,7 +29,7 @@ function sendApiRequest() {
             numQuestions: document.getElementById('selectNumber').value,
             material: document.getElementById('material').value,
         }
-        const url = '/api/generate'
+        const url = '/generate/bytext'
         try {
             const loader = document.querySelector('.loading-state')
             loader.style.visibility = 'visible'
@@ -213,7 +213,7 @@ document
         try {
             const loader = document.querySelector('.loading-state')
             loader.style.visibility = 'visible'
-            const response = await fetch('/upload-image', {
+            const response = await fetch('/generate/byphotoupload', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -435,7 +435,7 @@ function sendImageApiRequest() {
         console.log('Start calling API')
         axios
             .post(
-                '/api/generatebyimage',
+                '/generate/byimage',
                 {
                     base64Input: base64Output,
                     difficulty: document.getElementById('selectDifficulty').value,

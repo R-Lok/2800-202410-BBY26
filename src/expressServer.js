@@ -13,6 +13,7 @@ const authRouter = require('./routers/auth')
 const settingRouter = require('./routers/settings')
 const submitcardsRouter = require('./routers/submitcards')
 const adminRouter = require('./routers/admin')
+const generateRouter = require('./routers/generate')
 const { isAuth, isAdmin, hasSecurityQuestion } = require('./utilities/index')
 const OpenAI = require('openai')
 const openai = new OpenAI({
@@ -69,8 +70,11 @@ app.use('/collection', isAuth, hasSecurityQuestion, collectionRouter)
 app.use('/check', isAuth, hasSecurityQuestion, checkRouter)
 app.use('/review', isAuth, hasSecurityQuestion, reviewRouter)
 app.use('/submitcards', isAuth, hasSecurityQuestion, submitcardsRouter)
+app.use('/generate', isAuth, hasSecurityQuestion, generateRouter)
+/*
 app.use('/generate', isAuth, hasSecurityQuestion)
 app.use('/api/generate', isAuth, hasSecurityQuestion)
+*/
 app.use('/home', isAuth, hasSecurityQuestion, homeRouter)
 app.get('/health', (_, res) => {
     return res.status(200).send('ok')
@@ -85,9 +89,11 @@ app.get('/', (req, res) => {
 })
 
 // route for users to upload study material and then generate flashcards
+/*
 app.get('/generate', (req, res) => {
     return res.render('generate', { pictureID: req.session.picture })
 })
+*/
 
 // route for receiving image input from user
 app.post('/upload-image', async (req, res) => {
@@ -110,6 +116,7 @@ app.post('/upload-image', async (req, res) => {
     }
 })
 
+/*
 async function generateImage(difficulty, numQuestions, image) {
     try {
         const response = await openai.chat.completions.create({
@@ -138,6 +145,7 @@ async function generateImage(difficulty, numQuestions, image) {
         return { error: true, msg: 'OpenAI api error' }
     }
 }
+*/
 
 /**
  * Generate flashcards objects in JSON format by calling OpenAI API based on text study material
@@ -146,6 +154,7 @@ async function generateImage(difficulty, numQuestions, image) {
  * @param {String} material - Study material in text format
  * @return {Object} jsonResult - flashcards objects in JSON format
  */
+/*
 async function generate(difficulty, number, material) {
     let completion
     try {
@@ -193,12 +202,14 @@ app.post('/api/generate', async (req, res) => {
         res.status(500).json({ msg: 'Internal server error' })
     }
 })
+*/
 
 /**
  * Convert blob into base64 string
  * @param {object} base64Input - The length of the rectangle
  * @return {Promise} promise - Promise that resolves to a base64 file in string representation
  */
+/*
 async function convertImageToBase64Jpg(base64Input) {
     try {
         // Decode the base64 input image to a buffer
@@ -233,6 +244,7 @@ app.post('/api/generatebyimage', async (req, res) => {
         res.status(500).send('Fail to generate flashcards.')
     }
 })
+*/
 
 
 app.get('/egg', (req, res) => {
