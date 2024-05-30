@@ -3,6 +3,22 @@ const { authService } = require('../services/index')
 const { CustomError, authorization, tools } = require('../utilities/index')
 
 
+const checkLoginId = Joi.string().alphanum().min(3).max(20).required().messages({
+    'string.max': 'Login ID must be at most 20 characters long',
+    'string.pattern.base': 'Login ID must be between 3 and 20 characters long and contain only alpha-numeric characters',
+    'string.empty': 'Login ID is required',
+})
+
+const checkPwd = Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required().messages({
+    'string.empty': 'Password is required',
+    'string.pattern.base': 'Password must be between 3 and 20 alpha-numeric characters',
+})
+
+const checkConfirmPwd = Joi.string().required().valid(Joi.ref('password')).messages({
+    'any.only': 'Passwords do not match',
+    'string.empty': 'Please confirm your password',
+})
+
 const registerGET = (req, res) => {
     return res.render('register', { pictureID: req.session.picture })
 }
@@ -19,19 +35,9 @@ const registerPOST = async (req, res, next) => {
                 'string.email': 'Email must be a valid email',
                 'string.empty': 'Email is required',
             }),
-            loginId: Joi.string().alphanum().min(3).max(20).required().messages({
-                'string.max': 'Login ID must be at most 20 characters long',
-                'string.pattern.base': 'Login ID must be between 3 and 20 characters long and contain only alpha-numeric characters',
-                'string.empty': 'Login ID is required',
-            }),
-            password: Joi.string().required().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).messages({
-                'string.pattern.base': 'Password must be between 3 and 20 characters long and contain only alpha-numeric characters',
-                'string.empty': 'Password is required',
-            }),
-            confirmPassword: Joi.string().required().valid(Joi.ref('password')).messages({
-                'any.only': 'Passwords do not match',
-                'string.empty': 'Please confirm your password',
-            }),
+            loginId: checkLoginId,
+            password: checkPwd,
+            confirmPassword: checkConfirmPwd,
         })
             .with('password', 'confirmPassword')
 
@@ -55,13 +61,8 @@ const loginPOST = async (req, res, next) => {
     try {
         const { loginId, password } = req.body
         const schema = Joi.object({
-            loginId: Joi.string().max(20).required().messages({
-                'string.empty': 'Login ID is required',
-            }),
-            password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required().messages({
-                'string.empty': 'Password is required',
-                'string.pattern.base': 'Password must be between 3 and 20 alpha-numeric characters',
-            }),
+            loginId: checkLoginId,
+            password: checkPwd,
         })
 
         await schema.validateAsync({ loginId, password })
@@ -94,12 +95,8 @@ const resetPasswordPOST = async (req, res, next) => {
                     return helper.message('Invalid object id')
                 }
             }),
-            password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required().messages({
-                'string.pattern.base': 'Password must be between 3 and 20 alpha-numeric characters',
-            }),
-            confirmPassword: Joi.string().required().valid(Joi.ref('password')).messages({
-                'any.only': 'Passwords do not match',
-            }),
+            password: checkPwd,
+            confirmPassword: checkConfirmPwd,
         })
             .with('password', 'confirmPassword')
 
