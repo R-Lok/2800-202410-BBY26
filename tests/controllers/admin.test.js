@@ -1,6 +1,5 @@
 const { adminController } = require('../../src/controllers/index')
 const { authService } = require('../../src/services/index')
-// const { CustomError } = require('../../src/utilities')
 
 const users = [
     { loginId: 'admin', name: 'admin', email: 'admin@gmail.com', password: 'admin', confirmPassword: 'admin' },

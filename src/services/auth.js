@@ -1,17 +1,32 @@
 const bcrypt = require('bcrypt')
 const saltRounds = 12
-const { CustomError, encrypt, decrypt, hash } = require('../utilities')
+const { encrypt, decrypt, hash, CustomError } = require('../utilities')
 const usersModel = require('../models/users')
 const userSessionModel = require('../models/userSessions')
 
 
 const registerPOST = async (loginId, name, email, password) => {
+    const emailHash = await hash(email)
+    await usersModel.countDocuments({ loginId: loginId }).then((count) => {
+        if (count) {
+            throw new CustomError('422', 'LoginId already exists.')
+        }
+    })
+    await usersModel.countDocuments({ emailHash: emailHash }).then((count) => {
+        if (count) {
+            throw new CustomError('422', 'Email already exists.')
+        }
+    })
+    const [emailEncrypt, passwordHash] = await Promise.all([
+        encrypt(email),
+        bcrypt.hash(password, saltRounds),
+    ])
     const userObject = {
         loginId,
         name,
-        email: await encrypt(email),
-        emailHash: await hash(email),
-        password: await bcrypt.hash(password, saltRounds),
+        email: emailEncrypt,
+        emailHash: emailHash,
+        password: passwordHash,
         lastLogin: Date.now(),
         enable: true,
     }
@@ -23,7 +38,7 @@ const registerPOST = async (loginId, name, email, password) => {
 const loginPOST = async (loginId, password) => {
     const user = await usersModel.findOne({ loginId: loginId }).lean()
     if (!user) {
-        throw new CustomError('404', 'user not found')
+        throw new CustomError('404', 'user not found.')
     }
     if (!user.enable) {
         throw new CustomError('403', 'account disable!')
