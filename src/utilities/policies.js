@@ -15,6 +15,10 @@ const isAdmin = (req, res, next) => {
     }
 }
 
+const hasLoggedIn = (req, res, next) => {
+    return req.session.email ? res.redirect('/home') : next()
+}
+
 const hasSecurityQuestion = async (req, res, next) => {
     const { userId } = req.session
     const user = await usersModel.findById(userId, { security: 1 }).lean()
@@ -63,5 +67,6 @@ module.exports = {
     isAdmin,
     noSecurityQuestion,
     hasSecurityQuestion,
+    hasLoggedIn,
     authorization,
 }

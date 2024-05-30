@@ -1,9 +1,10 @@
 const express = require('express')
 const router = new express.Router()
 const authController = require('../controllers/auth')
+const { hasLoggedIn } = require('../utilities/index')
 
 
-router.get('/register', authController.registerGET)
+router.get('/register', hasLoggedIn, authController.registerGET)
 
 router.post('/register', authController.registerPOST)
 
