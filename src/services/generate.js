@@ -7,8 +7,8 @@ const sharp = require('sharp')
 /**
  * Generate flashcards objects in JSON format by calling OpenAI API based on text study material
  * @param {String} difficulty - Difficulty of flashcards: Easy, Medium, or Difficult
- * @param {String} number - Number of flashcards
- * @param {String} material - Study material in text format
+ * @param {String} numQuestions - Number of flashcards
+ * @param {String} image - Study material in text format
  * @return {Object} jsonResult - flashcards objects in JSON format
  */
 async function generateImage(difficulty, numQuestions, image) {
@@ -28,6 +28,7 @@ async function generateImage(difficulty, numQuestions, image) {
                 {
                     role: 'user',
                     content: [{
+                        // eslint-disable-next-line max-len
                         type: 'text', text: `Given the provided image, Generate an array in json format that contains ${numQuestions} flashcards object elments with ${difficulty} difficulty. Answer should be at most 25 words.
               Question and answer of flashcards should be the keys of each flashcard object element.` }, { 'type': 'image_url', 'image_url': { 'url': image } }],
                 },
