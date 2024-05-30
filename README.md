@@ -15,7 +15,6 @@ Our project, StudyGen, is a web application developed to alleviate student
 stress by simplifying flashcards creation with AI integration.
 
 ## Project Technologies
-an easy-to-find labeled section called Technologies describes everything the team used for this project. It includes tools, languages, version numbers... everything!
 
 ### Frontend
 * HTML5
@@ -42,7 +41,7 @@ an easy-to-find labeled section called Technologies describes everything the tea
 ## Listing of Files
 
 ```
- Top level files of project folder: 
+Top level files of project folder: 
 ├── .gitignore               # Git ignore file
 ├── .jest.config.js          # 
 ├── .eslintrc.js             # Eslint config file
@@ -98,6 +97,70 @@ section contains ordered instructions so a new developer can assemble a DEVELOPM
 
 ## Features
 an easy-to-find labeled section tells us how to use the app and includes a helpful list of features and how to use them.
+
+### 1. Account Sign Up and Management
+#### Registration
+To use the application, you must sign up for an account. To do so, go through the following steps:
+* Click sign up here on the Login Page
+* Fill in your information
+* Press Sign Up
+* Choose from one of the preset security questions
+* Input your security answer to the question
+* Press Submit
+
+#### Password Reset
+If you forgot your password, follow these steps to reset your password:
+* Click the Forgot your password dropdown on the Login Page
+* Press Reset password
+* Type in your email address in the modal input
+* Press Next Step
+* Enter the answer to your Security Question 
+* Press Next Step
+* Enter your new password and confirmation password
+* Click Reset
+* Click Log in now
+
+#### Account Information Editing
+To edit your account information, go through the following steps:
+* Sign in to the application with your account credentials
+* Go to the User Profile Page by clicking the Profile Picture Icon on the top right of the header
+* Click on your profile picture above your name will allow you to edit your profile picture
+* Click on any other buttons to edit the corresponding account details.
+
+### 2. Flashcard Generation
+The core feature of this application is to generate flashcards from various source materials. Here are some of the ways you can generate flashcards with.
+#### Text Upload
+* Go to the Generate Your Flashcards page by clicking on the bottom center footer button.
+* Select the Text Upload Tab and select your parameters for flashcard generation
+* Press the Upload Study Material Button
+* Insert your desired text upload * Press Generate
+* Preview the flashcards generated
+* If desired, input a name for the flashcard set and press Save to collection
+
+#### Image Upload
+* Go to the Generate Your Flashcards page by clicking on the bottom center footer button.
+* Select the Image Upload Tab and select your parameters for flashcard generation
+* Press the Upload Study Material Button
+* Drag and Drop an Image or press the middle to browse your file explorer for the desired image 
+* Press Generate
+* Preview the flashcards generated
+* If desired, input a name for the flashcard set and press Save to collection
+
+#### Photo Upload
+* Go to the Generate Your Flashcards page by clicking on the bottom center footer button.
+* Select the Take Photo Tab and select your parameters for flashcard generation
+* Press the Upload Study Material Button
+* Press Take Photo on your desired Study Material
+* Press Generate
+* Preview the flashcards generated
+* If desired, input a name for the flashcard set and press Save to collection
+
+### 3. Flashcard Review
+
+### 4. Flashcard Collections
+
+### 5. Homepage Study Streak Display
+
 
 ## Credits
 a labeled section provides an organized list of credits, references, and licenses (if you have any). This is where you include a list of all the websites that had helpful code you used in your app. Remember to provide credit where credit is due!
