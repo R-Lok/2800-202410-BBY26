@@ -39,14 +39,14 @@ const registerPOST = async (loginId, name, email, password) => {
 const loginPOST = async (loginId, password) => {
     const user = await usersModel.findOne({ loginId: loginId }).lean()
     if (!user) {
-        throw new CustomError('404', 'user not found.')
+        throw new CustomError('404', 'User is not found.')
     }
     if (!user.enable) {
-        throw new CustomError('403', 'account disable!')
+        throw new CustomError('403', 'Account Disabled!')
     }
     const result = await bcrypt.compare(password, user.password)
     if (!result) {
-        throw new CustomError('401', 'loginId or password incorrect!')
+        throw new CustomError('401', 'Login ID or Password is Incorrect!')
     }
     await usersModel.findByIdAndUpdate(user.id, { lastLogin: Date.now() }).lean()
     user.email = await decrypt(user.email)

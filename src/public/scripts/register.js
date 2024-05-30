@@ -18,7 +18,6 @@ form.addEventListener('submit', (e) => {
             return window.location.href = '/'
         })
         .catch((err) => {
-            console.log(err)
             const message = err.response.data.msg.details[0].message
             const key = err.response.data.msg.details[0].context.key
             displayErrorMessage(message, key);
