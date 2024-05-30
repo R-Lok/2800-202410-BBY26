@@ -17,8 +17,8 @@ async function saveFlashCardSet(req, res) {
     // use map to add the share id to each element of the cards array, to prepare for writing to DB
     const cards = JSON.parse(req.body.cards)
     const inputData = saveFlashcardsService.addShareIdToCards(cards, shareId)
-
-    const writeSetResult = await saveFlashcardsService.writeFlashCardSetToDB(req.body.name, req.session.userId, shareId, inputData)
+    const trimmedSetName = req.body.name.trim()
+    const writeSetResult = await saveFlashcardsService.writeFlashCardSetToDB(trimmedSetName, req.session.userId, shareId, inputData)
     if (writeSetResult.success) {
         res.status(200).json(JSON.stringify({ shareId: shareId }))
     } else {

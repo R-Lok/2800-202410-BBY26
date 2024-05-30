@@ -4,6 +4,13 @@ const openai = new OpenAI({
 })
 const sharp = require('sharp')
 
+/**
+ * Generate flashcards objects in JSON format by calling OpenAI API based on text study material
+ * @param {String} difficulty - Difficulty of flashcards: Easy, Medium, or Difficult
+ * @param {String} number - Number of flashcards
+ * @param {String} material - Study material in text format
+ * @return {Object} jsonResult - flashcards objects in JSON format
+ */
 async function generateImage(difficulty, numQuestions, image) {
     try {
         const response = await openai.chat.completions.create({
@@ -21,8 +28,8 @@ async function generateImage(difficulty, numQuestions, image) {
                 {
                     role: 'user',
                     content: [{
-                        type: 'text', text: `Given the provided image, Generate an array in json format that contains ${numQuestions} flashcards object elments with ${difficulty} difficulty.
-              Question and answer of flashcards should be the keys of each flashcard object element` }, { 'type': 'image_url', 'image_url': { 'url': image } }],
+                        type: 'text', text: `Given the provided image, Generate an array in json format that contains ${numQuestions} flashcards object elments with ${difficulty} difficulty. Answer should be at most 25 words.
+              Question and answer of flashcards should be the keys of each flashcard object element.` }, { 'type': 'image_url', 'image_url': { 'url': image } }],
                 },
             ],
         })
@@ -53,8 +60,8 @@ async function generate(difficulty, number, material) {
                 {
                     role: 'user',
                     content: `Given the following studying material in text: ${material}.
-              Generate an array in json format that contains ${number} flashcards object elments with ${difficulty} difficulty.
-              Question and answer of flashcards should be the keys of each flashcard object element`,
+              Generate an array in json format that contains ${number} flashcards object elments with ${difficulty} difficulty. Answer should be at most 25 words.
+              Question and answer of flashcards should be the keys of each flashcard object element.`,
                 },
             ],
             model: 'gpt-4o',
