@@ -1,7 +1,6 @@
 const { authService } = require('../../src/services/index')
 const userSessionModel = require('../../src/models/userSessions')
 const usersModel = require('../../src/models/users')
-const Joi = require('joi')
 
 const users = [
     { loginId: 'admin', name: 'admin', email: 'admin@gmail.com', password: 'admin' },
@@ -54,14 +53,7 @@ describe('auth service', () => {
 
         it('should throw an error (user not found)', async () => {
             await expect(authService.loginPOST('notExisting', 'password'))
-                .rejects.toThrow(new Joi.ValidationError('ValidationError', [{
-                    message: 'user not found.',
-                    path: ['loginId'],
-                    type: 'not found',
-                    context: {
-                        key: 'loginId',
-                    },
-                }], null))
+                .rejects.toThrow(new Error('[404] user not found.'))
         })
 
         it('should throw an error (incorrect password)', async () => {
