@@ -18,11 +18,23 @@ form.addEventListener('submit', (e) => {
             return window.location.href = '/'
         })
         .catch((err) => {
-            const message = err.response.data.msg.details[0].message
-            const key = err.response.data.msg.details[0].context.key
+            console.log(err);
+            const {message, key} = filterError(err);
             displayErrorMessage(message, key);
         })
 })
+
+function filterError(err) {
+    let message, key;
+    if (err.response.status === 422) {
+        message = err.response.data.msg.details[0].message
+        key = err.response.data.msg.details[0].context.key
+    } else if (err.response.status === 405) {
+        message = err.response.data.msg
+        key = message.split(" ")[0];
+    }
+    return {message, key}
+}
 
 // Display error message below the corresponding form field
 function displayErrorMessage(message, key) {
