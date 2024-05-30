@@ -340,7 +340,7 @@ function displayFile() {
                     return
                 }
             }
-            const imgTag = `<img src="${fileURL}" alt="">`
+            const imgTag = `<img id="upload-preview" src="${fileURL}" alt="">`
             dropArea.innerHTML = imgTag
             document.getElementById('preview-message').style.visibility = 'visible'
             document.getElementById('image-modal-footer').style.visibility =
