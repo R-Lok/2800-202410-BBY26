@@ -3,13 +3,13 @@ for (let i = 1; i <= 3; i++) {
     let elementId = "footerImg" + i
     const image = document.getElementById(elementId);
     image.addEventListener('click', () => {
-        image.src = './images/footerImage' + i + '.svg';
+        image.src = '/images/footerImage' + i + '.svg';
     })
     image.addEventListener('mouseover', () => {
-        image.src = './images/footerImage' + i + '.svg';
+        image.src = '/images/footerImage' + i + '.svg';
     })
 
     image.addEventListener('mouseleave', () => {
-        image.src = './images/footer' + i + '.svg';
+        image.src = '/images/footer' + i + '.svg';
     })
 }
