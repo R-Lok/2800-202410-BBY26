@@ -141,7 +141,7 @@ router.post('/editEmail', async (req, res) => {
     const userId = req.session.userId
     const email = req.body.email
     const schema = Joi.object({
-        email: Joi.string().email().max(20).required(),
+        email: Joi.string().email().required(),
     })
 
     try {

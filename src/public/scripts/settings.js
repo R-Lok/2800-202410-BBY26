@@ -1,4 +1,5 @@
-let picChoice = 1
+let picChoice
+let prevPicChoice
 
 // Post fetch request function for user's changing password
 const changePwd = async (securityAns, currentPwd, newPwd, confirmPwd) => {
@@ -136,7 +137,10 @@ function highlightIcon(clickedImage) {
         element.classList.remove('profilePicBorderHighlight')
     }
 
+    console.log(clickedImage)
+
     if (clickedImage) {
+        console.log(clickedImage)
         clickedImage.classList.add('profilePicBorderHighlight')
     }
 
@@ -144,8 +148,17 @@ function highlightIcon(clickedImage) {
     picChoice = imageId[5]
 }
 
+function profileCloseButton() {
+    for (let i = 1; i <= 9; i++) {
+        const elementNum = 'image' + i
+        const element = document.getElementById(elementNum)
+        element.classList.remove('profilePicBorderHighlight')
+    }
+}
+
 // Function to save the selected profile picture
 document.getElementById('SaveButton').addEventListener('click', async function() {
+    prevPicChoice = picChoice
     try {
         const response = await fetch(`/settings/changePic`, {
             method: 'POST',
@@ -161,3 +174,37 @@ document.getElementById('SaveButton').addEventListener('click', async function()
         console.log(error)
     }
 })
+
+// Function to clear the forms of all closed edit modals
+function clearForm() {
+    const form = document.querySelectorAll('form')
+    if (form) {
+        for (let i = 0; i < form.length; i++) {
+            form[i].reset()
+        }
+    }
+}
+
+// Mutation Observer to observe and check when the modals close
+const targetNode = document.querySelector('#editNameModal')
+const targetNode2 = document.querySelector('#changePwdModal')
+const targetNode3 = document.querySelector('#loginIdModal')
+const targetNode4 = document.querySelector('#editEmailModal')
+
+const config = { attributes: true, attributeFilter: ['class'] }
+
+const callback = (mutationsList, observer) => {
+    for (const mutation of mutationsList) {
+        const classList = mutation.target.classList
+        if (!classList.contains('show')) {
+            clearForm()
+        }
+    }
+}
+
+const observer = new MutationObserver(callback)
+observer.observe(targetNode, config)
+observer.observe(targetNode2, config)
+observer.observe(targetNode3, config)
+observer.observe(targetNode4, config)
+

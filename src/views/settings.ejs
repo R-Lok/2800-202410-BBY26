@@ -44,7 +44,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btnStyleClose" data-dismiss="modal">Close</button>
+              <button onclick="profileCloseButton()" type="button" class="btn btnStyleClose closeBtn" data-dismiss="modal">Close</button>
               <button id="SaveButton" type="button" class="btn btnStyle" data-dismiss="modal">Save Changes</button>
             </div>
           </div>
@@ -102,7 +102,7 @@
               </form>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btnStyleClose" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btnStyleClose closeBtn" data-dismiss="modal">Close</button>
               <button id="submitLogin" type="button" class="btn btnStyle" onclick="editLoginId(document.getElementById('newLoginId').value); this.disabled = true">Submit</button>
             </div>
           </div>
@@ -149,7 +149,7 @@
             </div>
 
             <div class="modal-footer">
-              <button type="button" class="btn btnStyleClose" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btnStyleClose closeBtn" data-dismiss="modal">Close</button>
               <button id="submitPass" type="button" class="btn btnStyle" onclick="changePwd(
                     document.getElementById('securityAns').value,
                     document.getElementById('currentPwd').value,
@@ -177,7 +177,7 @@
           </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn btnStyleClose" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btnStyleClose closeBtn" data-dismiss="modal">Close</button>
             <button id="submitName" type="button" class="btn btnStyle" onclick="editName(document.getElementById('newName').value); this.disabled = true">Submit</button>
           </div>
         </div>
@@ -197,7 +197,7 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btnStyleClose" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btnStyleClose closeBtn" data-dismiss="modal">Close</button>
             <button id="submitEmail" type="button" class="btn btnStyle" onclick="editEmail(document.getElementById('newEmail').value); this.disabled = true">Submit</button>
           </div>
         </div>
