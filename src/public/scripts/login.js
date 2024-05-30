@@ -18,10 +18,10 @@ form.addEventListener('submit', (e) => {
             return window.location.href = '/'
         })
         .catch((err) => {
-            console.log(err); 
-            const message = err.response.data.msg.details[0].message
-            const key = err.response.data.msg.details[0].context.key
-            displayErrorMessage(message, key)
+            // console.log(err); 
+            // const message = err.response.data.msg.details[0].message
+            // const key = err.response.data.msg.details[0].context.key
+            // displayErrorMessage(message, key)
         })
 })
 
@@ -30,8 +30,8 @@ function displayErrorMessage(message, key) {
     document.querySelectorAll('.invalid-feedback').forEach((elem) => {
         elem.innerHTML = "";
     })
-    document.querySelectorAll('input').forEach((elem) => {
-        elem.innerHTML = ""
+    document.querySelectorAll('.login-input').forEach((elem) => {
+        elem.value = "";
         elem.classList.remove('is-invalid');
     })
 
