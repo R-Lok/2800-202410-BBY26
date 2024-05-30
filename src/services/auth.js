@@ -3,7 +3,6 @@ const saltRounds = 12
 const { encrypt, decrypt, hash, CustomError } = require('../utilities')
 const usersModel = require('../models/users')
 const userSessionModel = require('../models/userSessions')
-const Joi = require('joi')
 
 
 const registerPOST = async (loginId, name, email, password) => {
