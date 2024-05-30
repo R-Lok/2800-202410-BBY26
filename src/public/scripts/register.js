@@ -24,6 +24,7 @@ form.addEventListener('submit', (e) => {
         })
 })
 
+// Display error message below the corresponding form field
 function displayErrorMessage(message, key) {
     document.querySelectorAll('.invalid-feedback').forEach((elem) => {
         elem.innerHTML = "";

@@ -50,7 +50,8 @@ img {
 }
 
 #sharecode {
-    background-color: grey;
+    color: white;
+    background-color: #8714c9;
     border-radius: 20px;
 }
 

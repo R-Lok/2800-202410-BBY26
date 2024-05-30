@@ -1,7 +1,7 @@
 // Fetch all available questions from users
 async function getQuestion(email) {
     if (email.length == 0) {
-        displayerErrorLoader("Email cannot be empty. Try again.");
+        displayErrorLoader("Email cannot be empty. Try again.");
         return;
     } 
     axios.get(`/securityQuestions/${email}`)
@@ -15,7 +15,7 @@ async function getQuestion(email) {
                 }, 1500)
             }
         }).catch((err) => {
-            displayerErrorLoader(err.response.data.msg)
+            displayErrorLoader(err.response.data.msg)
         })
 }
 
@@ -44,9 +44,9 @@ function setStepTwoQuestion(result) {
 
 // POST security answer to database for user input validation
 async function checkAnswer() {
-    const answer = document.getElementById('securityAns').value
+    const answer = document.getElementById('answer').value
     if (answer.length == 0) {
-        displayerErrorLoader("Answer cannot be empty");
+        displayErrorMessage("Answer cannot be empty", "answer");
         return;
     } 
     await axios.post('/securityQuestions/checkAnswer', {
@@ -55,7 +55,7 @@ async function checkAnswer() {
         },
         userId: localStorage.getItem('userId'),
         questionId: document.getElementById('securityQues').questionId,
-        answer: document.getElementById('securityAns').value,
+        answer: document.getElementById('answer').value,
     }).then((res) => {
         if (res.status === 200) {
             displayLoader()
@@ -65,21 +65,21 @@ async function checkAnswer() {
             }, 1500)
         }
     }).catch((err) => {
-        console.log(err);
-        displayerErrorLoader(err.response.data.msg)
+        const message = err.response.data.msg
+        displayErrorMessage(message, "answer");
     })
 }
 activateBtn(2, checkAnswer)
 
 // POST user new password to database
 async function resetPassword() {
-    const password = document.getElementById('newPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
-    if (password.length == 0) {
-        displayerErrorLoader("New password cannot be empty");
+    if (newPassword.length == 0) {
+        displayErrorMessage("New password cannot be empty.", "newPassword");
         return;
     } else if (confirmPassword.length == 0) {
-        displayerErrorLoader("Please confirm your password first.");
+        displayErrorMessage("Please confirm your password first.", "confirmPassword");
         return;
     }
     await axios.post('resetPassword', {
@@ -99,8 +99,12 @@ async function resetPassword() {
             }, 1500)
         }
     }).catch((err) => {
-        console.log(err)
-        displayerErrorLoader(err.response.data.msg.details[0].message)
+        const message = err.response.data.msg.details[0].message
+        let key = err.response.data.msg.details[0].context.key
+        if (key === "password") {
+            key = "newPassword";
+        }
+        displayErrorMessage(message, key);
     })
 }
 activateBtn(3, resetPassword)
@@ -127,7 +131,7 @@ function displayLoader() {
 }
 
 // Display error loader when users give invalid inputs
-function displayerErrorLoader(message) {
+function displayErrorLoader(message) {
     const modalBody = document.querySelector('.modal-body')
 
     const loader = document.createElement('div')
@@ -145,6 +149,21 @@ function displayerErrorLoader(message) {
 
     loader.appendChild(text)
     modalBody.appendChild(loader)
+}
+
+// Display error message below the corresponding form field
+function displayErrorMessage(message, key) {
+    document.querySelectorAll('.invalid-feedback').forEach((elem) => {
+        elem.innerHTML = "";
+    })
+    document.querySelectorAll('input').forEach((elem) => {
+        elem.classList.remove('is-invalid');
+    })
+
+    const elem = document.querySelector(`input[name=${key}]`);
+    const messageElem = document.getElementById(`${key}-feedback`);
+    messageElem.innerHTML = `<p>${message}</p>`;
+    elem.classList.add('is-invalid');
 }
 
 // Change steps for the modal

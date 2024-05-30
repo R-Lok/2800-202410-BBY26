@@ -48,14 +48,14 @@ describe('auth controller', () => {
             expect(next).not.toHaveBeenCalled()
         })
 
-        it('should throw an error (bad password)', async () => {
+        it('should throw an error (bad name)', async () => {
             const req = {
                 body: {
                     loginId: 'admin',
-                    name: 'admin',
-                    email: 'admin@gmail.com',
-                    password: '1',
-                    confirmPassword: '1',
+                    name: '',
+                    email: 'admin',
+                    password: 'admin',
+                    confirmPassword: 'admin',
                 },
                 session: {},
             }
@@ -64,7 +64,7 @@ describe('auth controller', () => {
             expect(next).toHaveBeenCalledWith(expect.any(CustomError))
             const error = next.mock.calls[0][0]
             expect(error).toBeInstanceOf(CustomError)
-            expect(error.message).toBe('[422] ValidationError: Password must be between 3 and 20 characters long and contain only alpha-numeric characters')
+            expect(error.message).toBe('[422] ValidationError: Display name is required')
             expect(error.code).toBe(422)
         })
 
@@ -85,6 +85,67 @@ describe('auth controller', () => {
             const error = next.mock.calls[0][0]
             expect(error).toBeInstanceOf(CustomError)
             expect(error.message).toBe('[422] ValidationError: Email must be a valid email')
+            expect(error.code).toBe(422)
+        })
+
+
+        it('should throw an error (bad loginId)', async () => {
+            const req = {
+                body: {
+                    loginId: '',
+                    name: 'admin',
+                    email: 'admin@gmail.com',
+                    password: 'admin',
+                    confirmPassword: 'admin',
+                },
+                session: {},
+            }
+            await authController.registerPOST(req, res, next)
+
+            expect(next).toHaveBeenCalledWith(expect.any(CustomError))
+            const error = next.mock.calls[0][0]
+            expect(error).toBeInstanceOf(CustomError)
+            expect(error.message).toBe('[422] ValidationError: Login ID is required')
+            expect(error.code).toBe(422)
+        })
+
+        it('should throw an error (bad password)', async () => {
+            const req = {
+                body: {
+                    loginId: 'admin',
+                    name: 'admin',
+                    email: 'admin@gmail.com',
+                    password: '1',
+                    confirmPassword: '1',
+                },
+                session: {},
+            }
+            await authController.registerPOST(req, res, next)
+
+            expect(next).toHaveBeenCalledWith(expect.any(CustomError))
+            const error = next.mock.calls[0][0]
+            expect(error).toBeInstanceOf(CustomError)
+            expect(error.message).toBe('[422] ValidationError: Password must be between 3 and 20 alpha-numeric characters')
+            expect(error.code).toBe(422)
+        })
+
+        it('should throw an error (bad confirmPassword)', async () => {
+            const req = {
+                body: {
+                    loginId: 'admin',
+                    name: 'admin',
+                    email: 'admin@gmail.com',
+                    password: '123',
+                    confirmPassword: '321',
+                },
+                session: {},
+            }
+            await authController.registerPOST(req, res, next)
+
+            expect(next).toHaveBeenCalledWith(expect.any(CustomError))
+            const error = next.mock.calls[0][0]
+            expect(error).toBeInstanceOf(CustomError)
+            expect(error.message).toBe('[422] ValidationError: Passwords do not match')
             expect(error.code).toBe(422)
         })
     })
@@ -128,6 +189,23 @@ describe('auth controller', () => {
             const error = next.mock.calls[0][0]
             expect(error).toBeInstanceOf(CustomError)
             expect(error.message).toBe('[422] ValidationError: Login ID is required')
+            expect(error.code).toBe(422)
+        })
+
+        it('should throw an error (empty password)', async () => {
+            const req = {
+                body: {
+                    loginId: 'admin',
+                    password: '',
+                },
+                session: {},
+            }
+            await authController.loginPOST(req, res, next)
+
+            expect(next).toHaveBeenCalledWith(expect.any(CustomError))
+            const error = next.mock.calls[0][0]
+            expect(error).toBeInstanceOf(CustomError)
+            expect(error.message).toBe('[422] ValidationError: Password is required')
             expect(error.code).toBe(422)
         })
     })
@@ -193,7 +271,7 @@ describe('auth controller', () => {
             expect(error.code).toBe(404)
         })
 
-        it('should throw an error ()', async () => {
+        it('should throw an error (passwords not match)', async () => {
             const req = {
                 body: {
                     userId: userId.toString(),

@@ -43,7 +43,7 @@
     background: var(--main-color6);
     border-radius: 10px;
     color:white;
-    text-shadow:#230C33;
+    text-shadow: 1px 1px var(--main-color4);
     margin-bottom:5px;
     box-shadow: 0 8px 6px -6px black;
 }

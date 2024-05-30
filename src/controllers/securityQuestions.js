@@ -81,12 +81,12 @@ const sqGETQuestion = async (req, res, next) => {
         const { email } = req.params
         const schema = Joi.object({
             email: Joi.string().email().required().messages({
-                'string.email': 'Invalid Email. Try again.'
+                'string.email': 'Invalid Email. Try again.',
             }),
         })
         await schema.validateAsync({ email })
             .catch((error) => {
-                throw new CustomError('422', error)
+                throw new CustomError('422', error.details[0].message)
             })
         const result = await sqService.sqGETQuestion({ email })
         return res.status(200).json(result)
