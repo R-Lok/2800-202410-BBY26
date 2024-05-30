@@ -42,7 +42,10 @@ function sendApiRequest() {
             })
             // Check if the response is successful
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`)
+                loader.style.visibility = 'hidden'
+                const data = await response.json()
+                displayAlert(data.msg)
+                return
             }
             // Parse the JSON response
             window.location.href = response.url
@@ -135,9 +138,14 @@ async function getCamera() {
     connectToCamera()
 }
 
-// This function toggles the hidden class on the input element
+// This function toggles the hidden class on the input element (invisible and does not take up dom space)
 function toggleHidden(element) {
     element.classList.toggle('hidden')
+}
+
+//This function toggles the invisible class on the input element (invisible, but takes up dom space)
+function toggleOpacity(element) {
+    element.classList.toggle('invisible')
 }
 
 // This function assigns the user's device camera to the mediaStream reference
@@ -187,7 +195,6 @@ function takePhoto() {
     const photoWidth = video.videoWidth
     context.drawImage(video, 0, 0, photoWidth, photoHeight)
     const image = canvas.toDataURL('image/png')
-    sessionStorage.setItem('imageURL', JSON.stringify(image))
     photoFrame.setAttribute('src', image)
 
     canvas.width = photoWidth
@@ -202,7 +209,7 @@ function takePhoto() {
 document
     .querySelector('#generatePhotoButton')
     .addEventListener('click', async (e) => {
-        const photo = JSON.parse(sessionStorage.getItem('imageURL'))
+        const photo = document.getElementById("frame").src
         try {
             const loader = document.querySelector('.loading-state')
             loader.style.visibility = 'visible'
@@ -219,13 +226,28 @@ document
             })
             if (response.ok) {
                 const data = await response.json()
-                window.location.href = `/check?data=${encodeURIComponent(data)}`
+                console.log(data)
+                window.location.href = `/check?data=${(encodeURIComponent(data))}`
+            } else {
+                
+                const data = await response.json()
+                displayAlert(data.msg)
             }
         } catch (err) {
             console.log(err) // implement some sort of alert that warns the user that it failed
+            loader.style.visibility = 'hidden'
         }
     })
 
+//Displays the msg in a pop up alert at the top of the screen (used for error messages)
+function displayAlert(msg) {
+    const alert = document.getElementById("alert")
+    toggleOpacity(alert)
+    alert.textContent = msg
+    setTimeout(() => {
+        toggleOpacity(alert)
+    }, 3000)
+}
 // mutationObserver to look at the photoModal for changes
 // if the classList of photoModal doesn't have 'show', turn off the camera
 const targetNode = document.querySelector('#photoModal')
@@ -426,11 +448,13 @@ function sendImageApiRequest() {
                 },
             )
             .then((response) => {
+                console.log(response)
                 window.location.href = response.data
                 console.log('Finish calling API. ')
             })
             .catch((error) => {
-                console.error('There was an error!', error)
+                loader.style.visibility = 'hidden'
+                displayAlert(error.response.data.msg)
             })
     })
 }

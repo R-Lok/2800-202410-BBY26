@@ -97,12 +97,16 @@ app.post('/upload-image', async (req, res) => {
     // base64 string is in req.body.image
     try {
         const result = await generateImage(difficulty, numQuestions, image)
-        res.status(200)
-        return res.json(result)
+        if (result.success) {
+            res.status(200)
+            return res.json(result.data)
+        } else {
+            res.status(500)
+            return res.json({ msg: 'Internal server error!' })
+        }
     } catch (err) {
         console.log(err)
-        res.status(500)
-        res.json(err)
+        res.status(500).json(err)
     }
 })
 
@@ -128,9 +132,10 @@ async function generateImage(difficulty, numQuestions, image) {
                 },
             ],
         })
-        return response.choices[0].message.content
+        return { success: true, data: response.choices[0].message.content }
     } catch (err) {
         console.log(err)
+        return { error: true, msg: 'OpenAI api error' }
     }
 }
 
@@ -166,21 +171,26 @@ async function generate(difficulty, number, material) {
             frequency_penalty: 0,
             presence_penalty: 0,
         })
+        const jsonResult = completion.choices[0].message.content
+        return { success: true, data: jsonResult }
     } catch (err) {
         console.log(`API Call fails: ${err}`)
+        return { error: true, data: 'OpenAI api call error' }
     }
-    const jsonResult = completion.choices[0].message.content
-
-    return jsonResult
 }
 
 // route for calling Open AI api for generating flashcards based on text upload
 app.post('/api/generate', async (req, res) => {
     try {
         const result = await generate(req.body.difficulty, req.body.numQuestions, req.body.material)
-        return res.redirect(`/check/?data=${result}`)
+        if (result.success) {
+            return res.redirect(`/check/?data=${encodeURIComponent(result.data)}`)
+        } else {
+            res.status(500).json({ msg: 'Internal server error' })
+        }
     } catch (err) {
         console.log('Error calling Open AI API')
+        res.status(500).json({ msg: 'Internal server error' })
     }
 })
 
@@ -214,9 +224,13 @@ app.post('/api/generatebyimage', async (req, res) => {
         const base64Jpg = await convertImageToBase64Jpg(base64Input)
         const imageUrl = `data:image/jpeg;base64,${base64Jpg}`
         const result = await generateImage(difficulty, numQuestions, imageUrl)
-        return res.send(`/check/?data=${encodeURIComponent(result)}`)
+        if (result.success) {
+            return res.send(`/check/?data=${encodeURIComponent(result.data)}`)
+        } else {
+            return res.status(500).json({ msg: 'Internal server error' })
+        }
     } catch {
-        res.status(400).send('Fail to generate flashcards.')
+        res.status(500).send('Fail to generate flashcards.')
     }
 })
 
