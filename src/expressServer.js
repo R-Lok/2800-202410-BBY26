@@ -184,7 +184,7 @@ app.post('/api/generate', async (req, res) => {
     try {
         const result = await generate(req.body.difficulty, req.body.numQuestions, req.body.material)
         if (result.success) {
-            return res.redirect(`/check/?data=${result}`)
+            return res.redirect(`/check/?data=${result.data}`)
         } else {
             res.status(500).json({ msg: 'Internal server error' })
         }
