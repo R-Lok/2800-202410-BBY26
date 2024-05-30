@@ -20,6 +20,10 @@
   width: 80%;
 }
 
+#upload-preview {
+  object-fit: fill;
+}
+
 #myTabContent {
   width: 90%;
   height: 40vh;

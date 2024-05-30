@@ -48,14 +48,14 @@
             <p>Parameters for generation</p>
             <select class="form-select mb-3" id="selectDifficulty" aria-label="Large select example"
               name="difficulty">
-              <option value="" selected>Difficulty of the flashcards</option>
+              <option value="" selected hidden>Difficulty of the flashcards</option>
               <option value="easy">Easy</option>
               <option value="medium">Medium</option>
               <option value="difficult">Difficult</option>
             </select>
 
             <select class="form-select mb-3" id="selectNumber" aria-label="Large select example" name="numFlashcards">
-              <option value="" selected>Number of flashcards</option>
+              <option value="" selected hidden>Number of flashcards</option>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -113,7 +113,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Change parameters</button>
-            <button type="button" id="generateButton" class="btn btn-success generate-btn">Generate</button> 
+            <button type="button" id="generateButton" class="btn btn-secondary generate-btn" disabled>Generate</button> 
             <!-- <button type="button" class="btn btn-primary"></button> -->
           </div>
         </div>

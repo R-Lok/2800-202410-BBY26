@@ -29,7 +29,7 @@ function sendApiRequest() {
             numQuestions: document.getElementById('selectNumber').value,
             material: document.getElementById('material').value,
         }
-        const url = '/api/generate'
+        const url = '/generate/bytext'
         try {
             const loader = document.querySelector('.loading-state')
             loader.style.visibility = 'visible'
@@ -213,7 +213,7 @@ document
         try {
             const loader = document.querySelector('.loading-state')
             loader.style.visibility = 'visible'
-            const response = await fetch('/upload-image', {
+            const response = await fetch('/generate/byphotoupload', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -340,7 +340,7 @@ function displayFile() {
                     return
                 }
             }
-            const imgTag = `<img src="${fileURL}" alt="">`
+            const imgTag = `<img id="upload-preview" src="${fileURL}" alt="">`
             dropArea.innerHTML = imgTag
             document.getElementById('preview-message').style.visibility = 'visible'
             document.getElementById('image-modal-footer').style.visibility =
@@ -435,7 +435,7 @@ function sendImageApiRequest() {
         console.log('Start calling API')
         axios
             .post(
-                '/api/generatebyimage',
+                '/generate/byimage',
                 {
                     base64Input: base64Output,
                     difficulty: document.getElementById('selectDifficulty').value,
@@ -460,3 +460,14 @@ function sendImageApiRequest() {
 }
 sendImageApiRequest()
 
+//Disable the generate button for the text modal if the textarea element is empty
+//enable if the textarea contains a value (text)
+document.getElementById("material").addEventListener("input", (e) => {
+    const generateBtn = document.getElementById("generateButton")
+
+    if(e.target.value === '') {
+        generateBtn.disabled = true
+    } else {
+        generateBtn.disabled = false
+    }
+})
