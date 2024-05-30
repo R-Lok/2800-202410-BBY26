@@ -19,7 +19,6 @@
             <span id="numCards"> <%= cards.length%></span>
         </div>
         <div id="carouselExampleCaptions" class="carousel slide" data-bs-theme="dark">
-            <!--We might not need the indicators anymore since we have a counter - discuss with team -->
             <div class="carousel-indicators">
                 <% for(let i=0; i < cards.length; i++) { %>
                     <%- include('cardindicator.ejs', {i: i})%>

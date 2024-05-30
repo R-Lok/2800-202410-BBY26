@@ -51,6 +51,7 @@ setGitHubLinks()
 
 
 // Javascript for Easter Egg background confetti animation (all code + comments below this) - copied from Jonathan Bell at codepen.io
+// https://codepen.io/jonathanbell/pen/OvYVYw
 let W = window.innerWidth
 let H = window.innerHeight
 const canvas = document.getElementById('canvas')
