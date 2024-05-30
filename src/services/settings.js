@@ -1,5 +1,5 @@
 const Joi = require('joi')
-const { CustomError, encrypt, decrypt, hash } = require('../utilities/index')
+const { CustomError } = require('../utilities/index')
 const bcrypt = require('bcrypt')
 const userAnswersModel = require('../models/userAnswers')
 const usersModel = require('../models/users')

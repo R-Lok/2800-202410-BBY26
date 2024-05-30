@@ -42,10 +42,7 @@ const revokePOST = async (req, res, next) => {
             .catch((error) => {
                 throw new CustomError('422', error)
             })
-        const result = await adminService.revokePOST(req, loginId)
-        if (!result) {
-            throw new CustomError('404', 'user not found')
-        }
+        await adminService.revokePOST(loginId)
         return res.status(200).json({ msg: 'ok' })
     } catch (error) {
         next(error)
@@ -63,10 +60,7 @@ const enablePOST = async (req, res, next) => {
             .catch((error) => {
                 throw new CustomError('422', error)
             })
-        const result = await adminService.enablePOST(loginId)
-        if (!result) {
-            throw new CustomError('404', 'user not found')
-        }
+        await adminService.enablePOST(loginId)
         return res.status(200).json({ msg: 'ok' })
     } catch (error) {
         next(error)

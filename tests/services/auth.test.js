@@ -24,14 +24,14 @@ describe('auth service', () => {
             const { loginId, name, email, password } = users[0]
             await authService.registerPOST(loginId, name, email, password)
             await expect(authService.registerPOST(loginId, name, email, password))
-                .rejects.toThrow(new Error('[422] LoginId already exists.'))
+                .rejects.toThrow(new Error('[405] loginId already exists.'))
         })
 
         it('should throw an error (email already exists)', async () => {
             const { loginId, name, email, password } = users[0]
             await authService.registerPOST(loginId, name, email, password)
             await expect(authService.registerPOST(users[1].loginId, name, email, password))
-                .rejects.toThrow(new Error('[422] Email already exists.'))
+                .rejects.toThrow(new Error('[405] email already exists.'))
         })
     })
 
@@ -53,18 +53,18 @@ describe('auth service', () => {
 
         it('should throw an error (user not found)', async () => {
             await expect(authService.loginPOST('notExisting', 'password'))
-                .rejects.toThrow(new Error('[404] user not found.'))
+                .rejects.toThrow(new Error('[404] User is not found.'))
         })
 
         it('should throw an error (incorrect password)', async () => {
             await expect(authService.loginPOST('admin', 'password'))
-                .rejects.toThrow(new Error('[401] loginId or password incorrect!'))
+                .rejects.toThrow(new Error('[401] Login ID or Password is Incorrect!'))
         })
 
         it('should throw an error (account disabled)', async () => {
             await usersModel.updateOne({ loginId: users[1].loginId }, { enable: false })
             await expect(authService.loginPOST(users[1].loginId, users[1].password))
-                .rejects.toThrow(new Error('[403] account disable!'))
+                .rejects.toThrow(new Error('[403] Account Disabled!'))
         })
     })
 
@@ -103,7 +103,7 @@ describe('auth service', () => {
 
             // old password should fail
             await expect(authService.loginPOST(users[0].loginId, users[0].password))
-                .rejects.toThrow(new Error('[401] loginId or password incorrect!'))
+                .rejects.toThrow(new Error('[401] Login ID or Password is Incorrect!'))
 
             // new password should work
             const user1 = await authService.loginPOST(users[0].loginId, newPassword)

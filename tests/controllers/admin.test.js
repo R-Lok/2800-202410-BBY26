@@ -1,5 +1,6 @@
 const { adminController } = require('../../src/controllers/index')
 const { authService } = require('../../src/services/index')
+const { CustomError } = require('../../src/utilities')
 
 const users = [
     { loginId: 'admin', name: 'admin', email: 'admin@gmail.com', password: 'admin', confirmPassword: 'admin' },
@@ -67,8 +68,39 @@ describe('admin controller', () => {
                 body: {
                     loginId: 'test',
                 },
-                session: {
-                    destroy: jest.fn(),
+            }
+            const result = await adminController.revokePOST(req, res, next)
+            expect(result.status).toHaveBeenCalledWith(200)
+            expect(result.statusCode).toBe(200)
+
+            expect(res.json).toHaveBeenCalledWith({ msg: 'ok' })
+            expect(res.jsonData).toEqual({ msg: 'ok' })
+
+            expect(next).not.toHaveBeenCalled()
+        })
+
+        it('should fail (user not found)', async () => {
+            const req = {
+                body: {
+                    loginId: 'not existing',
+                },
+            }
+            await adminController.revokePOST(req, res, next)
+
+            expect(next).toHaveBeenCalledWith(expect.any(CustomError))
+            const error = next.mock.calls[0][0]
+            expect(error).toBeInstanceOf(CustomError)
+            expect(error.message).toBe('[404] user not found')
+            expect(error.code).toBe(404)
+            expect(next).toHaveBeenCalled()
+        })
+    })
+
+    describe('enablePOST', () => {
+        it('should post', async () => {
+            const req = {
+                body: {
+                    loginId: 'test',
                 },
             }
             const result = await adminController.revokePOST(req, res, next)
@@ -80,23 +112,21 @@ describe('admin controller', () => {
 
             expect(next).not.toHaveBeenCalled()
         })
-    })
 
-    describe('enablePOST', () => {
-        it('should post', async () => {
+        it('should fail (user not found)', async () => {
             const req = {
                 body: {
-                    loginId: 'test',
+                    loginId: 'not existing',
                 },
             }
-            const result = await adminController.enablePOST(req, res, next)
-            expect(result.status).toHaveBeenCalledWith(200)
-            expect(result.statusCode).toBe(200)
+            await adminController.revokePOST(req, res, next)
 
-            expect(res.json).toHaveBeenCalledWith({ msg: 'ok' })
-            expect(res.jsonData).toEqual({ msg: 'ok' })
-
-            expect(next).not.toHaveBeenCalled()
+            expect(next).toHaveBeenCalledWith(expect.any(CustomError))
+            const error = next.mock.calls[0][0]
+            expect(error).toBeInstanceOf(CustomError)
+            expect(error.message).toBe('[404] user not found')
+            expect(error.code).toBe(404)
+            expect(next).toHaveBeenCalled()
         })
     })
 })

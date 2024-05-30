@@ -99,7 +99,7 @@ const sqGETQuestion = async ({ email }) => {
         .findOne({ userId: user._id }, { _id: 0, questionId: 1, userId: 1 })
         .lean()
     if (!result) {
-        throw new CustomError('422', `You haven\'t set up security question.`)
+        throw new CustomError('422', `You haven't set up security question.`)
     }
     const question = await SecurityQuestionsModel
         .findById(result.questionId)
