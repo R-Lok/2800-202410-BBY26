@@ -14,10 +14,6 @@
     font-style: normal;
 }
 
-.btn {
-    box-shadow: 0 8px 6px -6px black;
-}
-
 .headerText {
     color:var(--main-color6);
     font-size: 38px;
@@ -46,22 +42,12 @@
     box-shadow: 0 8px 6px -6px black;
 }
 
-.button-bg:active {
-    background-color:#560d81;
-    margin-bottom:7px;
-}
-
-.button-bg:hover {
-    background-color:#560d81;
-    margin-bottom:7px;
-}
-
 .input-group input[type="search"] {
-    width: 300px; /* Adjust the width as per your requirement */
-    height: 40px; /* Adjust the height as per your requirement */
+    width: 300px; 
+    height: 40px;
     border-radius: 20px;
     padding: 10px;
-    border: 1px solid #ced4da; /* Border color */
+    border: 1px solid #ced4da;
 }
 
 .list-group{

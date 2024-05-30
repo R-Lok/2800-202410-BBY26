@@ -74,16 +74,12 @@
     color:white;
     font-weight:bold;
     box-shadow: 0 8px 6px -6px black;
-}
-
-.btn:active{
-    background-color:#560d81;
-    color:white;
-}
-
-.btn:hover{
-    background-color:#560d81;
-    color:white;
+    --bs-btn-hover-bg: #560d81;
+    --bs-btn-hover-border-color: #560d81;
+    --bs-btn-active-bg: #560d81;
+    --bs-btn-active-border-color: #560d81;
+    --bs-btn-hover-color:white;
+    --bs-btn-active-color:white;
 }
 
 .btnStyleClose {

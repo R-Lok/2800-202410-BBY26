@@ -28,7 +28,7 @@
       <button class="btn btn-danger btn-sm py-0 mt-2 rounded" onclick="confirm('Are you sure you want to delete all of your flashcard sets?') ?
       deleteAll() : event.preventDefault()">Delete All</button>
       <select class="form-select mt-3 w-25" id="sortCollection" name="sortCollection">
-        <option value="default">Sort</option>
+        <option hidden selected value="default">Sort</option>
         <option value="viewed" <%= selectedOption == 'viewed' ? 'selected' : ''%>>Last Viewed</option>
         <option value="new" <%= selectedOption == 'new' ? 'selected' : ''%>>Newest First</option>
         <option value="old" <%= selectedOption == '' ? 'selected' : ''%>>Oldest First</option>

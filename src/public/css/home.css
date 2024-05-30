@@ -107,7 +107,7 @@
     filter: brightness(0) invert(1);
 }
 
-.btn {
+.btn-primary {
     box-shadow: 0 8px 6px -6px black;
 }
 
