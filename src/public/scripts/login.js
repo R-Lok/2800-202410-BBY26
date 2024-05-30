@@ -18,22 +18,47 @@ form.addEventListener('submit', (e) => {
             return window.location.href = '/'
         })
         .catch((err) => {
-            if (err.response.status === 422) {
-                console.log(error);
-                displayErrorMessage(err.response.data.msg.details[0].message);
-            } else if (err.response.status === 401) {
-                console.log(error);
-                displayErrorMessage(err.response.data.msg);
-            }
-            
+            const {message, key, statusText} = filterError(err);
+            displayErrorMessage(message, key, statusText)
         })
 })
 
-function displayErrorMessage(message) {
-    const passwordInput = document.getElementById('password');
-    const loginIdInput = document.getElementById('loginId');
-    const messageElem = document.querySelector('.invalid-feedback')
-    messageElem.innerHTML = message;
-    loginIdInput.classList.add('is-invalid');
-    passwordInput.classList.add('is-invalid');
+// Filter error type depending on whether it's joi error response or database error response
+function filterError(err) {
+    let message, key, statusText;
+    if (err.response.statusText === "Unprocessable Entity") {
+        message = err.response.data.msg.details[0].message
+        key = err.response.data.msg.details[0].context.key
+    } else if (err.response.statusText === "Unauthorized") {
+        message = err.response.data.msg
+        statusText = "Unauthorized"
+        key = "loginId"
+    } else {
+        message = err.response.data.msg
+        key = "loginId"
+    }
+    return {message, key, statusText}
+}
+
+// Display error message below the corresponding form field
+function displayErrorMessage(message, key, statusText) {
+    document.querySelectorAll('.invalid-feedback').forEach((elem) => {
+        elem.innerHTML = "";
+    })
+    document.querySelectorAll('.login-input').forEach((elem) => {
+        elem.value = "";
+        elem.classList.remove('is-invalid');
+    })
+
+    if (statusText === "Unauthorized") {
+        document.querySelectorAll('.login-input').forEach((elem) => {
+            elem.classList.add('is-invalid');
+            document.getElementById(`${key}-feedback`).innerHTML = message;
+            return;
+        })
+    }
+    const elem = document.querySelector(`input[name=${key}]`);
+    const messageElem = document.getElementById(`${key}-feedback`);
+    messageElem.innerHTML = `<p>${message}</p>`;
+    elem.classList.add('is-invalid');
 }
