@@ -97,6 +97,10 @@ if (document.getElementById('sharecode')) {
 // this needs validation in the backend to prevent injections
 if (document.getElementById('save-button')) {
     document.getElementById('save-button').addEventListener('click', async (e) => {
+        if(!document.getElementById('setName').value.trim().length) {
+            return triggerDBFailAlert('Please enter a flashcard set name!')
+        }
+
         e.target.disabled = true
         const data = {
             name: document.getElementById('setName').value,
