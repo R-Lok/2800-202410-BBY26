@@ -172,9 +172,16 @@ The core feature of this application is to generate flashcards from various sour
 
 ### 3. Flashcard Review
 
-### 4. Flashcard Collections
+### 5. Flashcard Collection
+To see your saved flashcard sets, you can go to your flashcard collection. Here are some steps to using the Flashcard Collection page:
+* To go to the Flashcard Collection page, click the right-most footer button (shaped like a folder)
+* To review any flashcard set, click on the title of the particular flashcard set you want to review to go to their respective review pages
+* To search for a particular flashcard set, input your text in the search bar and press the search button (the magnifying glass icon)
+* To sort the collection list, use the Sort dropdown menu and select from the sorting choices
+* To delete any flashcard set, click on the red Delete button beside each flashcard and press OK when the alert pops up
+* To delete all of the flashcard sets, click on the Delete All button below the search bar and press OK when the alert pops up
 
-### 5. Homepage Study Streak Display
+### 6. Homepage Study Streak Display
 
 
 ## Credits
