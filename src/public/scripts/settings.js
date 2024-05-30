@@ -1,5 +1,4 @@
 let picChoice
-let prevPicChoice
 
 // Post fetch request function for user's changing password
 const changePwd = async (securityAns, currentPwd, newPwd, confirmPwd) => {
@@ -137,10 +136,7 @@ function highlightIcon(clickedImage) {
         element.classList.remove('profilePicBorderHighlight')
     }
 
-    console.log(clickedImage)
-
     if (clickedImage) {
-        console.log(clickedImage)
         clickedImage.classList.add('profilePicBorderHighlight')
     }
 
@@ -148,6 +144,7 @@ function highlightIcon(clickedImage) {
     picChoice = imageId[5]
 }
 
+// Removes highlight from profile picture selection upon close button press
 function profileCloseButton() {
     for (let i = 1; i <= 9; i++) {
         const elementNum = 'image' + i
@@ -158,7 +155,6 @@ function profileCloseButton() {
 
 // Function to save the selected profile picture
 document.getElementById('SaveButton').addEventListener('click', async function() {
-    prevPicChoice = picChoice
     try {
         const response = await fetch(`/settings/changePic`, {
             method: 'POST',
