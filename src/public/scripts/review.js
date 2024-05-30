@@ -103,7 +103,7 @@ if (document.getElementById('save-button')) {
 
         e.target.disabled = true
         const data = {
-            name: document.getElementById('setName').value,
+            name: document.getElementById('setName').value.trim(),
             cards: localStorage.getItem('cards') }
         console.log('data:' + data)
 
