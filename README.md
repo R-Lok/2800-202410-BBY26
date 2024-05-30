@@ -126,17 +126,27 @@ Did you encounter any limitations? What were they, and how did you overcome them
 
 ## Contact Information
 Kong, Jimmy
-* 
+* Email: jimmyatwork368@gmail.com
 
 Li, Louise
 * Email: louiseli.van@gmail.com
 * Phone: 604-781-3673
 
 Liao, Wei-Yu
-* 
+* Email: wyliao76@gmail.com
 
 Lin, Joe
 * Email: jyyunlin@gmail.com
 
 Lok, Ryan
 * Email: rlok.pc@gmail.com
+
+## launch the server
+
+setup mongodb
+
+fill in /src/.env.local
+
+npm i
+
+npm run local
