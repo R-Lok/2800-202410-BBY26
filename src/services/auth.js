@@ -42,25 +42,11 @@ const loginPOST = async (loginId, password) => {
         throw new CustomError('404', 'user not found.')
     }
     if (!user.enable) {
-        throw new Joi.ValidationError('ValidationError', [{
-            message: 'account disable!',
-            path: ['loginId'],
-            type: 'account disable',
-            context: {
-                key: 'loginId',
-            },
-        }], null)
+        throw new CustomError('403', 'account disable!')
     }
     const result = await bcrypt.compare(password, user.password)
     if (!result) {
-        throw new Joi.ValidationError('ValidationError', [{
-            message: 'loginId or password incorrect!',
-            path: [''],
-            type: 'loginId or password incorrect',
-            context: {
-                key: '',
-            },
-        }], null)
+        throw new CustomError('401', 'loginId or password incorrect!')
     }
     await usersModel.findByIdAndUpdate(user.id, { lastLogin: Date.now() }).lean()
     user.email = await decrypt(user.email)
