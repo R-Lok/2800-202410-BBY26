@@ -7,14 +7,14 @@ const userSessionModel = require('../models/userSessions')
 
 const registerPOST = async (loginId, name, email, password) => {
     const emailHash = await hash(email)
-    await usersModel.countDocuments({ emailHash: emailHash }).then((count) => {
-        if (count) {
-            throw new CustomError('405', 'email already exists.')
-        }
-    })
     await usersModel.countDocuments({ loginId: loginId }).then((count) => {
         if (count) {
             throw new CustomError('405', 'loginId already exists.') // Change from 422 to 405 for easier front-end manipulation
+        }
+    })
+    await usersModel.countDocuments({ emailHash: emailHash }).then((count) => {
+        if (count) {
+            throw new CustomError('405', 'email already exists.')
         }
     })
     const [emailEncrypt, passwordHash] = await Promise.all([

@@ -24,14 +24,14 @@ describe('auth service', () => {
             const { loginId, name, email, password } = users[0]
             await authService.registerPOST(loginId, name, email, password)
             await expect(authService.registerPOST(loginId, name, email, password))
-                .rejects.toThrow(new Error('[422] LoginId already exists.'))
+                .rejects.toThrow(new Error('[405] loginId already exists.'))
         })
 
         it('should throw an error (email already exists)', async () => {
             const { loginId, name, email, password } = users[0]
             await authService.registerPOST(loginId, name, email, password)
             await expect(authService.registerPOST(users[1].loginId, name, email, password))
-                .rejects.toThrow(new Error('[422] Email already exists.'))
+                .rejects.toThrow(new Error('[405] email already exists.'))
         })
     })
 
