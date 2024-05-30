@@ -132,7 +132,7 @@ function displayLoader() {
 
 // Display error loader when users give invalid inputs
 function displayErrorLoader(message) {
-    const modalBody = document.querySelector('.modal-body')
+    const modalBody = document.querySelector('.modal-content')
 
     const loader = document.createElement('div')
     loader.classList.add('errorWrapper')
