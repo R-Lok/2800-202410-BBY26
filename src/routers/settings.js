@@ -116,19 +116,22 @@ async function validatePasswordChange(userId, currPass, newPass, confirmNewPass,
         throw new CustomError('401', 'Incorrect Security Answer')
     }
 
-    if (newPass !== confirmNewPass) {
-        throw new CustomError('401', 'New Password and Confirm Password do not match')
-    }
-
     const schema = Joi.object({
-        currPass: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
-        newPass: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,20}$')).required(),
+        currPass: Joi.string().alphanum().min(3).max(20).required(),
+        newPass: Joi.string().alphanum().min(3).max(20).required(),
     })
 
     await schema.validateAsync({ currPass, newPass })
         .catch((error) => {
-            throw new CustomError('422', 'Missing Password Fields')
+            const errorMsgParts = error.message.split(' ')
+            errorMsgParts.shift()
+            const errorMsg = errorMsgParts.join(' ')
+            throw new CustomError('422', 'Passwords ' + errorMsg)
         })
+
+    if (newPass !== confirmNewPass) {
+        throw new CustomError('401', 'New Password and Confirm Password do not match')
+    }
 
     const result = await bcrypt.compare(currPass, user.password)
     if (!result) {
