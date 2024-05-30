@@ -196,6 +196,9 @@ a labeled section provides an organized list of credits, references, and license
 * Logo Icon - Created using Microsoft Copilot
 * Streak Fire Image - https://www.svgrepo.com/vectors/fire/
 * Logo and Header Fonts - Google Fonts
+* OpenAI Chat Completions API - https://platform.openai.com/docs/guides/text-generation/chat-completions-api
+* File Drag & Drop or Browser Component - https://futurecodersweb.com/drag-drop-or-browse-file-upload-tutorial-using-html-css-and-javascript/
+* MDN Web Docs - https://developer.mozilla.org/en-US/
 
 ## AI Usage
 Did you use AI to help create your app? If so, how? Be specific. [2 marks]
