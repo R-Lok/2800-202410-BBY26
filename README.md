@@ -102,6 +102,14 @@ Top level folders and their subfolders/files:
 ## Installation
 section contains ordered instructions so a new developer can assemble a DEVELOPMENT ENVIRONMENT to contribute, including a list of tools, versions, and configuration instructions, if any. A separate plaintext file contains ids and passwords.
 
+setup mongodb
+
+fill in /src/.env.local
+
+npm i
+
+npm run local
+
 ## Features
 an easy-to-find labeled section tells us how to use the app and includes a helpful list of features and how to use them.
 
@@ -210,13 +218,3 @@ Lin, Joe
 
 Lok, Ryan
 * Email: rlok.pc@gmail.com
-
-## launch the server
-
-setup mongodb
-
-fill in /src/.env.local
-
-npm i
-
-npm run local
