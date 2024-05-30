@@ -78,19 +78,29 @@
 }
 
 .input-group input[type="search"] {
-    width: 300px; /* Adjust the width as per your requirement */
-    height: 40px; /* Adjust the height as per your requirement */
+    width: 300px;
+    height: 40px;
     border-radius: 20px;
     padding: 10px;
-    border: 1px solid #ced4da; /* Border color */
+    border: 1px solid #ced4da;
 }
 
 .input-group input[type="text"] {
-    width: 270px; /* Adjust the width as per your requirement */
-    height: 40px; /* Adjust the height as per your requirement */
+    width: 270px;
+    height: 40px;
     border-radius: 20px;
     padding: 10px;
-    border: 1px solid #ced4da; /* Border color */
+    border: 1px solid #ced4da; 
+}
+
+@media (max-width: 380px) {
+    .input-group input[type="text"] {
+        width: 230px; 
+        height: 40px;
+        border-radius: 20px; 
+        padding: 10px;
+        border: 1px solid #ced4da; 
+    }
 }
 
 .search {
