@@ -1,3 +1,4 @@
+// This script is for inserting mock data for our collection, "securityQuestions"
 require('dotenv').config({ path: `${process.cwd()}/.env.${process.env.NODE_ENV}` })
 const mongoose = require('mongoose')
 const securityQuestionsModel = require('../src/models/securityQuestions')
