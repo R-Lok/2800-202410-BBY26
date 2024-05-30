@@ -145,12 +145,11 @@ function highlightIcon(clickedImage) {
 }
 
 // Removes highlight from profile picture selection upon close button press
-function profileCloseButton() {
-    for (let i = 1; i <= 9; i++) {
-        const elementNum = 'image' + i
-        const element = document.getElementById(elementNum)
-        element.classList.remove('profilePicBorderHighlight')
-    }
+function profileCloseButton(previous) {
+    console.log(previous)
+    const choiceNum = 'image' + previous
+    const choiceElement = document.getElementById(choiceNum)
+    highlightIcon(choiceElement);
 }
 
 // Function to save the selected profile picture
