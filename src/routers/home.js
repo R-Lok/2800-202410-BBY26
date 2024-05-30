@@ -26,6 +26,7 @@ router.get('/', async (req, res) => {
         // Retrieves user auditLogs from all dates of the current calendar
         auditLogResult = await auditLogsModel.find({ loginId: req.session.loginId, createdAt: { '$gte': prevMonthLastDate } })
         user = await usersModel.findOne({ loginId: req.session.loginId })
+        // eslint-disable-next-line max-len
         if (user.lastActivity === null || user.lastActivity.timestamp === null || user.lastActivity.shareId === null) return renderHome(req, res, date, activityName, existingActivity, user, auditLogResult)
         const dayDifference = isConsecutiveDays(user.lastActivity.timestamp, date)
         // If dates are not consecutive and not the same, then reset the streak.

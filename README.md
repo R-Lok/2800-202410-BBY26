@@ -43,15 +43,21 @@ stress by simplifying flashcards creation with AI integration.
 ```
 Top level files of project folder: 
 ├── .gitignore               # Git ignore file
-├── .jest.config.js          # 
+├── .jest.config.js          # jest config file
 ├── .eslintrc.js             # Eslint config file
-├── package.json             # 
+├── .docker-compose.yml      # Docker-compose file
+├── Dockerfile               # Dockerfile for StudyGen
+├── Dockerfile_mongodb       # Dockerfile for Mongodb replica set
+├── generate-keyfile.sh      # Generate key for Mongodb replica set
+├── mongo-init.js            # JS script for setting up Mongodb replica set
+├── mongod.cong              # Mongodb config file
+├── package.json             # npm config file
 └── README.md
 
 
 Top level folders and their subfolders/files:
 ├── .vscode                  # Folder for vscode config
-├── scripts                  # 
+├── scripts                  # scripts for management
 ├── src                      # Folder for all static files
     ├── controllers          # Containing controller files
         *.js                 # Controller files
@@ -81,13 +87,14 @@ Top level folders and their subfolders/files:
           ├── template       # Contains template ejs files
               *.ejs          # Template ejs used by other ejs
         *.ejs                # EJS files for rendering all pages
-    ├── expressServer.js     # 
-    ├── index.js             #
-    ├── setupTests.js        # 
+    ├── expressServer.js     # Express server setup file
+    ├── index.js             # Server runtime file
+    ├── setupTests.js        # setup file for jest
+    ├── setup.sh             # bash file to populate database
 ├── tests                    #
-      ├── controllers        #
+      ├── controllers        # test for controllers
           .js
-      ├── services           #
+      ├── services           # test for services
           .js
 
 ```
@@ -189,17 +196,27 @@ Did you encounter any limitations? What were they, and how did you overcome them
 
 ## Contact Information
 Kong, Jimmy
-* 
+* Email: jimmyatwork368@gmail.com
 
 Li, Louise
 * Email: louiseli.van@gmail.com
 * Phone: 604-781-3673
 
 Liao, Wei-Yu
-* 
+* Email: wyliao76@gmail.com
 
 Lin, Joe
 * Email: jyyunlin@gmail.com
 
 Lok, Ryan
 * Email: rlok.pc@gmail.com
+
+## launch the server
+
+setup mongodb
+
+fill in /src/.env.local
+
+npm i
+
+npm run local

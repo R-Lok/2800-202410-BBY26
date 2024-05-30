@@ -306,6 +306,7 @@ Image File upload
 
 -------- */
 const dropArea = document.querySelector('.drag-area');
+const uploadArea = document.querySelector('.upload-area');
 const dragText = document.querySelector('.header');
 const button = dropArea.querySelector('.button');
 const input = dropArea.querySelector('input');
@@ -342,28 +343,11 @@ function displayFile() {
         'image/jpeg',
         'image/jpg',
         'image/png',
-        'image/heic',
-        'image/heif',
     ];
     if (validExtensions.includes(fileType)) {
         const fileReader = new FileReader();
         fileReader.onload = async () => {
             let fileURL = fileReader.result;
-            if (fileType === 'image/heic' || fileType === 'image/heif') {
-                try {
-                    const blob = await heic2any({
-                        blob: file,
-                        toType: 'image/jpeg',
-                        quality: 0.5,
-                    });
-                    fileURL = URL.createObjectURL(blob);
-                } catch (error) {
-                    console.error('Error converting HEIC to JPEG:', error);
-                    alert('Error converting HEIC to JPEG');
-                    dropArea.classList.remove('active');
-                    return;
-                }
-            }
             const imgTag = `<img id="upload-preview" src="${fileURL}" alt="">`;
             dropArea.innerHTML = imgTag;
             document.getElementById('preview-message').style.visibility = 'visible';
@@ -371,12 +355,12 @@ function displayFile() {
         };
         fileReader.readAsDataURL(file);
     } else {
-        alert('This is not an Image File');
+        alert('The file uploaded is not supported. Try again.');
         dropArea.classList.remove('active');
     }
 }
 
-button.onclick = () => {
+uploadArea.onclick = () => {
     input.click();
 };
 
@@ -401,7 +385,7 @@ function addResetImageEvent() {
         <span class="header">Drag & Drop</span>
         <span class="header">or <span class="button">browse</span></span>
         <input type="file" hidden />
-        <span class="support">Supports: JPEG, JPG, PNG, HEIC, HEIF</span>
+        <span class="support">Supports: JPEG, JPG, PNG</span>
         `;
         // reset file
         file = "";

@@ -58,6 +58,11 @@
   resize: vertical; /* Allows vertical resizing only */
 }
 
+.upload-area {
+  height: 10vh;
+  width: 60vw;
+}
+
 /* Loading animation */
 
 .loading-state {
