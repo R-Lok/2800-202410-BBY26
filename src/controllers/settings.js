@@ -73,8 +73,10 @@ const settingsEditNamePOST = async (req, res) => {
                 throw new CustomError('400', 'Name ' + errorMsg)
             })
 
-        await usersModel.findByIdAndUpdate(userId, { name: newName })
-        req.session.name = newName
+        const newNameTrimmed = newName.trim()
+
+        await usersModel.findByIdAndUpdate(userId, { name: newNameTrimmed })
+        req.session.name = newNameTrimmed
         return res.status(200).json({
             msg: 'ok',
         })
