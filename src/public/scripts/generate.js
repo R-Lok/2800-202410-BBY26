@@ -195,7 +195,6 @@ function takePhoto() {
     const photoWidth = video.videoWidth
     context.drawImage(video, 0, 0, photoWidth, photoHeight)
     const image = canvas.toDataURL('image/png')
-    sessionStorage.setItem('imageURL', JSON.stringify(image))
     photoFrame.setAttribute('src', image)
 
     canvas.width = photoWidth
@@ -210,7 +209,7 @@ function takePhoto() {
 document
     .querySelector('#generatePhotoButton')
     .addEventListener('click', async (e) => {
-        const photo = JSON.parse(sessionStorage.getItem('imageURL'))
+        const photo = document.getElementById("frame").src
         try {
             const loader = document.querySelector('.loading-state')
             loader.style.visibility = 'visible'
@@ -227,14 +226,16 @@ document
             })
             if (response.ok) {
                 const data = await response.json()
-                window.location.href = `/check?data=${encodeURIComponent(data)}`
+                console.log(data)
+                window.location.href = `/check?data=${(encodeURIComponent(data))}`
             } else {
-                loader.style.visibility = 'hidden'
+                
                 const data = await response.json()
                 displayAlert(data.msg)
             }
         } catch (err) {
             console.log(err) // implement some sort of alert that warns the user that it failed
+            loader.style.visibility = 'hidden'
         }
     })
 
