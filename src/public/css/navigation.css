@@ -16,11 +16,13 @@
 }
 
 .navbar-bg {
-    background-color: var(--main-color6);
+    background: rgb(135,20,201);
+    background: linear-gradient(138deg, rgba(135,20,201,1) 0%, rgba(44,13,93,1) 35%, rgba(135,20,201,1) 62%, rgba(69,0,125,1) 100%);
 }
 
 .nav-button{
     border-width:0px;
+    background: rgba(0, 0, 0, 0) 
 }
 
 nav button img {

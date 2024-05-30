@@ -1,3 +1,16 @@
+:root {
+  --main-color1: #CAA8F5;
+  --main-color2: #9984D4;
+  --main-color3: #FED766;
+  --main-color4: #3c0761;
+  --main-color5: #FFFFFF;
+  --main-color6:#8714c9;
+}
+
+.headerText {
+  color:var(--main-color6);
+}
+
 body, html {
   height: 100%;
   margin: 0;
@@ -151,4 +164,6 @@ body, html {
   color: #000; /* Ensure text color contrasts against the background */
 }
 
-
+.login-button{
+  box-shadow: 0 8px 6px -6px black;
+}

@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     const userId = req.session.userId
 
     // Database read to find all flashcard sets queried using userId
-    const collections = await collectionsModel.find({ userId: userId })
+    const collections = await collectionsModel.find({ userId: userId }).sort({ updatedAt: -1 }).lean()
     return res.render('collection', { collections: collections, pictureID: req.session.picture, selectedOption: req.session.sort, search: req.session.search })
 })
 
