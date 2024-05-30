@@ -1,11 +1,38 @@
-const { CustomError, decrypt } = require('../utilities/index')
+const { CustomError, decrypt, searcherObject } = require('../utilities/index')
 const usersModel = require('../models/users')
-const authService = require('../services/auth')
+const userSessionModel = require('../models/userSessions')
+
+const searcher = searcherObject({
+    // can't filter by email because hash
+    filter: {
+        $eq: ['_id', 'role'],
+        $iLike: ['loginId', 'name'],
+    },
+    sorter: searcherObject().default.sorter,
+    pager: searcherObject().default.pager,
+})
 
 
-const userListGET = async () => {
-    const results = await usersModel.find({}).lean()
-    return { data: results, total: results.length }
+const userListGET = async (query) => {
+    const filter = searcher.getFilter(query)
+    const sorter = searcher.getSorter(query)
+    const pager = searcher.getPager(query)
+
+    const [results, total] = await Promise.all([
+        usersModel
+            .find(filter, { emailHash: 0, password: 0, __v: 0 })
+            .sort(sorter)
+            .skip(pager.skip)
+            .limit(pager.limit)
+            .lean(),
+        usersModel.countDocuments(filter),
+    ])
+
+    const data = await Promise.all(results.map(async (user) => {
+        user.email = await decrypt(user.email)
+        return user
+    }))
+    return { data, total }
 }
 
 const impersonationPOST = async (loginId) => {
@@ -17,21 +44,22 @@ const impersonationPOST = async (loginId) => {
     return user
 }
 
-const revokePOST = async (req, loginId) => {
-    const user = await usersModel.findOne({ loginId: loginId }).lean()
+const revokePOST = async (loginId) => {
+    const user = await usersModel.findOneAndUpdate({ loginId: loginId }, { enable: false }, { new: true })
     if (!user) {
         throw new CustomError('404', 'user not found')
     }
-    await authService.logoutGET(req)
-    return usersModel.findByIdAndUpdate(user._id, { enable: false }, { new: true })
+    // FIX: does not delete session, too much to work on express-session
+    await userSessionModel.deleteMany({ userId: user._id })
+    return user
 }
 
 const enablePOST = async (loginId) => {
-    const user = await usersModel.findOne({ loginId: loginId }).lean()
+    const user = await usersModel.findOneAndUpdate({ loginId: loginId }, { enable: true }, { new: true })
     if (!user) {
         throw new CustomError('404', 'user not found')
     }
-    return usersModel.findByIdAndUpdate(user._id, { enable: true }, { new: true })
+    return user
 }
 
 module.exports = {

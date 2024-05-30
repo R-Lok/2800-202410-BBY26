@@ -37,7 +37,7 @@ const captions = document.querySelectorAll('.carousel-caption')
 captions.forEach((element) => {
     element.addEventListener('click', (e) => {
         console.log('flip')
-        const target = e.target.tagName == 'H5' || e.target.tagName == 'P' ? e.target.parentNode : e.target
+        const target = e.target.tagName === 'H5' || e.target.tagName === 'P' ? e.target.parentNode : e.target
         console.log(target)
         const answer = target.querySelector('p')
         const prompt = target.querySelector('h5')
@@ -97,6 +97,10 @@ if (document.getElementById('sharecode')) {
 // this needs validation in the backend to prevent injections
 if (document.getElementById('save-button')) {
     document.getElementById('save-button').addEventListener('click', async (e) => {
+        if(!document.getElementById('setName').value.trim().length) {
+            return triggerDBFailAlert('Please enter a flashcard set name!')
+        }
+
         e.target.disabled = true
         const data = {
             name: document.getElementById('setName').value,

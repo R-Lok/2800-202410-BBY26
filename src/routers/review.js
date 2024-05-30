@@ -20,7 +20,7 @@ router.get('/:setid', async (req, res) => {
 
         // if flashcard set exists, update user's latestActivity, increment their study streak and log their view
         await collectionsModel.findOneAndUpdate({ shareId: Number(req.params.setid) }, { updatedAt: new Date() })
-        incrementStreak(req)
+        await incrementStreak(req)
         await auditlogModel.create({ loginId: req.session.loginId, type: 'flashcard', shareId: req.params.setid })
         const carouselData = { bg: '/images/plain-FFFFFF.svg', cards: cards, id: req.params.setid, queryType: 'view', pictureID: req.session.picture }
         return res.render('review', carouselData)
