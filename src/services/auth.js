@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt')
 const saltRounds = 12
-const { encrypt, decrypt, hash } = require('../utilities')
+const { encrypt, decrypt, hash, CustomError } = require('../utilities')
 const usersModel = require('../models/users')
 const userSessionModel = require('../models/userSessions')
 const Joi = require('joi')
@@ -10,26 +10,12 @@ const registerPOST = async (loginId, name, email, password) => {
     const emailHash = await hash(email)
     await usersModel.countDocuments({ loginId: loginId }).then((count) => {
         if (count) {
-            throw new Joi.ValidationError('ValidationError', [{
-                message: 'LoginId already exists.',
-                path: ['loginId'],
-                type: 'LoginId already exists.',
-                context: {
-                    key: 'loginId',
-                },
-            }], null)
+            throw new CustomError('422', 'LoginId already exists.')
         }
     })
     await usersModel.countDocuments({ emailHash: emailHash }).then((count) => {
         if (count) {
-            throw new Joi.ValidationError('ValidationError', [{
-                message: 'Email already exists.',
-                path: ['email'],
-                type: 'Email already exists.',
-                context: {
-                    key: 'email',
-                },
-            }], null)
+            throw new CustomError('422', 'Email already exists.')
         }
     })
     const [emailEncrypt, passwordHash] = await Promise.all([
@@ -53,14 +39,7 @@ const registerPOST = async (loginId, name, email, password) => {
 const loginPOST = async (loginId, password) => {
     const user = await usersModel.findOne({ loginId: loginId }).lean()
     if (!user) {
-        throw new Joi.ValidationError('ValidationError', [{
-            message: 'user not found.',
-            path: ['loginId'],
-            type: 'not found',
-            context: {
-                key: 'loginId',
-            },
-        }], null)
+        throw new CustomError('404', 'user not found.')
     }
     if (!user.enable) {
         throw new Joi.ValidationError('ValidationError', [{
