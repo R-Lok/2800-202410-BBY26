@@ -176,7 +176,7 @@ The core feature of this application is to generate flashcards from various sour
 * There are arrows on each side of the flashcard to tap to navigate to the previous or next flashcard
 * Users can tap the sharecode at the bottom of the viewing page to copy it and share it with other users
 
-## 4. Sharing your flashcards
+### 4. Sharing your Flashcards
 * Users can enter a flashcard code on the home screen of the application by pressing "Open by Code"
 * Users can see the sharecode of their flashcard set at the bottom of their screen when viewing their flashcard set
 * There might be a way to find a secret easter EGG page through the "Open by Code" feature..
