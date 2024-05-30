@@ -2,8 +2,6 @@ const express = require('express')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
 const path = require('path')
-// const cors = require('cors')
-// const helmet = require('helmet')
 const compression = require('compression')
 const checkRouter = require('./routers/check')
 const reviewRouter = require('./routers/review')
@@ -19,11 +17,6 @@ const homeRouter = require('./routers/home')
 
 const app = express()
 const server = require('http').createServer(app)
-
-// const whitelist = ['http://localhost:3000']
-
-// app.use(cors({ credentials: true, origin: whitelist }))
-// app.use(helmet)
 app.use(compression())
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ extended: true }))
