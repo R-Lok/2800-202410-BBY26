@@ -31,8 +31,9 @@ const registerPOST = async (req, res, next) => {
                 'string.max': 'Display name must be at most 20 characters long',
                 'string.empty': 'Display name is required',
             }),
-            email: Joi.string().required().email().messages({
+            email: Joi.string().max(22).required().email().messages({
                 'string.email': 'Email must be a valid email',
+                'string.max': 'Email must have a max length of 22 characters',
                 'string.empty': 'Email is required',
             }),
             loginId: checkLoginId,
