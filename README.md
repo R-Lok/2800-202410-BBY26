@@ -103,7 +103,7 @@ Top level folders and their subfolders/files:
 ## Installation
 This section contains ordered instructions so a new developer can assemble a DEVELOPMENT ENVIRONMENT to contribute, including a list of tools, versions, and configuration instructions, if any. A separate plaintext file contains ids and passwords.
 
-You will require the following auth tokens of your own to start developing:
+You will require the following keys/tokens/hashes of your own to start developing:
 - openAI api token
 - your own mongoDB database tokens, login, password
 - your own encryption key for encrypting user emails
