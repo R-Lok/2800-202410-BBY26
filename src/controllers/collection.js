@@ -25,16 +25,16 @@ const collectionSearchPOST = async (req, res) => {
     // Database read with conditional sorting based off of selected sort option from dropdown options
     switch (sort) {
     case 'alpha':
-        collections = collectionService.sortAlpha(userId, regexPattern)
+        collections = await collectionService.sortAlpha(userId, regexPattern)
         break
     case 'new':
-        collections = collectionService.sortNew(userId, regexPattern)
+        collections = await collectionService.sortNew(userId, regexPattern)
         break
-    case 'viewed':
-        collections = collectionService.sortViewed(userId, regexPattern)
+    case 'old':
+        collections = await collectionService.sortOld(userId, regexPattern)
         break
     default:
-        collections = collectionService.sortOld(userId, regexPattern)
+        collections = await collectionService.sortViewed(userId, regexPattern)
     }
     return res.render('collection', { collections: collections, pictureID: req.session.picture, selectedOption: sort, search: search })
 }
@@ -57,11 +57,11 @@ const collectionSortPOST = async (req, res) => {
         case 'new':
             collections = await collectionService.sortNew(userId, regexPattern)
             break
-        case 'viewed':
-            collections = await collectionService.sortViewed(userId, regexPattern)
+        case 'old':
+            collections = await collectionService.sortOld(userId, regexPattern)
             break
         default:
-            collections = await collectionService.sortOld(userId, regexPattern)
+            collections = await collectionService.sortViewed(userId, regexPattern)
         }
         res.json({ collections })
     } catch (error) {
