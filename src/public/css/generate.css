@@ -154,6 +154,10 @@ video, #frame {
   visibility: hidden;
 }
 
+#image-modal-content {
+  overflow-y: scroll !important;
+}
+
 #image-modal-footer {
   background-color: white;
   visibility: hidden;
