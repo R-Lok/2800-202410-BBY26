@@ -110,7 +110,7 @@ const settingsEditEmailPOST = async (req, res) => {
     const userId = req.session.userId
     const email = req.body.email
     const schema = Joi.object({
-        email: Joi.string().email().required(),
+        email: Joi.string().email().max(22).required(),
     })
 
     try {
