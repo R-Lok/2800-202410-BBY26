@@ -9,9 +9,9 @@ const mongoOptions = {
     dbName: process.env.DATABASE_NAME,
     maxPoolSize: 100,
     ssl: process.env.NODE_ENV === 'local' ? false : true,
-    // sslValidate: false,
 }
 
+//launches server
 const launch = async () => {
     try {
         await Promise.all([
@@ -37,6 +37,7 @@ const mongoDBShutdown = async () => {
     console.log('MongoDb connection closed.')
 }
 
+//ensures graceful exit
 process.on('SIGINT', () => {
     console.log('SIGINT signal received.')
     console.log('Closing http server...')

@@ -1,5 +1,6 @@
 const { saveFlashcardsService } = require('../services/index')
 
+//this controller is responsible processing requests to save flashcards to the database
 async function saveFlashCardSet(req, res) {
     let lastShareCode
     // get the latest sharecode from collections

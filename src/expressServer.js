@@ -15,6 +15,7 @@ const securityQuestionsRouter = require('./routers/securityQuestions')
 const collectionRouter = require('./routers/collection')
 const homeRouter = require('./routers/home')
 
+//express configuration
 const app = express()
 const server = require('http').createServer(app)
 app.use(compression())
@@ -48,6 +49,7 @@ app.use(session({
     cookie: { secure: false },
 }))
 
+//set middlewares
 app.use('/', authRouter)
 app.use('/admin', isAdmin, hasSecurityQuestion, adminRouter)
 app.use('/settings', isAuth, hasSecurityQuestion, settingRouter)
@@ -62,6 +64,7 @@ app.get('/health', (_, res) => {
     return res.status(200).send('ok')
 })
 
+//misc routes
 app.get('/', (req, res) => {
     return req.session.email ? res.redirect('/home') : res.render('landing')
 })

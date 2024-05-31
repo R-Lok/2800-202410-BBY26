@@ -1,4 +1,3 @@
-console.log('review.js loaded')
 
 // this function is used to "unflip" a flashcard, so the question side is showing
 // when they go back to it in the same review session.
@@ -18,7 +17,6 @@ function resetCards(e) {
 // This adds event listeners to each flashcard that updates the counter at the top according to which flashcard is currently being displayed
 document.querySelectorAll('.carousel-item').forEach((ele) => ele.addEventListener('transitionend', (e) => {
     const activeCard = document.querySelector('.carousel-item-next') ? document.querySelector('.carousel-item-next') : document.querySelector('.carousel-item-prev')
-    console.log(activeCard)
     const counter = document.getElementById('counter')
 
     if (activeCard) {
@@ -36,9 +34,7 @@ document.querySelector('.carousel-control-prev').addEventListener('click', reset
 const captions = document.querySelectorAll('.carousel-caption')
 captions.forEach((element) => {
     element.addEventListener('click', (e) => {
-        console.log('flip')
         const target = e.target.tagName === 'H5' || e.target.tagName === 'P' ? e.target.parentNode : e.target
-        console.log(target)
         const answer = target.querySelector('p')
         const prompt = target.querySelector('h5')
 
@@ -105,8 +101,7 @@ if (document.getElementById('save-button')) {
         const data = {
             name: document.getElementById('setName').value.trim(),
             cards: localStorage.getItem('cards') }
-        console.log('data:' + data)
-
+        //send request to server to save the flashcards
         try {
             const response = await fetch('/submitcards', {
                 method: 'POST',
@@ -121,8 +116,8 @@ if (document.getElementById('save-button')) {
                 triggerDBFailAlert(text.message)
                 e.target.disabled = false
             }
+        //if server returns error, then trigger alert to let user know
         } catch {
-            console.log('Error in submission')
             triggerDBFailAlert('An unexpected error occurred. Please try again later.')
         }
     },
