@@ -87,6 +87,7 @@ Top level folders and their subfolders/files:
           ├── template       # Contains template ejs files
               *.ejs          # Template ejs used by other ejs
         *.ejs                # EJS files for rendering all pages
+    ├── example.env          # example template env file
     ├── expressServer.js     # Express server setup file
     ├── index.js             # Server runtime file
     ├── setupTests.js        # setup file for jest
