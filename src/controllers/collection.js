@@ -57,7 +57,7 @@ const collectionSortPOST = async (req, res) => {
         case 'new':
             collections = await collectionService.sortNew(userId, regexPattern)
             break
-        case 'viewed':
+        case 'old':
             collections = await collectionService.sortOld(userId, regexPattern)
             break
         default:
