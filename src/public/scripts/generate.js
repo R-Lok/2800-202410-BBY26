@@ -255,7 +255,6 @@ document
             })
             if (response.ok) {
                 const data = await response.json()
-                console.log(data)
                 window.location.href = `/check?data=${(encodeURIComponent(data))}`
             } else {
 
@@ -441,11 +440,9 @@ function sendImageApiRequest() {
             alert('Please select an image of study material first.');
             return;
         }
-        console.log(file);
         const base64Output = await convertFileToBase64(file);
         const loader = document.querySelector('.loading-state');
         loader.style.visibility = 'visible';
-        console.log('Start calling API');
         sendImageApiRequestHelper(base64Output, document.getElementById('selectDifficulty').value, document.getElementById('selectNumber').value)
 
     });
@@ -468,9 +465,7 @@ function sendImageApiRequestHelper(base64Output, difficulty, numQuestions) {
             },
         )
         .then((response) => {
-            console.log(response);
             window.location.href = response.data;
-            console.log('Finish calling API. ');
         })
         .catch((error) => {
             loader.style.visibility = 'hidden';
