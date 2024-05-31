@@ -13,11 +13,11 @@
 }
 
 .generate-container {
-  height: 90vh;
   display: flex;
   flex-direction: column;
   margin: auto;
   width: 80%;
+  padding-bottom: 60px;
 }
 
 #upload-preview {
