@@ -2,11 +2,11 @@ version: "3.8"
 
 networks:
   proxy:
-    name: example
+    name: studygen
     ipam:
       driver: default
       config:
-        - subnet: 192.168.88.0/24
+        - subnet: 192.168.87.0/24
 
 volumes:
   mongodb_data:
@@ -25,29 +25,32 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+    command: "mongod --bind_ip_all"
 
-  # studygen:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   container_name: studygen
-  #   restart: always
-  #   networks:
-  #     - proxy
-  #   ports:
-  #     - "${PORT}:${PORT}"
-  #   environment:
-  #     NODE_ENV: ${NODE_ENV}
-  #     PORT: ${PORT}
-  #     SECRET: ${SECRET}
-  #     DATABASE_HOST: mongodb
-  #     DATABASE_PORT: ${DATABASE_PORT}
-  #     DATABASE_NAME: ${DATABASE_NAME}
-  #     DATABASE_USERNAME: ${DATABASE_USERNAME}
-  #     DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-  #     MONGODB_SESSION_SECRET: ${MONGODB_SESSION_SECRET}
-  #     SESSION_TTL: ${SESSION_TTL}
-  #     OPENAI_API_KEY: ${OPENAI_API_KEY}
-  #     SECURE_COOKIE: ${SECURE_COOKIE}
-  #     ENCRYPTION_KEY: ${ENCRYPTION_KEY}
-  #     AUTO_INDEX: ${AUTO_INDEX}
+  studygen:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: studygen
+    restart: always
+    depends_on:
+      - mongodb
+    networks:
+      - proxy
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      PORT: ${PORT}
+      SECRET: ${SECRET}
+      DATABASE_HOST: mongodb
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      MONGODB_SESSION_SECRET: ${MONGODB_SESSION_SECRET}
+      SESSION_TTL: ${SESSION_TTL}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      SECURE_COOKIE: ${SECURE_COOKIE}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      AUTO_INDEX: ${AUTO_INDEX}
