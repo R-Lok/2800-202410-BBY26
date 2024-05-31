@@ -11,7 +11,7 @@
     <div class="container-alert">
         <div class="alert alert-light custom-alert" role="alert">
             <p>Hi <%= name %>!</p>
-            <p>You've been studying for <%= days %> days in a row!<img src="/images/fire.svg" width="30" height="30"></p>
+            <p>You've been studying for <%= days %> day<% if (days !== 1) { %>s in a row<% } %>!<img src="/images/fire.svg" width="30" height="30"></p>
         </div>
     </div>
 
