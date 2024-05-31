@@ -193,8 +193,7 @@ To see your saved flashcard sets, you can go to your flashcard collection. Here 
 
 ### 6. Homepage Study Streak Display
 The home page contains elements that help motivate the user to study:
-* The application keeps a track of the days in which the user has reviewed their generated flashcard sets:
-* which is displayed on the calendar on the homepage
+* The application keeps a track of the days in which the user has reviewed their generated flashcard sets which is displayed on the calendar on the homepage
 * It also keeps track of the consecutive days in which the user has been studying for, which is displayed as a streak counter above the calendar
 
 
