@@ -102,3 +102,7 @@
     }
 
 }
+
+.displayName {
+    overflow:hidden;
+}
