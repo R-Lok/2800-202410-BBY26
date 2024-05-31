@@ -130,7 +130,7 @@ video, #frame {
 .file-container {
   max-width: 650px;
   width: 100%;
-  padding: 30px;
+  padding: 0 30px;
   border-radius: 20px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
@@ -152,6 +152,10 @@ video, #frame {
 
 #preview-message {
   visibility: hidden;
+}
+
+#image-modal-content {
+  overflow-y: scroll !important;
 }
 
 #image-modal-footer {

@@ -76,9 +76,12 @@
     <!-- Image Modal -->
     <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
+        <div class="modal-content" id="image-modal-content">
           <div class="file-container">
-            <h3 id="upload-message">Upload your File :</h3>
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="textModalLabel">Upload a file</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <small id="preview-message">Preview of your image</small>
             <div class="drag-area">
               <div class="icon">
