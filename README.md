@@ -111,7 +111,6 @@ npm i
 npm run local
 
 ## Features
-an easy-to-find labeled section tells us how to use the app and includes a helpful list of features and how to use them.
 
 ### 1. Account Sign Up and Management
 #### Registration
@@ -171,12 +170,14 @@ The core feature of this application is to generate flashcards from various sour
 * If desired, input a name for the flashcard set and press Save to collection
 
 ### 3. Flashcard Review
+The application allows users to view their generated flashcard sets:
 * The user can view their flashcard sets by navigating to the collections page (folder icon on footer), and pressing on any of their saved sets
 * On the viewing page, users can tap on flashcards to flip the card between prompt and answers
 * There are arrows on each side of the flashcard to tap to navigate to the previous or next flashcard
 * Users can tap the sharecode at the bottom of the viewing page to copy it and share it with other users
 
 ### 4. Sharing your Flashcards
+The application allows users to share their flashcard sets and view others' flashcard sets via a sharecode:
 * Users can enter a flashcard code on the home screen of the application by pressing "Open by Code"
 * Users can see the sharecode of their flashcard set at the bottom of their screen when viewing their flashcard set
 * There might be a way to find a secret easter EGG page through the "Open by Code" feature..
@@ -191,6 +192,10 @@ To see your saved flashcard sets, you can go to your flashcard collection. Here 
 * To delete all of the flashcard sets, click on the Delete All button below the search bar and press OK when the alert pops up
 
 ### 6. Homepage Study Streak Display
+The home page contains elements that help motivate the user to study:
+* The application keeps a track of the days in which the user has reviewed their generated flashcard sets:
+* which is displayed on the calendar on the homepage
+* It also keeps track of the consecutive days in which the user has been studying for, which is displayed as a streak counter above the calendar
 
 
 ## Credits
