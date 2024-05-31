@@ -198,7 +198,6 @@ The home page contains elements that help motivate the user to study:
 
 
 ## Credits
-a labeled section provides an organized list of credits, references, and licenses (if you have any). This is where you include a list of all the websites that had helpful code you used in your app. Remember to provide credit where credit is due!
 * Easter Egg Confetti Animation - Jonathan Bell - https://codepen.io/jonathanbell/pen/OvYVYw
 * Easter Egg Gifs - Palworld
 * Easter Egg Music - Slow Jazz Cafe - https://www.youtube.com/watch?v=RelTcUFL8Yk&ab_channel=BGMchannel-Topic
