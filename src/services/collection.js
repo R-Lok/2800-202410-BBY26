@@ -4,11 +4,9 @@ const flashcardsModel = require('../models/flashcards')
 // Deletion function used inside deletion route
 const deleteSet = async (shareId) => {
     try {
-        console.log(shareId)
         // Write to database to delete the flashcard set and flashcards associated with the shareId
         await collectionsModel.deleteOne({ shareId: shareId })
         await flashcardsModel.deleteMany({ shareId: shareId })
-        console.log('Document deleted successfully')
     } catch (err) {
         console.error('Error deleting document: ', err)
         throw (err)

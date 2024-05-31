@@ -35,7 +35,6 @@ const changePwd = async (securityAns, currentPwd, newPwd, confirmPwd) => {
 // Post fetch request function for user's editing name
 const editName = async (newName) => {
     try {
-        console.log(newName)
         const response = await fetch(`/settings/editName`, {
             method: 'POST',
             headers: {
@@ -97,7 +96,6 @@ const editLoginId = async (loginId) => {
 
 // Post fetch request for editing user's email
 const editEmail = async (email) => {
-    console.log(email)
     try {
         const response = await fetch(`/settings/editEmail`, {
             method: 'POST',
@@ -146,7 +144,6 @@ function highlightIcon(clickedImage) {
 
 // Removes highlight from profile picture selection upon close button press
 function profileCloseButton(previous) {
-    console.log(previous)
     const choiceNum = 'image' + previous
     const choiceElement = document.getElementById(choiceNum)
     highlightIcon(choiceElement);

@@ -10,7 +10,6 @@ async function validatePasswordChange(userId, currPass, newPass, confirmNewPass,
     const user = await usersModel.findById(userId)
 
     if (userAnswer.answer !== securityAns) {
-        console.log('Incorrect Security Answer')
         throw new CustomError('401', 'Incorrect Security Answer')
     }
 

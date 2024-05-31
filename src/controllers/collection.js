@@ -82,7 +82,6 @@ const collectionDELETE = async (req, res) => {
             return res.status(404).json({ message: 'Flashcard set not found' })
         }
         if (userId !== setOwnerIdString) {
-            console.log('I am here')
             return res.status(403).json({ message: 'User not authorized' })
         }
 
