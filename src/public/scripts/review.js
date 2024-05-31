@@ -101,7 +101,7 @@ if (document.getElementById('save-button')) {
         const data = {
             name: document.getElementById('setName').value.trim(),
             cards: localStorage.getItem('cards') }
-
+        //send request to server to save the flashcards
         try {
             const response = await fetch('/submitcards', {
                 method: 'POST',
@@ -116,6 +116,7 @@ if (document.getElementById('save-button')) {
                 triggerDBFailAlert(text.message)
                 e.target.disabled = false
             }
+        //if server returns error, then trigger alert to let user know
         } catch {
             triggerDBFailAlert('An unexpected error occurred. Please try again later.')
         }
