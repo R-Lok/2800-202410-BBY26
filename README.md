@@ -101,15 +101,34 @@ Top level folders and their subfolders/files:
 ```
 
 ## Installation
-section contains ordered instructions so a new developer can assemble a DEVELOPMENT ENVIRONMENT to contribute, including a list of tools, versions, and configuration instructions, if any. A separate plaintext file contains ids and passwords.
+This section contains ordered instructions so a new developer can assemble a DEVELOPMENT ENVIRONMENT to contribute, including a list of tools, versions, and configuration instructions, if any. A separate plaintext file contains ids and passwords.
 
-setup mongodb
+You will require the following auth tokens of your own to start developing:
+- openAI api token
+- your own mongoDB database tokens, login, password
+- your own encryption key for encrypting user emails
+- your own session encryption hashing string
+- your own database encryption hashing string
 
-fill in /src/.env.local
+You will require the following tools:
+- Your IDE of choice
+- a local MongoDB instance, or a MongoDB Atlas instance
+- Any browser of choice to preview changes you have made 
 
-npm i
 
-npm run local
+Instructions to start developing:
+1. Fork this repository
+2. git clone your fork into your local machine
+3. Install dependencies for the project via "npm i" in the project folder
+4. Set up your own mongoDB Atlas or local mongoDB instance 
+5. Create your own .env file within the /src directory named ".env.local" for local mongoDB instances, or ".env.dev" for mongoDB Atlas instances. 
+6. Fill in your own .env with your own tokens listed in /src/example.env
+7. Launch the project by typing "npm run local" for local mongoDB instances, or "npm run dev" for mongoDB Atlas instance into your terminal within the project folder
+8. Project should running, happy developing!
+
+Fill feel to contact us if you run into any issues.
+
+Testing spreadsheet: https://docs.google.com/spreadsheets/d/1dW8jB15GkY0_NWLoMBVsNXWW5RbtdFe4pqGRXzF1vog/edit?usp=sharing
 
 ## Features
 
