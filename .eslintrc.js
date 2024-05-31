@@ -23,5 +23,6 @@ module.exports = {
         'arrow-spacing': ['error', { 'before': true, 'after': true }],
     },
     'plugins': ['jest'],
+    'ignorePatterns': ['src/public/*', 'mongo-init.js'],
 }
 

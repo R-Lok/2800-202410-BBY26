@@ -1,8 +1,7 @@
+// This script is for inserting mock data for our collection called "collections"
 require('dotenv').config({ path: `${process.cwd()}/.env.${process.env.NODE_ENV}` })
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
-const saltRounds = 12
-const collectionModel = require('../models/collections')
+const collectionModel = require('../src/models/collections')
 
 
 const mongoUrl = process.env.NODE_ENV === 'local' ?
@@ -25,6 +24,7 @@ const main = async () => {
         console.log('MongoDB connect successful.')
 
         const collectionObjects = [
+            // Fix: userId error
             { setName: 'name', userId: '8', shareId: '1000' },
         ]
         const results = await collectionModel.insertMany(collectionObjects)

@@ -1,8 +1,7 @@
+// This script is for inserting mock data for our collection, "flashcards"
 require('dotenv').config({ path: `${process.cwd()}/.env.${process.env.NODE_ENV}` })
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
-const saltRounds = 12
-const flashcardModel = require('../models/flashcards')
+const flashcardModel = require('../src/models/flashcards')
 
 
 const mongoUrl = process.env.NODE_ENV === 'local' ?

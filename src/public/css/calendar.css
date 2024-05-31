@@ -1,0 +1,115 @@
+
+ul {list-style-type: none;}
+body {font-family: Verdana, sans-serif;}
+
+/* Month header */
+.month {
+  width: 100%;
+  background: #8714c9;
+  text-align: center;
+  /* border-radius: 15px, 15px, 0px, 0px; */
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.month-header {
+  box-shadow: 0 8px 6px -6px black;
+}
+
+/* Month list */
+.month ul {
+  margin: 0;
+  padding: 0.5em;
+}
+
+.month ul li {
+  color: white;
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+/* Previous button inside month header */
+.month .prev {
+  float: left;
+}
+
+/* Next button */
+.month .next {
+  float: right;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+li {
+  padding: 6px;
+}
+/* Weekdays (Mon-Sun) */
+.weekdays {
+  margin: 0;
+  padding: 8px 0;
+}
+
+.prevMonthDays {
+  color: rgb(184, 184, 184);
+}
+
+.nextMonthDays {
+  color: rgb(184, 184, 184);
+}
+
+/* Highlight the "current" day */
+.active {
+  display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: center;
+  background: #8714c9;
+  color: white !important;
+  border-radius: 25%;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.studied {
+  position: relative;
+}
+
+.studied::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  background-image: url('../images/fire.svg');
+  background-size: cover;
+  opacity: 0.4;
+}
+
+.streak {
+  position: relative;
+}
+
+.streak::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  background-image: url('../images/fire.svg');
+  background-size: cover;
+  opacity: 1;
+}

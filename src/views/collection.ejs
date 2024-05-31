@@ -1,0 +1,53 @@
+<%- include("template/header.ejs") %>
+<link rel="stylesheet" href="/css/collections.css">
+</head>
+<body>
+  <%- include('template/headerBar', {pictureID:pictureID}) %>
+
+
+  <div class="d-flex justify-content-center mt-5 headerText space">
+    <h1 class="headerText fw-bold">Flashcard Collection</h1>
+  </div>
+
+  <div class="d-flex justify-content-center space2">
+    <h6>Here are your previously generated flashcards</h6>
+  </div>
+
+
+  <div class="input-group justify-content-center">
+    <form class= "justify-content-center" action='/collection/search' method='post'>
+      <input name="search" type="search" placeholder="Search" value="<%= search %>"/>
+      <button type="submit" class="btn btn-primary" id="search-button" data-mdb-ripple-init>
+      <img class="search" src='/images/search.svg'>
+      </button>
+    </form>
+  </div>
+
+  <div class="container">
+    <div class="d-flex justify-content-between">
+      <button class="btn btn-danger btn-sm py-0 mt-2 rounded" onclick="confirm('Are you sure you want to delete all of your flashcard sets?') ?
+      deleteAll() : event.preventDefault()">Delete All</button>
+      <select class="form-select mt-3 w-25" id="sortCollection" name="sortCollection">
+        <option hidden selected value="default">Sort</option>
+        <option value="viewed" <%= selectedOption == 'viewed' ? 'selected' : ''%>>Last Viewed</option>
+        <option value="new" <%= selectedOption == 'new' ? 'selected' : ''%>>Newest First</option>
+        <option value="old" <%= selectedOption == '' ? 'selected' : ''%>>Oldest First</option>
+        <option value="alpha" <%= selectedOption == 'alpha' ? 'selected' : ''%>>Alphabetical Order</option>
+      </select>
+    </div>
+
+<div id="collectionsList" class="list-group mt-2">
+  <% for(var i = 0; i<collections.length; i++) { %>
+      <div class="list-group-item d-flex list-group-item-action w-100">
+        <a href="/review/<%= collections[i].shareId %>" class="p-0 m-0 flex-grow-1 setText"><%= collections[i].setName %></a>
+          <button class="btn btn-danger rounded" onclick="confirm('Are you sure you want to delete this set?') 
+          ? deleteFlashCardSet('<%= collections[i].shareId %>') : event.preventDefault()">Delete</button>
+      </div>
+  <% }; %>
+</div>
+
+</div>
+
+<script src="/scripts/collection.js"></script>
+<%- include("template/footerBar.ejs") %>
+<%- include("template/footer.ejs") %>

@@ -1,0 +1,54 @@
+.title {
+  letter-spacing: 0.3em;
+  font-size: 2.5em;
+  color: white;
+  font-weight: bold;
+}
+
+#logo {
+  max-height: 15vh;
+  max-width: 100%;
+  margin-bottom: 1em;
+}
+
+.message {
+  margin-top: -10em;
+  font-size: 1.2em;
+  color: white;
+}
+
+.container-fluid {
+  background-image: url("/images/landing.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.logo-container {
+  transform: translateY(-10%);
+}
+
+/* Animation for pops up */
+@keyframes popUp {
+  from {
+      transform: translateY(100%);
+      opacity: 0;
+  }
+  to {
+      transform: translateY(0);
+      opacity: 1;
+  }
+}
+
+.logo-container img,
+.logo-container .title {
+  animation: popUp 1s ease-out forwards;
+  opacity: 0;
+}
+
+.logo-container img {
+  animation-delay: 0.3s;
+}
+
+.logo-container .title {
+  animation-delay: 0.6s;
+}

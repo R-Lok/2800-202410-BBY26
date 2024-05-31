@@ -1,0 +1,108 @@
+:root {
+    --main-color1: #CAA8F5;
+    --main-color2: #9984D4;
+    --main-color3: #FED766;
+    --main-color4: #230C33;
+    --main-color5: #FFFFFF;
+    --main-color6:#8714c9;
+}
+
+@font-face {
+    font-family: 'Linotte';
+    src: url('../fonts/Linotte.otf') format('opentype');
+    font-weight: bolder;
+    font-style: normal;
+}
+
+.headerText {
+    color:var(--main-color6);
+    font-size:38px;
+    font-family:'Linotte';
+    text-shadow: 1px 1px var(--main-color4);
+}
+
+
+.profilePicBorder {
+    border-style: solid;
+    border-width: 2px;
+    border-color: black;
+
+}
+
+.profilePicBorderHighlight {
+    border-style: solid;
+    border-width: 5px;
+    border-color:var(--main-color6);
+}
+
+.settingsBlock {
+    padding: 15px;
+    border-style: outset;
+    border-color:black;
+    border-width:2px;
+    background: var(--main-color6);
+    border-radius: 10px;
+    color:white;
+    text-shadow: 1px 1px var(--main-color4);
+    margin-bottom:5px;
+    box-shadow: 0 8px 6px -6px black;
+}
+
+
+.settingsBlock img {
+    width: 40%;
+    height: 60%;
+    align-self:center;
+    background-color: darkgrey;
+    background: transparent;
+    filter: brightness(0) invert(1);
+}
+
+.settingsBlock span {
+    width:40px;
+}
+
+.verticalLine{
+    width: 2px;
+    height: 30px;
+    background-color: white;
+}
+
+.btnStyle {
+    background: var(--main-color6);
+    border: black solid 2px;
+    color:white;
+    font-weight:bold;
+    box-shadow: 0 8px 6px -6px black;
+    --bs-btn-hover-bg: #560d81;
+    --bs-btn-hover-border-color: #560d81;
+    --bs-btn-active-bg: #560d81;
+    --bs-btn-active-border-color: #560d81;
+    --bs-btn-hover-color:white;
+    --bs-btn-active-color:white;
+}
+
+.btnStyleClose {
+    color:white;
+    background: gray;
+    border: black solid 2px;
+    color:white;
+    font-weight:bold;
+    box-shadow: 0 8px 6px -6px black;
+}
+
+#logout-btn {
+    margin-bottom:100px;
+}
+
+@media only screen and (max-width: 383px) {
+
+    .settingsModalIcon {
+        width:75px;
+    }
+
+}
+
+.displayName {
+    overflow:hidden;
+}

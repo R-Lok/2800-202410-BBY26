@@ -1,0 +1,19 @@
+body, html {
+  height: 100%;  
+  margin: 0;    
+}
+
+.sign-up-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;  
+  justify-content: center;  
+}
+
+.form-signup {
+  width: 100%;  
+  max-width: 330px;  
+  margin: auto; 
+  padding-bottom: 60px;
+}

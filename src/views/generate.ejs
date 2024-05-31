@@ -1,0 +1,157 @@
+<%- include("template/header") %>
+  <link rel="stylesheet" href="../css/generate.css"></link>
+  <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  <script src="https://cdn.jsdelivr.net/npm/bson@6.7.0/lib/bson.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+  </head>
+
+  <body>
+    <%- include('template/headerBar', {pictureID:pictureID}) %>
+    <div class="loading-state" id="loader">
+      <div class="loading"></div>
+    </div>
+
+    <div class="generate-container d-flex flex-column justify-content-center">
+      <h3 class="headerText mb-5 mt-3 fw-bold text-center display-3">Generate Your Flashcards</h3>
+
+      <ul class="nav nav-tabs d-flex flex-nowrap justify-content-center" id="myTab" role="tablist">
+        <li class="nav-item flex-grow-1 text-center" role="presentation">
+          <button class="nav-link w-100 fw-bold" id="image-tab" data-bs-toggle="tab" data-bs-target="#text-tab-pane"
+            type="button" role="tab" aria-controls="image-tab-pane" aria-selected="false">Image Upload</button>
+        </li>
+        <li class="nav-item flex-grow-1 text-center" role="presentation">
+          <button class="nav-link active w-100 fw-bold" id="text-tab" data-bs-toggle="tab" data-bs-target="#text-tab-pane"
+            type="button" role="tab" aria-controls="text-tab-pane" aria-selected="true">Text Upload</button>
+        </li>
+        <li class="nav-item flex-grow-1 text-center" role="presentation">
+          <button class="nav-link w-100 fw-bold" id="photo-tab" data-bs-toggle="tab" data-bs-target="#text-tab-pane"
+            type="button" role="tab" aria-controls="photo-tab-pane" aria-selected="false">Take Photo</button>
+        </li>
+      </ul>
+
+      <div class="tab-content d-flex justify-content-center mt-5" id="myTabContent">
+        <div class="tab-pane fade" id="image-tab-pane" role="tabpanel" aria-labelledby="image-tab" tabindex="0">
+          <!--camera-->
+        </div>
+
+        <div class="tab-pane fade show active d-flex flex-column align-items-center" id="text-tab-pane" role="tabpanel"
+          aria-labelledby="text-tab" tabindex="0">
+          <form>
+            <p>Parameters for generation</p>
+            <select class="form-select mb-3" id="selectDifficulty" aria-label="Large select example"
+              name="difficulty">
+              <option value="" selected hidden>Difficulty of the flashcards</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="difficult">Difficult</option>
+            </select>
+
+            <select class="form-select mb-3" id="selectNumber" aria-label="Large select example" name="numFlashcards">
+              <option value="" selected hidden>Number of flashcards</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+
+            <div class="d-flex justify-content-center mt-5">
+              <button class="btn btn-primary" type="button" id="enterTextButton" data-bs-toggle="modal"
+                data-bs-target="#textModal">Upload Study Material</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="tab-pane fade" id="photo-tab-pane" role="tabpanel" aria-labelledby="photo-tab" tabindex="0">
+          <!--image-->
+        </div>
+      </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content" id="image-modal-content">
+          <div class="file-container">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="textModalLabel">Upload a file</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <small id="preview-message">Preview of your image</small>
+            <div class="drag-area">
+              <div class="icon">
+                <i class="fas fa-images"></i>
+              </div>
+              <div class="upload-area d-flex flex-column align-items-center justify-content-center">
+                <span class="header">Drag & Drop</span>
+                <span class="header">or <span class="button">browse</span></span>
+              </div>
+              <input type="file" hidden />
+              <span class="support">Supports: JPEG, JPG, PNG</span>
+            </div>
+
+            <div id="image-modal-footer" class="modal-footer flex d-flex justify-content-end">
+              <button type="button" id="reset-image" class="btn btn-secondary">Choose Another Image</button>
+              <button type="button" id="image-generate-button" class="btn btn-success generate-btn">Generate</button> 
+            </div>
+          </div>  
+        </div>
+      </div>
+    </div>
+
+    <!-- Text Modal -->
+    <div class="modal fade" id="textModal" tabindex="-1" aria-labelledby="textModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="textModalLabel">Text Upload</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <textarea id="material" class="text-material-input" name="material" rows="15" placeholder="Place your study material here..." required></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="reset-text-button" class="btn btn-secondary">Reset study material</button>
+            <button type="button" id="generateButton" class="btn btn-secondary generate-btn" disabled>Generate</button> 
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Camera Modal -->
+    <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="photoModalLabel">Take a photo</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" style="padding: 0">
+            <div class='d-flex justify-content-center'>
+              <video id="cam" autoplay muted playsinline></video>
+              <canvas id="canv" class="hidden"></canvas>
+              <img src="" alt="" id="frame" class="hidden">
+            </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-between">
+            <button id="snap"class="btn btn-success generate-buttons">Take Photo</button>
+            <button id="retake" class="hidden btn btn-danger">Retake</button>
+            <button type="button" id="generatePhotoButton" class="btn btn-secondary generate-btn">Generate</button>
+            <!-- <button type="button" class="btn btn-primary"></button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Alert-->
+    <div class="alert alert-danger invisible" id="alert" role="alert">
+    </div>
+    <script type="text/javascript" src="../scripts/generate.js"></script>
+  <%- include("template/footerBar.ejs") %>
+  <%- include("template/footer") %>
+
+   

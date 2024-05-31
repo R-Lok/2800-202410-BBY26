@@ -1,0 +1,62 @@
+<%- include('template/header') %>
+<%- include('template/headerBar', {pictureID:pictureID}) %>
+<link rel="stylesheet" href="/css/home.css">
+<link rel="stylesheet" href="/css/calendar.css">
+</head>
+<body>
+    <div id="data-container"
+        data-studied-days='<%- JSON.stringify(studiedDays) %>'
+        data-streak-days='<%- JSON.stringify(streakDays) %>'>
+    </div>
+    <div class="container-alert">
+        <div class="alert alert-light custom-alert" role="alert">
+            <p>Hi <%= name %>!</p>
+            <p>You've been studying for <%= days %> days in a row!<img src="/images/fire.svg" width="30" height="30"></p>
+        </div>
+    </div>
+
+    <%- include('calendar') %>
+    <div class="input-group justify-content-center">
+        <form class= "justify-content-center" action='/collection/search' method='post'>
+          <input name="search" type="search" placeholder="Search" />
+          <button type="submit" class="btn btn-primary" id="search-button" data-mdb-ripple-init>
+          <img class="search" src='/images/search.svg'>
+          </button>
+        </form>
+    </div>
+
+    <div class="container-buttons">
+        <% if (existingActivity == 0) {%>
+            <button type="button" onclick="location.href='/generate'" class="btn btn-primary btn-lg w-100 home-buttons">Generate Flashcards</button>
+        <%} else {%>
+            <button type="button" onclick="location.href='<%= existingActivity %>'" class="btn btn-primary btn-lg w-100 home-buttons">Review <span style="font-weight: 800;"><%= activityName %></span></button>
+        <% } %>
+        <button type="button" class="btn btn-primary btn-lg w-100 home-buttons" data-bs-toggle="modal" data-bs-target="#openByCodeModal">
+            Open by Code
+        </button>
+    </div>
+      
+      <!-- Modal -->
+    <div class="modal fade" id="openByCodeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Enter share code</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="input-group justify-content-center">
+                <form class= "justify-content-center open-by-code" action='/home/shareCode' method='post'>
+                    <input name="shareId" type="text" placeholder="Code" />
+                    <button type="submit" class="btn btn-primary" data-mdb-ripple-init>
+                    <img class="search" id="search-button" src='/images/search.svg'></button>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+
+<script src="/scripts/calendarDisplay.js"></script>
+<%- include('template/footerBar') %>
+<%- include('template/footer') %>

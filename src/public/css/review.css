@@ -1,0 +1,84 @@
+.carousel-caption {
+    bottom: auto !important; 
+}
+
+.carousel-item.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content-container {
+    margin: 0;
+    margin-top: 5vh;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* height: 100vh; */
+    padding-bottom: 60px;
+}
+
+p {
+    margin-bottom: 0;
+}
+
+#setName {
+    width: 300px;
+    height: 40px;
+    border-radius: 20px;
+    padding: 10px;
+    border: 1px solid #ced4da;
+}
+
+#save-button {
+    margin: 0.5em;
+    border-radius: 15px;
+    background-color: #8714c9;
+    padding: 0.5em;
+}
+
+img {
+    max-height: 400px;
+}
+
+#sharecode-container > * {
+    margin: 0;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+#sharecode {
+    color: white;
+    background-color: #8714c9;
+    border-radius: 20px;
+}
+
+#sharecode:hover {
+    cursor: pointer;
+}
+
+#tap-notif {
+    margin: 2.5%;
+}
+
+.hidden {
+    display: none;
+}
+
+.alert {
+    position: absolute;
+    top: 10vh;
+}
+
+.alert-hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 2s, opacity 2s linear;
+}
+
+#carouselExampleCaptions {
+    margin-top: 5px;
+}

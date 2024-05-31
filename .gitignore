@@ -137,5 +137,6 @@ package-lock.json
 # *.txt
 *.txt
 
-*.sh
+scripts/*.sh
 *s.json
+playground.js

@@ -1,0 +1,71 @@
+<%- include("template/header") %>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="../css/register.css">
+    </link>
+    </head>
+
+    <body>
+        <%- include('template/headerBar', {pictureID:pictureID}) %>
+            <div class="sign-up-container">
+                <div class="form-signup">
+                    <h3 class="h3 mt-3 mb-3 fw-normal text-center display-1">Sign Up</h3>
+                    <form id="form-register" novalidate>
+                        <div class="mb-1">
+                            <label for="displayName" class="form-label">Display Name *</label>
+                            <input type="text" id="displayName" class="form-control" name="name" required>
+                            <small id="loginIdHelp" class="form-text text-muted">At most 20 characters long</small>
+                            <div id="name-feedback" class="invalid-feedback">
+                                <p>Invalid Message Placeholder</p>
+                           </div>
+                        </div>
+
+                        <div class="mb-1">
+                            <label for="email" class="form-label">Email *</label>
+                            <input type="email" id="email" class="form-control" name="email" required>
+                            <small id="emailHelp" class="form-text text-muted">example: name@gmail.com</small>
+                            <div id="email-feedback" class="invalid-feedback">
+                                <p>Invalid Message Placeholder</p>
+                           </div>
+                        </div>
+
+                        <div class="mb-1">
+                            <label for="loginId" class="form-label">Login ID *</label>
+                            <input type="text" id="loginId" class="form-control" name="loginId" required>
+                            <small id="passworldHelp" class="form-text text-muted">3 to 20 alpha-numeric characters long</small>
+                            <div id="loginId-feedback" class="invalid-feedback">
+                                <p>Invalid Message Placeholder</p>
+                           </div>
+                        </div>
+
+                        <div class="mb-1">
+                            <label for="password" class="form-label">Password *</label>
+                            <input type="password" id="password" class="form-control" name="password" required>
+                            <small id="nameHelp" class="form-text text-muted">3 to 20 alpha-numeric characters long</small>
+                            <div id="password-feedback" class="invalid-feedback">
+                                 <p>Invalid Message Placeholder</p>
+                            </div>
+                        </div>
+
+                        <div class="mb-1">
+                            <label for="confirmPassword" class="form-label">Confirm Password *</label>
+                            <input type="password" id="confirmPassword" class="form-control" name="confirmPassword"
+                                required>
+                            <small id="confirmPasswordHelp" class="form-text text-muted">Must match password</small>
+                            <div id="confirmPassword-feedback" class="invalid-feedback">
+                                <p>Invalid Message Placeholder</p>
+                            </div>
+                        </div>
+
+                        <div class="d-grid mt-1">
+                            <button class="btn btn-primary btn-lg" type="submit">Sign Up</button>
+                        </div>
+
+                        <p class="mt-2 text-center">
+                            Already have an account? <a href="/login">Log In</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+            <script src="scripts/register.js"></script>
+            <%- include("template/footerBar.ejs") %>
+                <%- include("template/footer") %>

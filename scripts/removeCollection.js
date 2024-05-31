@@ -1,3 +1,4 @@
+// This script is for removing data from our collection, "collections"
 require('dotenv').config({ path: `${process.cwd()}/.env.${process.env.NODE_ENV}` })
 const mongoose = require('mongoose')
 const collectionModel = require('../models/collections')

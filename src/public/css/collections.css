@@ -1,0 +1,75 @@
+:root {
+    --main-color1: #CAA8F5;
+    --main-color2: #9984D4;
+    --main-color3: #FED766;
+    --main-color4: #3c0761;
+    --main-color5: #FFFFFF;
+    --main-color6:#8714c9;
+}
+
+@font-face {
+    font-family: 'Linotte';
+    src: url('../fonts/Linotte.otf') format('opentype');
+    font-weight: bolder;
+    font-style: normal;
+}
+
+.headerText {
+    color:var(--main-color6);
+    font-size: 38px;
+    font-family: 'Linotte';
+    text-shadow: 1px 1px var(--main-color4);
+}
+
+
+.setText{
+    color:var(--main-color4);
+    font-weight:bolder;
+    text-decoration:none;
+}
+
+.space {
+    padding-bottom:6px;
+}
+
+.space2 {
+    padding-bottom:10px;
+}
+
+.button-bg{
+    background-color:var(--main-color6);
+    margin-bottom:7px;
+    box-shadow: 0 8px 6px -6px black;
+}
+
+.input-group input[type="search"] {
+    width: 300px; 
+    height: 40px;
+    border-radius: 20px;
+    padding: 10px;
+    border: 1px solid #ced4da;
+}
+
+.list-group{
+    margin-bottom: 100px;
+    margin-top:20px
+}
+
+.no-space-btn {
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+}
+
+.search {
+    filter: brightness(0) invert(1);
+}
+
+.btn.btn-danger {
+    border: black solid 2px;
+    box-shadow: 0 8px 6px -6px black;
+}
+
+#search-button {
+    border-radius: 30%;
+}

@@ -1,0 +1,37 @@
+<%- include("template/header.ejs") %>
+<link rel="stylesheet" href="/css/egg.css">
+</head>
+<body>
+<%- include('template/headerBar', {pictureID:pictureID}) %>
+
+<canvas id="canvas"></canvas>
+
+<div class="d-flex justify-content-center">
+    <img class='align-items-center mt-5' id="eggPic" src="/images/depresso1.gif"/>
+</div>
+    
+<div class="text-center h1 eggText" id="studyGen">StudyGen</div>
+
+<div id="nameContainer" class="d-flex justify-content-center">
+    <span data-link="R-Lok" class="nameCard name1 color1 fw-bold h3 text-center">Ryan Lok
+        <img class="headshot" src="/images/Ryan.png"/>
+    </span>
+    <span data-link="jimmykongg" class="nameCard name2 color2 fw-bold h3 text-center">Jimmy Kong
+        <img class="headshot" src="/images/Jimmy.png"/>
+    </span>
+    <span data-link="wyliao76" class="nameCard name3 color3 fw-bold h3 text-center">Wei-Yu Liao
+        <img class="headshot" src="/images/Will.png"/>
+    </span>
+    <span data-link="LouiseYLi" class="nameCard name4 color4 fw-bold h3 text-center">Louise Li
+        <img class="headshot" src="/images/Louise.png"/>
+    </span>
+    <span data-link="Jyyunrin" class="nameCard name5 color5 fw-bold h3 text-center">Joe Lin
+        <img class="headshot" src="/images/Joe.png"/>
+    </span>
+</div>
+
+
+<audio id='EggMusic' autoplay loop src="/music/EggMusic.mp3"></audio>
+<script src="/scripts/egg.js"></script>
+<%- include("template/footerBar.ejs") %>
+<%- include("template/footer.ejs") %>

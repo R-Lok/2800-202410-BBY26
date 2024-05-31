@@ -1,0 +1,58 @@
+:root {
+    --main-color1: #CAA8F5;
+    --main-color2: #9984D4;
+    --main-color3: #FED766;
+    --main-color4: #230C33;
+    --main-color5: #FFFFFF;
+    --main-color6:#8714c9;
+}
+
+.navbar {
+    font-size: 14pt;
+    padding: 0 !important;
+    margin: 0;
+    line-height: 1;
+    box-shadow: 0 -6px 10px 5px rgba(0,0,0,0.5);
+}
+
+.navbar-bg {
+    background: rgb(135,20,201);
+    background: linear-gradient(138deg, rgba(135,20,201,1) 0%, rgba(44,13,93,1) 35%, rgba(135,20,201,1) 62%, rgba(69,0,125,1) 100%);
+}
+
+.nav-button{
+    border-width:0px;
+    background: rgba(0, 0, 0, 0) 
+}
+
+nav button img {
+    width:80px;
+}
+
+nav button span {
+    color:white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif; 
+    font-size: 20pt;
+    padding-top: 25px;
+}
+
+#headerProfilePic{
+    width:60px;
+}
+
+.btn-primary {
+    --bs-btn-bg: #8714c9 !important;
+    --bs-btn-hover-bg: #560d81 !important;
+    --bs-btn-hover-border-color: #560d81 !important;
+    --bs-btn-active-bg: #560d81 !important;
+    --bs-btn-active-border-color: #560d81 !important;
+}
+
+footer {
+    box-shadow: 0 -6px 10px -4px rgba(0,0,0,0.5);
+}
+
+.footer-btn img {
+    width: 40px;
+    filter: brightness(0) invert(1);
+}

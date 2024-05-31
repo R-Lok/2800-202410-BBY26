@@ -1,0 +1,21 @@
+<div class="container-calendar">
+    <div class="month">
+        <ul class="month-header">
+        <!-- <li class="prev">&#10094;</li> -->
+        <!-- <li class="next">&#10095;</li> -->
+        <li><%- monthName %> <span style="font-size:18px"><%- year %></span></li>
+    </ul>
+    </div>
+    <ol class="calendar">
+        <li class="weekdays">Su</li>
+        <li class="weekdays">Mo</li>
+        <li class="weekdays">Tu</li>
+        <li class="weekdays">We</li>
+        <li class="weekdays">Th</li>
+        <li class="weekdays">Fr</li>
+        <li class="weekdays">Sa</li>
+        <%- prevMonthDays %>
+        <%- currMonthDays %>
+        <%- nextMonthDays %>
+    </ol>
+</div>
