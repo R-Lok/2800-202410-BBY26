@@ -1,9 +1,11 @@
 const eggPic = document.getElementById('eggPic')
 const studyGen = document.getElementById('studyGen')
 const spans = document.getElementsByTagName('span')
+const audio = document.getElementById('EggMusic')
 
 // Onclick event listener for modifying Easter Egg elements' css classes
 eggPic.addEventListener('click', () => {
+    audio.play();
     if (eggPic.src.includes('/images/depresso2.gif')) {
         eggPic.src = '/images/depresso1.gif'
         studyGen.classList.add('eggText')
