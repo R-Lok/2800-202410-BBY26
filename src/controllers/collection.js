@@ -2,6 +2,7 @@ const collectionsModel = require('../models/collections')
 const flashcardsModel = require('../models/flashcards')
 const { collectionService } = require('../services/index')
 
+// GET route to render the base collections page
 const collectionGET = async (req, res) => {
     req.session.sort = 'default'
     req.session.search = ''
